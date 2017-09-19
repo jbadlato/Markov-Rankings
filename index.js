@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var request = require('request');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -63,66 +64,19 @@ function matrixMultiply(A, B) {
 	return C;
 }
 
-app.get("/getData", function (req, res) {
-	var workbook = XLSX.readFile('2017 Game Results Data.xlsx');
-	var worksheet = workbook.Sheets['Sheet1'];
-	var headers = {};
-	var data = [];
-	for (z in worksheet) {
-		if (z[0] === '!') continue;
-		//parse out the column, row, and value
-		var tt = 0;
-		for (var i = 0; i < z.length; i++) {
-			if (!isNaN(z[i])) {
-				tt = i;
-				break;
-			}
-		};
-		var col = z.substring(0, tt);
-		var row = parseInt(z.substring(tt));
-		var value = worksheet[z].v;
-
-		//store header names
-		if(row == 1 && value) {
-			headers[col] = value;
-			continue;
-		}
-
-		if(!data[row]) data[row]={};
-		data[row][headers[col]] = value;
-	}
-	//drop those first two rows which are empty
-	data.shift();
-	data.shift();
-
-	//Number each team:
-	teamId = 0;
-	map = {};
-	for (i = 0; i < data.length; i++) {
-		row = data[i];
-		teamName = row["Team"];
-		if (!(teamName in map)) {
-			map[teamName] = teamId;
-			teamId++;
-		}
-	}
-	var teamNameToId = new TwoWayMap(map);
-	var teamCount = Object.keys(teamNameToId.map).length;
-
+function calculateRankings(data, teamNameToId) {
+	teamCount = Object.keys(teamNameToId.map).length;
 	//Convert scores to matrix:
 	var ScoresMatrix = makeArray(teamCount, teamCount, 0);
 	var NumOfMatches = makeArray(teamCount, teamCount, 0);
 	for (var i = 0; i < data.length; i++) {
 		row = data[i];
-		if (row["Game Type"] !== "Division 1") {
-			continue;
-		}
-		team = row["Team"];
-		opponent = row["Opponent"];
-		teamId = teamNameToId.get(team);
-		opponentId = teamNameToId.get(opponent);
+		teamId = row["Team"];
+		opponentId = row["Opponent"];
 		NumOfMatches[teamId][opponentId]++;
 		ScoresMatrix[teamId][opponentId] = (ScoresMatrix[teamId][opponentId]*(NumOfMatches[teamId][opponentId] - 1) + row["Team Score"]) / NumOfMatches[teamId][opponentId];
+		NumOfMatches[opponentId][teamId]++;
+		ScoresMatrix[opponentId][teamId] = (ScoresMatrix[opponentId][teamId]*(NumOfMatches[opponentId][teamId] - 1) + row["Opponent Score"]) / NumOfMatches[opponentId][teamId];
 	}
 	transpose(ScoresMatrix);
 
@@ -163,6 +117,81 @@ app.get("/getData", function (req, res) {
 		Standings[i] = name;
 		Ratings[id] = -1;
 	}
-	console.log('done');
-	res.send(Standings);
+	return Standings;
+}
+
+function fetchData(teamsURL, scoresURL, res) {
+	request(scoresURL, function (error, response, body) {
+		if (error) {
+			console.log(error);
+		} else {
+			data = body
+			data = data.split(/,[ ]*|[\n]/);
+			var scores = [];
+			for (var i = 0; i < data.length; i++) {
+				if (i % 8 === 0) { // not sure what this number from the data represents?
+					continue;
+				} else if (i % 8 === 1) { // Date of game
+					continue;
+				} else if (i % 8 === 2) { // Team id
+					scores.push({});
+					scores[scores.length - 1]["Team"] = parseInt(data[i]) - 1;
+				} else if (i % 8 === 3) { // Team venue (i.e. Home, Away, Neutral)
+					var venue;
+					if (data[i] === '1') {
+						venue = "Home";
+					} else if (data[i] === '-1') {
+						venue = "Away";
+					} else if (data[i] === '0') {
+						venue = "Neutral";
+					} else {
+						venue = "N/A";
+					}
+					scores[scores.length - 1]["Team Venue"] = venue;
+				} else if (i % 8 === 4) { // Team score
+					scores[scores.length - 1]["Team Score"] = parseInt(data[i]);
+				} else if (i % 8 === 5) { // Opponent id
+					scores[scores.length - 1]["Opponent"] = parseInt(data[i]) - 1;
+				} else if (i % 8 === 6) {
+					var venue;
+					if (data[i] === '1') {
+						venue = "Home";
+					} else if (data[i] === '-1') {
+						venue = "Away";
+					} else if (data[i] === '0') {
+						venue = "Neutral";
+					} else {
+						venue = "N/A";
+					}
+					scores[scores.length - 1]["Opponent Venue"] = venue;
+				} else if (i % 8 === 7) {
+					scores[scores.length - 1]["Opponent Score"] = parseInt(data[i]);
+				}
+			}
+			request(teamsURL, function (error2, response2, body2) {
+				body2 = body2.split(/,[ ]*|[\n]/);
+				var teamNameToId = {};
+				for (var i = 1; i < body2.length; i += 2) {
+					teamName = body2[i];
+					teamId = parseInt(body2[i-1]) - 1;
+					teamNameToId[teamName] = teamId;
+				}
+				var teamNameToId = new TwoWayMap(teamNameToId);
+				var rankings = calculateRankings(scores, teamNameToId);
+				res.send(rankings);
+			});
+		}
+	});
+}
+
+app.get("/college-football", function (req, res) {
+	var gamesURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=1';
+	var teamsURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=2';
+	fetchData(teamsURL, gamesURL, res);
+});
+
+app.get("/college-basketball", function (req, res) {
+	var gamesURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=1';
+	var teamsURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=2';
+	fetchData(teamsURL, gamesURL, res);
 });

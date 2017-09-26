@@ -40,7 +40,7 @@ app.get("/college-basketball", function (req, res) {
 		ssl: true,
 	});
 	client.connect();
-	client.query('SELECT * FROM ncaa_fbs_rankings ORDER BY date_retrieved DESC LIMIT 1', (err, res2) => {
+	client.query('SELECT * FROM ncaa_basketball_rankings ORDER BY date_retrieved DESC LIMIT 1', (err, res2) => {
 		if (err) throw err;
 		console.log('retrieved most recent ncaa BB rankings. sending...');
 		res.send(res2);

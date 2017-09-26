@@ -2,7 +2,6 @@ $(document).ready(function() {
 	$("#college_football").click(function() {
 		$.get("/college-football", function(data, status) {
 			res = data.rows[0];
-			console.log(JSON.stringify(res));
 			rankings = JSON.parse(res.rankings);
 			$("#standings").empty();
 			$("#last_calculated").text('Last Calculated: ' + res.date_retrieved);
@@ -14,7 +13,6 @@ $(document).ready(function() {
 	$("#college_basketball").click(function() {
 		$.get("/college-basketball", function(data, status) {
 			res = data.rows[0];
-			console.log(JSON.stringify(res));
 			rankings = JSON.parse(res.rankings);
 			$("#standings").empty();
 			$("#last_calculated").text('Last Calculated: ' + res.date_retrieved);

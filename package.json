@@ -1,18 +1,19 @@
 {
-	"name": "ncaa-rankings",
-	"version": "1.0.0",
-	"description": "ncaa college sports rankings",
-	"engines": {
-		"node": "6.10.2"
-	},
-	"main": "index.js",
-	"scripts": {
-		"start": "node index.js",
-		"test": "node test.js"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"express": "^4.15.2"
-	}
+  "name": "ncaa-rankings",
+  "version": "1.0.0",
+  "description": "ncaa college sports rankings",
+  "engines": {
+    "node": "6.10.2"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "pg": "7.3.0"
+  }
 }

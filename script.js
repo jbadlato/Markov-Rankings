@@ -1,19 +1,25 @@
 $(document).ready(function() {
 	$("#college_football").click(function() {
 		$.get("/college-football", function(data, status) {
-			console.log(JSON.stringify(data));
+			res = data.rows[0];
+			console.log(JSON.stringify(res));
+			rankings = JSON.parse(res.rankings);
 			$("#standings").empty();
-			for (var i = 0; i < Object.keys(data).length; i++) {
-				$("#standings").append('<li>' + data[i] + '</li>');
+			$("#last_calculated").text('Last Calculated: ' + res.date_retrieved);
+			for (var i = 0; i < Object.keys(rankings).length; i++) {
+				$("#standings").append('<li>' + rankings[i] + '</li>');
 			}
 		});
 	});
 	$("#college_basketball").click(function() {
 		$.get("/college-basketball", function(data, status) {
-			console.log(JSON.stringify(data));
+			res = data.rows[0];
+			console.log(JSON.stringify(res));
+			rankings = JSON.parse(res.rankings);
 			$("#standings").empty();
-			for (var i = 0; i < Object.keys(data).length; i++) {
-				$("#standings").append('<li>' + data[i] + '</li>');
+			$("#last_calculated").text('Last Calculated: ' + res.date_retrieved);
+			for (var i = 0; i < Object.keys(rankings).length; i++) {
+				$("#standings").append('<li>' + rankings[i] + '</li>');
 			}
 		})
 	});

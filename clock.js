@@ -18,6 +18,7 @@ function scrape() {
 	});
 	
 	//For reinitializing the tables:
+	/*
 	client.connect();
 	client.query('DROP TABLE ncaa_fbs_rankings', (err, res) => {
 		client.query('DROP TABLE ncaa_basketball_rankings', (err, res) => {
@@ -25,6 +26,7 @@ function scrape() {
 			client.end();
 		});
 	});
+	*/
 	
 	// scrape data and calculate rankings
 	console.log('scrape() function');

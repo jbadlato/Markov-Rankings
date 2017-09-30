@@ -33,16 +33,32 @@ function scrape() {
 	// NCAA FBS Football:
 	var gamesURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=1';
 	var teamsURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=2';
-	fetchData(teamsURL, gamesURL, 'NCAAFBS');
+	fetchData(teamsURL, gamesURL, 'ncaa_fbs_rankings');
 
 	// NCAA Basketball:
 	var gamesURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=1';
 	var teamsURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=2';
-	fetchData(teamsURL, gamesURL, 'NCAABB');
+	fetchData(teamsURL, gamesURL, 'ncaa_basketball_rankings');
 }
 function saveData() {
 	// save rankings to database
 	console.log('saveData() function');
+}
+
+function sendToDatabase(rankings, league) {
+	const client = new Client({
+		connectionString: process.env.DATABASE_URL,
+		ssl: true,
+	});
+	client.connect();
+	client.query('CREATE TABLE IF NOT EXISTS ' + league + ' (id SERIAL PRIMARY KEY, date_retrieved DATE, rankings TEXT);', (err, res) => {
+		if (err) throw err;
+		console.log('created fbs table');
+		client.query('INSERT INTO ' + league + ' (date_retrieved, rankings) VALUES (now(), $1)', [JSON.stringify(rankings)], (err, res) => {
+			if (err) throw err;
+			client.end();
+		});
+	});
 }
 
 function fetchData(teamsURL, scoresURL, league) {
@@ -104,6 +120,8 @@ function fetchData(teamsURL, scoresURL, league) {
 				var teamNameToId = new TwoWayMap(teamNameToId);
 				var rankings = calculateRankings(scores, teamNameToId);
 				// send rankings to database
+				sendToDatabase(rankings, league);
+				/*
 				if (league === 'NCAAFBS') {
 					console.log('calculated FBS Rankings');
 					// send to NCAA FBS Football database
@@ -139,6 +157,7 @@ function fetchData(teamsURL, scoresURL, league) {
 						});
 					});
 				}
+				*/
 			});
 		}
 	});

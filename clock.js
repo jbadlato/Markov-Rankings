@@ -3,7 +3,7 @@ const { Client } = require('pg');
 var CronJob = require('cron').CronJob;
 
 cronJob = new CronJob({
-	cronTime: "00 00 00 * * 0-1,5-6", // runs every Sunday, Monday, Friday, Saturday at midnight.
+	cronTime: "00 00 00 * * *", // runs every Sunday, Monday, Friday, Saturday at midnight.
 	onTick: scrape(), // scrape newest data, calculate rankings
 	onComplete: saveData(), // save ranking to database or file
 	start: true,

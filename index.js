@@ -18,32 +18,43 @@ app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
 
-app.get("/college-football", function (req, res) {
-	console.log('college football get request');
+function sendRankings(res, league) {
 	const client = new Client({
 		connectionString: process.env.DATABASE_URL,
 		ssl: true,
 	});
 	client.connect();
-	client.query('SELECT * FROM ncaa_fbs_rankings ORDER BY date_retrieved DESC LIMIT 1', (err, res2) => {
+	client.query('SELECT * FROM ' + league + ' ORDER BY date_retrieved DESC LIMIT 1', (err, res2) => {
 		if (err) throw err;
-		console.log('retrieved most recent fbs rankings. sending...');
 		res.send(res2);
 		client.end();
 	});
+}
+
+app.get("/college-football", function (req, res) {
+	sendRankings(res, 'ncaa_fbs_rankings');
 });
 
 app.get("/college-basketball", function (req, res) {
-	console.log('college basketball get request');
-	const client = new Client({
-		connectionString: process.env.DATABASE_URL,
-		ssl: true,
-	});
-	client.connect();
-	client.query('SELECT * FROM ncaa_basketball_rankings ORDER BY date_retrieved DESC LIMIT 1', (err, res2) => {
-		if (err) throw err;
-		console.log('retrieved most recent ncaa BB rankings. sending...');
-		res.send(res2);
-		client.end();
-	});
+	sendRankings(res, 'ncaa_basketball_rankings');
+});
+
+app.get("/nba-basketball", function (req, res) {
+	sendRankings(res, 'nba_basketball_rankings');
+});
+
+app.get("/nhl-hockey", function (req, res) {
+	sendRankings(res, 'nhl_hockey_rankings');
+});
+
+app.get("/nfl-football", function (req, res) {
+	sendRankings(res, 'nfl_football_rankings');
+});
+
+app.get("/college-basketball-womens", function (req, res) {
+	sendRankings(res, 'ncaa_womens_basketball_rankings');
+});
+
+app.get("/mlb-baseball", function (req, res) {
+	sendRankings(res, 'mlb_baseball_rankings');
 });

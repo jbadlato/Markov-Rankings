@@ -7,3 +7,43 @@ body {
 	background-color: #e7e7e7;
 }
 
+#sports_container {
+	font-size: 0;
+	display: flex;
+}
+
+.sport {
+	display: inline-block;
+	border-style: solid;
+	border-radius: 2%;
+	margin: 0;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	text-align: center;
+	font-size: 16px;
+}
+
+.sport:active {
+	box-shadow: 0 1px 0 #00823F;
+    bottom:-2px;
+}
+
+#college_basketball, #nba_basketball, #college_basketball_womens {
+	background-color: #f99;
+}
+
+#college_football, #nfl_football {
+	background-color: #ff9;
+}
+
+#nhl_hockey {
+	background-color: #99f;
+}
+
+#mlb_baseball {
+	background-color: #f9f;
+}
+
+#standings, #last_calculated {
+	display: block;
+}

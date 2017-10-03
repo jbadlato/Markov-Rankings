@@ -3,11 +3,11 @@ const { Client } = require('pg');
 var CronJob = require('cron').CronJob;
 
 cronJob = new CronJob({
-	cronTime: "00 00 00 * * *", // runs every Sunday, Monday, Friday, Saturday at midnight.
+	cronTime: "00 00 00 * * *", // runs everyday at midnight.
 	onTick: scrape(), // scrape newest data, calculate rankings
-	onComplete: saveData(), // save ranking to database or file
 	start: true,
-	timeZone: 'America/Los_Angeles'
+	timeZone: 'America/Los_Angeles',
+	runOnInit: true
 });
 //cronJob.start();
 
@@ -22,27 +22,108 @@ function scrape() {
 	client.connect();
 	client.query('DROP TABLE ncaa_fbs_rankings', (err, res) => {
 		client.query('DROP TABLE ncaa_basketball_rankings', (err, res) => {
-			console.log('deleted tables.');
-			client.end();
+			client.query('DROP TABLE nba_basketball_rankings', (err, res) => {
+				client.query('DROP TABLE nhl_hockey_rankings', (err, res) => {
+					client.query('DROP TABLE nfl_football_rankings', (err, res) => {
+						client.query('DROP TABLE ncaa_womens_basketball_rankings', (err, res) => {
+							client.query('DROP TABLE mlb_baseball_rankings', (err, res) => {
+								console.log('deleted tables.');
+								client.end();
+							})
+						})
+					});
+				});
+			});
 		});
 	});
 	*/
 	
-	// scrape data and calculate rankings
-	console.log('scrape() function');
+	// scrape data and calculate rankings:
+
 	// NCAA FBS Football:
-	var gamesURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=1';
-	var teamsURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=2';
-	fetchData(teamsURL, gamesURL, 'ncaa_fbs_rankings');
+	var ncaaFBS = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=295489&sub=11604&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'ncaa_fbs_rankings');
+			resolve();
+		});
+		return promise;
+	}
 
 	// NCAA Basketball:
-	var gamesURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=1';
-	var teamsURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=2';
-	fetchData(teamsURL, gamesURL, 'ncaa_basketball_rankings');
-}
-function saveData() {
-	// save rankings to database
-	console.log('saveData() function');
+	var ncaaMBB = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'ncaa_basketball_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	// NBA Basketball: 
+	var nbaBB = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=292150&sub=292150&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=292150&sub=292150&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'nba_basketball_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	// NHL Hockey:
+	var nhlHockey = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'nhl_hockey_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	// NFL Football:
+	var nflFootball = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=295430&sub=295430&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=295430&sub=295430&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'nfl_football_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	// NCAA Women's Basketball:
+	var ncaaWBB = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=292155&sub=11590&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=292155&sub=11590&all=1&mode=2&format=2';
+			fetchData(teamsURL, gamesURL, 'ncaa_womens_basketball_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	// MLB Baseball:
+	var mlbBaseball = function () {
+		var promise = new Promise(function(resolve, reject) {
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=294524&sub=14342&all=1&mode=3&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=294524&sub=14342&all=1&mode=3&format=2';
+			fetchData(teamsURL, gamesURL, 'mlb_baseball_rankings');
+			resolve();
+		});
+		return promise;
+	}
+
+	ncaaFBS()
+		.then(ncaaMBB)
+		.then(nbaBB)
+		.then(nhlHockey)
+		.then(nflFootball)
+		.then(ncaaWBB)
+		.then(mlbBaseball);
 }
 
 function sendToDatabase(rankings, league) {
@@ -51,9 +132,9 @@ function sendToDatabase(rankings, league) {
 		ssl: true,
 	});
 	client.connect();
-	client.query('CREATE TABLE IF NOT EXISTS ' + league + ' (id SERIAL PRIMARY KEY, date_retrieved DATE, rankings TEXT);', (err, res) => {
+	client.query('CREATE TABLE IF NOT EXISTS ' + league + ' (id SERIAL PRIMARY KEY, date_retrieved TIMESTAMP, rankings TEXT);', (err, res) => {
+		console.log(league + 'table');
 		if (err) throw err;
-		console.log('created fbs table');
 		client.query('INSERT INTO ' + league + ' (date_retrieved, rankings) VALUES (now(), $1)', [JSON.stringify(rankings)], (err, res) => {
 			if (err) throw err;
 			client.end();
@@ -70,7 +151,7 @@ function fetchData(teamsURL, scoresURL, league) {
 			data = data.split(/,[ ]*|[\n]/);
 			var scores = [];
 			for (var i = 0; i < data.length; i++) {
-				if (i % 8 === 0) { // not sure what this number from the data represents?
+				if (i % 8 === 0) { // not sure what this number from the data represents? Game ID maybe?
 					continue;
 				} else if (i % 8 === 1) { // Date of game
 					continue;
@@ -121,43 +202,6 @@ function fetchData(teamsURL, scoresURL, league) {
 				var rankings = calculateRankings(scores, teamNameToId);
 				// send rankings to database
 				sendToDatabase(rankings, league);
-				/*
-				if (league === 'NCAAFBS') {
-					console.log('calculated FBS Rankings');
-					// send to NCAA FBS Football database
-					const client = new Client({
-						connectionString: process.env.DATABASE_URL,
-						ssl: true,
-					});
-					client.connect();
-					client.query('CREATE TABLE IF NOT EXISTS ncaa_fbs_rankings (id SERIAL PRIMARY KEY, date_retrieved DATE, rankings TEXT);', (err, res) => {
-						if (err) throw err;
-						console.log('created fbs table');
-						client.query('INSERT INTO ncaa_fbs_rankings (date_retrieved, rankings) VALUES (now(), $1)', [JSON.stringify(rankings)], (err, res) => {
-							if (err) throw err;
-							console.log('wrote fbs rankings at to database.');
-							client.end();
-						});
-					});
-				} else if (league === 'NCAABB') {
-					console.log('calculated NCAA BB Rankings');
-					// send to NCAA Basketball database
-					const client = new Client({
-						connectionString: process.env.DATABASE_URL,
-						ssl: true,
-					});
-					client.connect();
-					client.query('CREATE TABLE IF NOT EXISTS ncaa_basketball_rankings (id SERIAL PRIMARY KEY, date_retrieved DATE, rankings TEXT);', (err, res) => {
-						if (err) throw err;
-						console.log('created ncaabb table');
-						client.query('INSERT INTO ncaa_basketball_rankings (date_retrieved, rankings) VALUES (now(), $1)', [JSON.stringify(rankings)], (err, res) => {
-							if (err) throw err;
-							console.log('wrote ncaabb rankings to database.');
-							client.end();
-						});
-					});
-				}
-				*/
 			});
 		}
 	});

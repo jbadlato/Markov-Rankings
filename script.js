@@ -4,7 +4,7 @@ function printRankings(data, status) {
 	$('#standings').empty();
 	$('#last_calculated').text('Last Calculated: ' + res.date_retrieved);
 	for (var i = 0; i < Object.keys(rankings).length; i++) {
-		$('#standings').append('<li>' + rankings[i] + '</li>');
+		$('#standings').append('<li>' + rankings[i].replace(/_/g," ") + '</li>');
 	}
 }
 

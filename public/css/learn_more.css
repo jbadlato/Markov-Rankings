@@ -1,0 +1,25 @@
+* {
+	font-family: 'Exo', sans-serif;
+	margin: 1%;
+}
+
+body {
+	background-color: #e7e7e7;
+	padding: 5%;
+	padding-top: 0;
+}
+
+h1 {
+	text-align: center;
+}
+
+img {
+	display: block;
+	margin: auto;
+	max-height: 450px;
+}
+
+#rankings_comparison img {
+	margin: 0;
+	display: inline;
+}

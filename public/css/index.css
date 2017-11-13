@@ -47,3 +47,8 @@ body {
 #standings, #last_calculated {
 	display: block;
 }
+
+.top25 {
+	font-size: 32px; 
+	font-weight: bolder;
+}

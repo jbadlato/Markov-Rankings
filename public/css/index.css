@@ -13,14 +13,25 @@ body {
 }
 
 .sport {
+	color: #222;
 	display: inline-block;
 	border-style: solid;
 	border-radius: 2%;
 	margin: 0;
-	padding-top: 5%;
-	padding-bottom: 5%;
+	height: 200px;
 	text-align: center;
 	font-size: 16px;
+}
+
+.sport p {
+	display: table-cell;
+	height: 200px;
+	width: 200px;
+	vertical-align: middle;
+}
+
+.sport:hover {
+	color: #666;
 }
 
 .sport:active {
@@ -29,15 +40,15 @@ body {
 }
 
 #college_basketball, #nba_basketball, #college_basketball_womens {
-	background-color: #f99;
+	background-color: #e33;
 }
 
 #college_football, #nfl_football {
-	background-color: #ff9;
+	background-color: #3e3;
 }
 
 #nhl_hockey {
-	background-color: #99f;
+	background-color: #33e;
 }
 
 #mlb_baseball {
@@ -46,6 +57,12 @@ body {
 
 #standings, #last_calculated {
 	display: block;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+#learn-more {
+	font-weight: bolder;
 }
 
 .top25 {

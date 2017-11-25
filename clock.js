@@ -147,9 +147,22 @@ function fetchData(teamsURL, scoresURL, league) {
 		if (error) {
 			console.log(error);
 		} else {
-			data = body
+			data = body;
 			data = data.split(/,[ ]*|[\n]/);
-			var scores = [];
+			var scores = []; 
+			/* scores format:
+				[
+					{
+						"Team": int >= 0, 
+						"Team Venue": 'Home' or 'Away' (string), 
+						"Team Score": int >= 0, 
+						"Opponent"; int >= 0,
+						"Opponent Venue": 'Home' or 'Away' (string), 
+						"Opponent Score": int >= 0
+					}, 
+					...(for each game)
+				]
+			*/
 			for (var i = 0; i < data.length; i++) {
 				if (i % 8 === 0) { // not sure what this number from the data represents? Game ID maybe?
 					continue;
@@ -193,6 +206,19 @@ function fetchData(teamsURL, scoresURL, league) {
 			request(teamsURL, function (error2, response2, body2) {
 				body2 = body2.split(/,[ ]*|[\n]/);
 				var teamNameToId = {};
+				/* teamNameToId format: 
+					(Two-Way Map)
+					{
+						"map": {
+							string: int >= 0, 
+							...(for each team)
+							},
+						"reverseMap": {
+							int >= 0: string,
+							...(for each team)
+							}
+					}
+				*/
 				for (var i = 1; i < body2.length; i += 2) {
 					teamName = body2[i];
 					teamId = parseInt(body2[i-1]) - 1;
@@ -212,6 +238,7 @@ function calculateRankings(data, teamNameToId) {
 	//Convert scores to matrix:
 	var ScoresMatrix = makeArray(teamCount, teamCount, 0);
 	var NumOfMatches = makeArray(teamCount, teamCount, 0);
+	var WinLossRecords = makeArray(teamCount, 3, 0);
 	for (var i = 0; i < data.length; i++) {
 		row = data[i];
 		teamId = row["Team"];
@@ -220,6 +247,16 @@ function calculateRankings(data, teamNameToId) {
 		ScoresMatrix[teamId][opponentId] = (ScoresMatrix[teamId][opponentId]*(NumOfMatches[teamId][opponentId] - 1) + row["Team Score"]) / NumOfMatches[teamId][opponentId];
 		NumOfMatches[opponentId][teamId]++;
 		ScoresMatrix[opponentId][teamId] = (ScoresMatrix[opponentId][teamId]*(NumOfMatches[opponentId][teamId] - 1) + row["Opponent Score"]) / NumOfMatches[opponentId][teamId];
+		if (row["Team Score"] > row["Opponent Score"]) {
+			WinLossRecords[teamId][0]++;
+			WinLossRecords[opponentId][1]++;
+		} else if (row["Team Score"] < row["Opponent Score"]) {
+			WinLossRecords[teamId][1]++;
+			WinLossRecords[opponentId][0]++;
+		} else {
+			WinLossRecords[teamId][2]++;
+			WinLossRecords[opponentId][2]++;
+		}
 	}
 	transpose(ScoresMatrix);
 
@@ -252,13 +289,22 @@ function calculateRankings(data, teamNameToId) {
 	}
 	Ratings = Ratings[0];
 	var Standings = {};
-	var topRating, id, name;
+	var topRating, id, name, record;
 	for (var i = 0; i < Ratings.length; i++) {
+		Standings[i] = {};
 		topRating = Math.max.apply(Math, Ratings);
 		id = Ratings.indexOf(topRating);
 		name = teamNameToId.revGet(id);
-		Standings[i] = name;
+		Standings[i]["Team"] = name;
 		Ratings[id] = -1;
+		// Add Win-Loss Record: 
+		record = "(" + WinLossRecords[id][0] + "-" + WinLossRecords[id][1];
+		if (WinLossRecords[id][2] === 0) {
+			record += ")";
+		} else {
+			record += "-" + WinLossRecords[id][2] + ")";
+		}
+		Standings[i]["Record"] = record; 
 	}
 	return Standings;
 }

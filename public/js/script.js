@@ -4,7 +4,7 @@ function printRankings(data, status) {
 	$('#standings').empty();
 	$('#last_calculated').text('Last Calculated: ' + res.date_retrieved);
 	for (var i = 0; i < Object.keys(rankings).length; i++) {
-		$('#standings').append('<li>' + rankings[i].replace(/_/g," ") + '</li>');
+		$('#standings').append('<li>' + rankings[i]["Team"].replace(/_/g," ") + " " + rankings[i]["Record"] + '</li>');
 		if (i < 25) {
 			$('#standings li:last-child').addClass('top25');
 		}

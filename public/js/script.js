@@ -3,10 +3,16 @@ function printRankings(data, status) {
 	rankings = JSON.parse(res.rankings);
 	$('#standings').empty();
 	$('#last_calculated').text('Last Calculated: ' + res.date_retrieved);
+	var numOfTop;
+	if (Object.keys(rankings).length > 100) {
+		numOfTop = 25;
+	} else {
+		numOfTop = 10;
+	}
 	for (var i = 0; i < Object.keys(rankings).length; i++) {
 		$('#standings').append('<li>' + rankings[i]["Team"].replace(/_/g," ") + " " + rankings[i]["Record"] + '</li>');
-		if (i < 25) {
-			$('#standings li:last-child').addClass('top25');
+		if (i < numOfTop) {
+			$('#standings li:last-child').addClass('top');
 		}
 	}
 }

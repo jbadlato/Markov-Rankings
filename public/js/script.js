@@ -1,8 +1,9 @@
 function printRankings(data, status) {
 	res = data.rows[0];
 	rankings = JSON.parse(res.rankings);
+	dateRetrieved = new Date(res.date_retrieved);
 	$('#standings').empty();
-	$('#last_calculated').text('Last Calculated: ' + res.date_retrieved);
+	$('#last_calculated').text('Last Calculated: ' + dateRetrieved.toUTCString());
 	var numOfTop;
 	if (Object.keys(rankings).length > 100) {
 		numOfTop = 25;

@@ -1,4 +1,4 @@
-var request = require('request');
+var request = require('request');	
 const { Client } = require('pg');
 var CronJob = require('cron').CronJob;
 
@@ -16,27 +16,6 @@ function scrape() {
 		connectionString: process.env.DATABASE_URL,
 		ssl: true,
 	});
-	
-	//For reinitializing the tables:
-	/*
-	client.connect();
-	client.query('DROP TABLE ncaa_fbs_rankings', (err, res) => {
-		client.query('DROP TABLE ncaa_basketball_rankings', (err, res) => {
-			client.query('DROP TABLE nba_basketball_rankings', (err, res) => {
-				client.query('DROP TABLE nhl_hockey_rankings', (err, res) => {
-					client.query('DROP TABLE nfl_football_rankings', (err, res) => {
-						client.query('DROP TABLE ncaa_womens_basketball_rankings', (err, res) => {
-							client.query('DROP TABLE mlb_baseball_rankings', (err, res) => {
-								console.log('deleted tables.');
-								client.end();
-							})
-						})
-					});
-				});
-			});
-		});
-	});
-	*/
 	
 	// scrape data and calculate rankings:
 

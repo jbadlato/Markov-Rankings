@@ -203,6 +203,7 @@ function fetchData(teamsURL, scoresURL, league) {
 					teamId = parseInt(body2[i-1]) - 1;
 					teamNameToId[teamName] = teamId;
 				}
+				console.log(JSON.stringify(teamNameToId));
 				var teamNameToId = new TwoWayMap(teamNameToId);
 				var rankings = calculateRankings(scores, teamNameToId);
 				// send rankings to database
@@ -252,6 +253,7 @@ function calculateRankings(data, teamNameToId) {
 			ProbabilityMatrix[i][j] = ScoresMatrix[i][j] / sumOfScores;
 		}
 	}
+	console.log("ProbabilityMatrix: " + JSON.stringify(ProbabilityMatrix));
 
 	for (var i = 0; i < ProbabilityMatrix.length; i++) {
 		var rowSum = 0;
@@ -260,8 +262,9 @@ function calculateRankings(data, teamNameToId) {
 		}
 		ProbabilityMatrix[i][i] = 1 - rowSum;
 	}
-
+	console.log("ProbabilityMatrix: " + JSON.stringify(ProbabilityMatrix));
 	var Ratings = matrixMultiply(ProbabilityMatrix, ProbabilityMatrix);
+	console.log("Ratings: " + JSON.stringify(Ratings));
 	var tol = 0.0000000001
 	while (Math.abs(Ratings[0][0] - Ratings[1][0]) > tol) { // could come up with a more robust end condition
 		Ratings = matrixMultiply(Ratings, Ratings);
@@ -271,12 +274,20 @@ function calculateRankings(data, teamNameToId) {
 	var topRating, id, name, record;
 	for (var i = 0; i < Ratings.length; i++) {
 		Standings[i] = {};
+		console.log(JSON.stringify(Ratings));
 		topRating = Math.max.apply(Math, Ratings);
+		if (isNaN(topRating) || topRating < 0) {	// Prevent crash when there aren't enough games
+			topRating = null;
+		}
 		id = Ratings.indexOf(topRating);
 		name = teamNameToId.revGet(id);
 		Standings[i]["Team"] = name;
 		Ratings[id] = -1;
 		// Add Win-Loss Record: 
+		console.log("Ratings: " + JSON.stringify(Ratings));
+		console.log("TopRating: " + topRating);
+		console.log("id: " + id);
+		console.log("WinLossRecords: " + JSON.stringify(WinLossRecords));
 		record = "(" + WinLossRecords[id][0] + "-" + WinLossRecords[id][1];
 		if (WinLossRecords[id][2] === 0) {
 			record += ")";

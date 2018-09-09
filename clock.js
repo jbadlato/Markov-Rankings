@@ -225,9 +225,11 @@ function calculateRankings(data, teamNameToId) {
 		teamId = row["Team"];
 		opponentId = row["Opponent"];
 		NumOfMatches[teamId][opponentId]++;
-		ScoresMatrix[teamId][opponentId] = (ScoresMatrix[teamId][opponentId]*(NumOfMatches[teamId][opponentId] - 1) + row["Team Score"]) / NumOfMatches[teamId][opponentId];
+		ScoresMatrix[teamId][opponentId] += row["Team Score"];
+		//ScoresMatrix[teamId][opponentId] = (ScoresMatrix[teamId][opponentId]*(NumOfMatches[teamId][opponentId] - 1) + row["Team Score"]) / NumOfMatches[teamId][opponentId];
 		NumOfMatches[opponentId][teamId]++;
-		ScoresMatrix[opponentId][teamId] = (ScoresMatrix[opponentId][teamId]*(NumOfMatches[opponentId][teamId] - 1) + row["Opponent Score"]) / NumOfMatches[opponentId][teamId];
+		ScoresMatrix[opponentId][teamId] += row["Opponent Score"];
+		//ScoresMatrix[opponentId][teamId] = (ScoresMatrix[opponentId][teamId]*(NumOfMatches[opponentId][teamId] - 1) + row["Opponent Score"]) / NumOfMatches[opponentId][teamId];
 		if (row["Team Score"] > row["Opponent Score"]) {
 			WinLossRecords[teamId][0]++;
 			WinLossRecords[opponentId][1]++;

@@ -66,8 +66,8 @@ function scrape() {
 	// NFL Football:
 	var nflFootball = function () {
 		var promise = new Promise(function(resolve, reject) {
-			var gamesURL = 'https://www.masseyratings.com/scores.php?s=295430&sub=295430&all=1&mode=2&format=1';
-			var teamsURL = 'https://www.masseyratings.com/scores.php?s=295430&sub=295430&all=1&mode=2&format=2';
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&format=2';
 			fetchData(teamsURL, gamesURL, 'nfl_football_rankings');
 			resolve();
 		});

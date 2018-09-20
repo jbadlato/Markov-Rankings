@@ -232,7 +232,7 @@ function fetchData(teamsURL, scoresURL, league) {
 				// send to Twitter
 				var today = new Date();
 				var dayOfTheWeek = today.getDay();
-				if (dayOfTheWeek === 4 && league === 'ncaa_fbs_rankings') {
+				if (dayOfTheWeek === 0 && league === 'ncaa_fbs_rankings') {
 					console.log("Tweeting FBS rankings...");
 					tweetTopTen(rankings);
 				}

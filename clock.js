@@ -1,6 +1,9 @@
 var request = require('request');	
 const { Client } = require('pg');
 var CronJob = require('cron').CronJob;
+var twit = require('twit');
+var config = require('./config.js');
+var Twitter = new twit(config);
 
 cronJob = new CronJob({
 	cronTime: "00 00 00 * * *", // runs everyday at midnight.
@@ -103,6 +106,24 @@ function scrape() {
 		.then(nflFootball)
 		.then(ncaaWBB)
 		.then(mlbBaseball);
+}
+
+function tweetTopTen(rankings) {
+	var tweetMessage = 'This week\'s FBS Top Ten: \n'
+		+ '1: ' + rankings[0]["Team"].replace('_', ' ') + '\n'
+		+ '2: ' + rankings[1]["Team"].replace('_', ' ') + '\n'
+		+ '3: ' + rankings[2]["Team"].replace('_', ' ') + '\n'
+		+ '4: ' + rankings[3]["Team"].replace('_', ' ') + '\n'
+		+ '5: ' + rankings[4]["Team"].replace('_', ' ') + '\n'
+		+ '6: ' + rankings[5]["Team"].replace('_', ' ') + '\n'
+		+ '7: ' + rankings[6]["Team"].replace('_', ' ') + '\n'
+		+ '8: ' + rankings[7]["Team"].replace('_', ' ') + '\n'
+		+ '9: ' + rankings[8]["Team"].replace('_', ' ') + '\n'
+		+ '10: ' + rankings[9]["Team"].replace('_', ' ') + '\n'
+		+ '#FBS #NCAA #CollegeFootball';
+	Twitter.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
+		console.log('Tweeted FBS rankings: ' + JSON.stringify(data));
+	});
 }
 
 function sendToDatabase(rankings, league) {
@@ -208,6 +229,13 @@ function fetchData(teamsURL, scoresURL, league) {
 				var rankings = calculateRankings(scores, teamNameToId);
 				// send rankings to database
 				sendToDatabase(rankings, league);
+				// send to Twitter
+				var today = new Date();
+				var dayOfTheWeek = today.getDay();
+				if (dayOfTheWeek === 4 && league === 'ncaa_fbs_rankings') {
+					console.log("Tweeting FBS rankings...");
+					tweetTopTen(rankings);
+				}
 			});
 		}
 	});

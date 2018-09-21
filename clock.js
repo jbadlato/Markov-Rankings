@@ -1,17 +1,18 @@
 var request = require('request');	
 const { Client } = require('pg');
-var CronJob = require('cron').CronJob;
+//var CronJob = require('cron').CronJob;
 var twit = require('twit');
 var config = require('./config.js');
 var Twitter = new twit(config);
 
-cronJob = new CronJob({
-	cronTime: "00 00 00 * * *", // runs everyday at midnight.
-	onTick: scrape(), // scrape newest data, calculate rankings
-	start: true,
-	timeZone: 'America/Los_Angeles',
-	runOnInit: true
-});
+scrape();
+// cronJob = new CronJob({
+// 	cronTime: "00 00 00 * * *", // runs everyday at midnight.
+// 	onTick: scrape(), // scrape newest data, calculate rankings
+// 	start: true,
+// 	timeZone: 'America/Los_Angeles',
+// 	runOnInit: true
+// });
 //cronJob.start();
 
 function scrape() {

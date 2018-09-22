@@ -1,3 +1,4 @@
+TRUNCATE lu_twitter_football;
 INSERT INTO lu_twitter_football (
 	team_name,
 	twitter_handle
@@ -60,6 +61,13 @@ INSERT INTO lu_twitter_football (
 ) VALUES (
 	'Army',
 	'ArmyWP_Football'
+);
+INSERT INTO lu_twitter_football (
+	team_name,
+	twitter_handle
+) VALUES (
+	'Auburn',
+	'AuburnFootball'
 );
 INSERT INTO lu_twitter_football (
 	team_name,

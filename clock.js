@@ -109,22 +109,78 @@ function scrape() {
 		.then(mlbBaseball);
 }
 
-function tweetTopTen(rankings) {
-	var tweetMessage = 'This week\'s FBS Top Ten: \n'
-		+ '1: ' + rankings[0]["Team"].replace('_', ' ') + '\n'
-		+ '2: ' + rankings[1]["Team"].replace('_', ' ') + '\n'
-		+ '3: ' + rankings[2]["Team"].replace('_', ' ') + '\n'
-		+ '4: ' + rankings[3]["Team"].replace('_', ' ') + '\n'
-		+ '5: ' + rankings[4]["Team"].replace('_', ' ') + '\n'
-		+ '6: ' + rankings[5]["Team"].replace('_', ' ') + '\n'
-		+ '7: ' + rankings[6]["Team"].replace('_', ' ') + '\n'
-		+ '8: ' + rankings[7]["Team"].replace('_', ' ') + '\n'
-		+ '9: ' + rankings[8]["Team"].replace('_', ' ') + '\n'
-		+ '10: ' + rankings[9]["Team"].replace('_', ' ') + '\n'
-		+ '#FBS #NCAA #CollegeFootball';
-	Twitter.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
-		console.log('Tweeted FBS rankings: ' + JSON.stringify(data));
+function getTwitterHandle(teamName, callback) {
+	const client = new Client({
+		connectionString: process.env.DATABASE_URL,
+		ssl: true,
 	});
+	client.connect();
+	var twitterHandle = '';
+	client.query('SELECT twitter_handle FROM lu_twitter_football WHERE team_name = \'' + teamName + '\';', (err, res) => {
+		console.log(teamName);
+		console.log(res);
+		if (err) throw err;
+		twitterHandle = res.rows[0].twitter_handle;
+		client.end();
+		console.log(twitterHandle);
+		callback(twitterHandle);
+	});
+}
+
+function tweetTopTen(rankings) {
+	getTwitterHandle(rankings[0]["Team"], (twitter1) => {
+		getTwitterHandle(rankings[1]["Team"], (twitter2) => {
+			getTwitterHandle(rankings[2]["Team"], (twitter3) => {
+				getTwitterHandle(rankings[3]["Team"], (twitter4) => {
+					getTwitterHandle(rankings[4]["Team"], (twitter5) => {
+						getTwitterHandle(rankings[5]["Team"], (twitter6) => {
+							getTwitterHandle(rankings[6]["Team"], (twitter7) => {
+								getTwitterHandle(rankings[7]["Team"], (twitter8) => {
+									getTwitterHandle(rankings[8]["Team"], (twitter9) => {
+										getTwitterHandle(rankings[9]["Team"], (twitter10) => {
+											var tweetMessage = 'This week\'s BS Top Ten:\n'
+												+ '1: @' + twitter1 + '\n'
+												+ '2: @' + twitter2 + '\n'
+												+ '3: @' + twitter3 + '\n'
+												+ '4: @' + twitter4 + '\n'
+												+ '5: @' + twitter5 + '\n'
+												+ '6: @' + twitter6 + '\n'
+												+ '7: @' + twitter7 + '\n'
+												+ '8: @' + twitter8 + '\n'
+												+ '9: @' + twitter9 + '\n'
+												+ '10: @' + twitter10 + '\n'
+												+ 'Full Rankings: markov-rankings.herokuapp.com';
+											Twitter.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
+												console.log('Tweeted FBS rankings.');
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+	});
+
+	/*
+	var tweetMessage = 'This week\'s FBS Top Ten:\n'
+		+ '1: @' + getTwitterHandle(rankings[0]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '2: @' + getTwitterHandle(rankings[1]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '3: @' + getTwitterHandle(rankings[2]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '4: @' + getTwitterHandle(rankings[3]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '5: @' + getTwitterHandle(rankings[4]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '6: @' + getTwitterHandle(rankings[5]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '7: @' + getTwitterHandle(rankings[6]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '8: @' + getTwitterHandle(rankings[7]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '9: @' + getTwitterHandle(rankings[8]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ '10: @' + getTwitterHandle(rankings[9]["Team"], (twitterHandle) => {return twitterHandle}) + '\n'
+		+ 'Full Rankings: markov-rankings.herokuapp.com';
+	Twitter.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
+		console.log('Tweeted FBS rankings.');
+	});
+	*/
 }
 
 function sendToDatabase(rankings, league) {

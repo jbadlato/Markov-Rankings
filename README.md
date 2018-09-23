@@ -7,7 +7,7 @@ Hosted on https://markov-rankings.herokuapp.com
 
 Built with: 
 * Node.js
-* Cron
 * PostgreSQL
+* Twitter API
 * Heroku
 * Bootstrap

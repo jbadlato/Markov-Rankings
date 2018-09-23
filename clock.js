@@ -138,7 +138,7 @@ function tweetTopTen(rankings) {
 								getTwitterHandle(rankings[7]["Team"], (twitter8) => {
 									getTwitterHandle(rankings[8]["Team"], (twitter9) => {
 										getTwitterHandle(rankings[9]["Team"], (twitter10) => {
-											var tweetMessage = 'This week\'s BS Top Ten:\n'
+											var tweetMessage = 'This week\'s FBS Top Ten:\n'
 												+ '1: @' + twitter1 + '\n'
 												+ '2: @' + twitter2 + '\n'
 												+ '3: @' + twitter3 + '\n'

@@ -71,3 +71,11 @@ body {
 	font-size: 32px; 
 	font-weight: bolder;
 }
+
+#twitter_button {
+	display: block;
+	position: absolute;
+	right:0px;
+	max-height: 50px;
+	max-width: 50px;
+	

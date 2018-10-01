@@ -5,6 +5,8 @@ var twit = require('twit');
 var config = require('./config.js');
 var Twitter = new twit(config);
 
+var FBS_TWITTER_LU_TBL = 'lu_twitter_fbs';
+
 scrape();
 // cronJob = new CronJob({
 // 	cronTime: "00 00 00 * * *", // runs everyday at midnight.
@@ -109,14 +111,14 @@ function scrape() {
 		.then(mlbBaseball);
 }
 
-function getTwitterHandle(teamName, callback) {
+function getTwitterHandle(teamName, luTblName, callback) {
 	const client = new Client({
 		connectionString: process.env.DATABASE_URL,
 		ssl: true,
 	});
 	client.connect();
 	var twitterHandle = '';
-	client.query('SELECT twitter_handle FROM lu_twitter_football WHERE team_name = \'' + teamName + '\';', (err, res) => {
+	client.query('SELECT twitter_handle FROM ' + luTblName + ' WHERE team_name = \'' + teamName + '\';', (err, res) => {
 		console.log(teamName);
 		console.log(res);
 		if (err) throw err;
@@ -127,17 +129,17 @@ function getTwitterHandle(teamName, callback) {
 	});
 }
 
-function tweetTopTen(rankings) {
-	getTwitterHandle(rankings[0]["Team"], (twitter1) => {
-		getTwitterHandle(rankings[1]["Team"], (twitter2) => {
-			getTwitterHandle(rankings[2]["Team"], (twitter3) => {
-				getTwitterHandle(rankings[3]["Team"], (twitter4) => {
-					getTwitterHandle(rankings[4]["Team"], (twitter5) => {
-						getTwitterHandle(rankings[5]["Team"], (twitter6) => {
-							getTwitterHandle(rankings[6]["Team"], (twitter7) => {
-								getTwitterHandle(rankings[7]["Team"], (twitter8) => {
-									getTwitterHandle(rankings[8]["Team"], (twitter9) => {
-										getTwitterHandle(rankings[9]["Team"], (twitter10) => {
+function tweetTopTen(rankings, luTblName) {
+	getTwitterHandle(rankings[0]["Team"], luTblName, (twitter1) => {
+		getTwitterHandle(rankings[1]["Team"], luTblName, (twitter2) => {
+			getTwitterHandle(rankings[2]["Team"], luTblName, (twitter3) => {
+				getTwitterHandle(rankings[3]["Team"], luTblName, (twitter4) => {
+					getTwitterHandle(rankings[4]["Team"], luTblName, (twitter5) => {
+						getTwitterHandle(rankings[5]["Team"], luTblName, (twitter6) => {
+							getTwitterHandle(rankings[6]["Team"], luTblName, (twitter7) => {
+								getTwitterHandle(rankings[7]["Team"], luTblName, (twitter8) => {
+									getTwitterHandle(rankings[8]["Team"], luTblName, (twitter9) => {
+										getTwitterHandle(rankings[9]["Team"], luTblName, (twitter10) => {
 											var tweetMessage = 'This week\'s FBS Top Ten:\n'
 												+ '1: @' + twitter1 + '\n'
 												+ '2: @' + twitter2 + '\n'
@@ -291,7 +293,7 @@ function fetchData(teamsURL, scoresURL, league) {
 				var dayOfTheWeek = today.getDay();
 				if (dayOfTheWeek === 0 && league === 'ncaa_fbs_rankings') {
 					console.log("Tweeting FBS rankings...");
-					tweetTopTen(rankings);
+					tweetTopTen(rankings, FBS_TWITTER_LU_TBL);
 				}
 			});
 		}

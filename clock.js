@@ -6,6 +6,7 @@ var config = require('./config.js');
 var Twitter = new twit(config);
 
 var FBS_TWITTER_LU_TBL = 'lu_twitter_fbs';
+var NFL_TWITTER_LU_TBL = 'lu_twitter_nfl';
 
 scrape();
 // cronJob = new CronJob({
@@ -294,6 +295,10 @@ function fetchData(teamsURL, scoresURL, league) {
 				if (dayOfTheWeek === 0 && league === 'ncaa_fbs_rankings') {
 					console.log("Tweeting FBS rankings...");
 					tweetTopTen(rankings, FBS_TWITTER_LU_TBL);
+				}
+				if (dayOfTheWeek === 2 && league === 'nfl_football_rankings') {
+					console.log("Tweeting NFL rankings...");
+					tweetTopTen(rankings, NFL_TWITTER_LU_TBL);
 				}
 			});
 		}

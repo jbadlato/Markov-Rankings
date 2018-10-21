@@ -51,8 +51,8 @@ function scrape() {
 	// NBA Basketball: 
 	var nbaBB = function () {
 		var promise = new Promise(function(resolve, reject) {
-			var gamesURL = 'https://www.masseyratings.com/scores.php?s=292150&sub=292150&all=1&mode=2&format=1';
-			var teamsURL = 'https://www.masseyratings.com/scores.php?s=292150&sub=292150&all=1&mode=2&format=2';
+			var gamesURL = 'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&format=1';
+			var teamsURL = 'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&format=2';
 			fetchData(teamsURL, gamesURL, 'nba_basketball_rankings');
 			resolve();
 		});

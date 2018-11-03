@@ -92,7 +92,7 @@ MathJax.Hub.Config({
 				0.1522 & 0 & 0.1304 & 0.7174 \\
 				\end{bmatrix}
 				$$
-				Now, let's consider $A^2$.  After some inspection, we see that the $ij$th element of this matrix is the probability of ending at state $j$ after two steps if we start at state $i$.  So if Bobby is currently a fan of Team A, the element in the first row and third column of $A^2$ Would be the probability that Bobby is a fan of Team C after changing his mind twice (Note: here I say "changing his mind, but this includes the possibility that Bobby stays a fan of Team A on the first step).  
+				Now, let's consider $A^2$.  After some inspection, we see that the $ij$th element of this matrix is the probability of ending at state $j$ after two steps if we start at state $i$.  So if Bobby is currently a fan of Team A, the element in the first row and third column of $A^2$ Would be the probability that Bobby is a fan of Team C after changing his mind twice (Note: here I say "changing his mind", but this includes the possibility that Bobby stays a fan of Team A).  
 			</p>
 			<p>
 				If we look at $A^3$, we find the probabilities that result after 3 steps, $A^4$ contains the probabilities after 4 steps, and so on.  As it turns out, if we raise $A$ to a really high power, all of the rows start to look the same.  In other words, $\lim_\limits{n \to \infty}{A^n}$ converges and each row of the resulting matrix is identical.  This matrix, $A^\infty$, holds the long-run probability of the system being in each state.  In other words, in the long run, it tells us how much time Bobby spends being a fan of each team.  

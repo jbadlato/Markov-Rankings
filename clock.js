@@ -131,7 +131,7 @@ function getTwitterHandle(teamName, luTblName, callback) {
 }
 
 function tweetTopTen(rankings, luTblName) {
-	let league = luTblName.substring(luTblName.indexOf("LU_TWITTER_") + "LU_TWITTER_".length, luTblName.length);
+	let league = luTblName.substring(luTblName.indexOf("LU_TWITTER_") + "LU_TWITTER_".length + 1, luTblName.length).toUpperCase();
 	getTwitterHandle(rankings[0]["Team"], luTblName, (twitter1) => {
 		getTwitterHandle(rankings[1]["Team"], luTblName, (twitter2) => {
 			getTwitterHandle(rankings[2]["Team"], luTblName, (twitter3) => {

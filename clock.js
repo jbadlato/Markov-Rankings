@@ -31,8 +31,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'ncaa_fbs_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'ncaa_fbs_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -42,8 +49,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'ncaa_basketball_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'ncaa_basketball_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -53,8 +67,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'nba_basketball_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'nba_basketball_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -64,8 +85,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=305192&sub=305192&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=305192&sub=305192&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'nhl_hockey_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'nhl_hockey_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -75,8 +103,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'nfl_football_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'nfl_football_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -86,8 +121,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=298893&sub=11590&all=1&mode=2&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=298893&sub=11590&all=1&mode=2&format=2';
-			fetchData(teamsURL, gamesURL, 'ncaa_womens_basketball_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'ncaa_womens_basketball_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}
@@ -97,8 +139,15 @@ function scrape() {
 		var promise = new Promise(function(resolve, reject) {
 			var gamesURL = 'https://www.masseyratings.com/scores.php?s=294524&sub=14342&all=1&mode=3&format=1';
 			var teamsURL = 'https://www.masseyratings.com/scores.php?s=294524&sub=14342&all=1&mode=3&format=2';
-			fetchData(teamsURL, gamesURL, 'mlb_baseball_rankings');
-			resolve();
+			try {
+				fetchData(teamsURL, gamesURL, 'mlb_baseball_rankings');
+			}
+			catch(err) {
+				console.log(err + ": " + err.message);
+			}
+			finally {
+				resolve();
+			}
 		});
 		return promise;
 	}

@@ -336,19 +336,24 @@ function fetchData(teamsURL, scoresURL, league) {
 					teamNameToId[teamName] = teamId;
 				}
 				var teamNameToId = new TwoWayMap(teamNameToId);
-				var rankings = calculateRankings(scores, teamNameToId);
-				// send rankings to database
-				sendToDatabase(rankings, league);
-				// send to Twitter
-				var today = new Date();
-				var dayOfTheWeek = today.getDay();
-				if (dayOfTheWeek === 0 && league === 'ncaa_fbs_rankings') {
-					console.log("Tweeting FBS rankings...");
-					tweetTopTen(rankings, FBS_TWITTER_LU_TBL);
+				try {
+					var rankings = calculateRankings(scores, teamNameToId);
+					// send rankings to database
+					sendToDatabase(rankings, league);
+					// send to Twitter
+					var today = new Date();
+					var dayOfTheWeek = today.getDay();
+					if (dayOfTheWeek === 0 && league === 'ncaa_fbs_rankings') {
+						console.log("Tweeting FBS rankings...");
+						tweetTopTen(rankings, FBS_TWITTER_LU_TBL);
+					}
+					if (dayOfTheWeek === 2 && league === 'nfl_football_rankings') {
+						console.log("Tweeting NFL rankings...");
+						tweetTopTen(rankings, NFL_TWITTER_LU_TBL);
+					}
 				}
-				if (dayOfTheWeek === 2 && league === 'nfl_football_rankings') {
-					console.log("Tweeting NFL rankings...");
-					tweetTopTen(rankings, NFL_TWITTER_LU_TBL);
+				catch(err) {
+					console.log(err + ": " + err.message);
 				}
 			});
 		}

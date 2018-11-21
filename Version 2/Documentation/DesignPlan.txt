@@ -1,0 +1,114 @@
+- Put old project into folder "v1"
+- Create new folder "v2" for new design
+- Data Retrieval: 
+	- Pull from masseyratings.com, include scheduled games
+	- Insert into _TEAMS tables only at beginning of season
+	- Update database tables daily--will have to use update statements rather than inserts
+		- Update by matching to { GAME_DATE, TEAM_ID, OPPONENT_ID }.  This will break if any two teams have a double-header against each other--which shouldn't happen in the leagues currently used, the algorithm isn't great for series-formatted leagues like the MLB anyway
+	- Update twitter handles 
+	- Store scores in database tables: 
+		- separate tables for each league
+		- LEAGUE
+			- ID INTEGER (PRIMARY KEY)
+			- LEAGUE_NAME VARCHAR(4)
+		- SEASON
+			- ID INTEGER (PRIMARY KEY)
+			- LEAGUE_ID INTEGER (FOREIGN KEY ON LEAGUE.ID)
+			- SEASON INTEGER
+			- TEAMS_URL VARCHAR(255)
+			- SCORES_URL VARCHAR(255)
+			- WEEK_START INTEGER
+			- SEASON_START DATE
+			- SEASON_END DATE
+		- TEAM
+			- ID INTEGER (PRIMARY KEY)
+			- NAME VARCHAR(20)
+			- SEASON_ID INTEGER (FOREIGN KEY ON SEASON.ID)
+			- TWITTER_HANDLE VARCHAR(15)
+			- LOGO_FILE VARCHAR(255)
+			- WIN_COUNT INTEGER
+			- LOSS_COUNT INTEGER
+			- TIE_COUNT INTEGER
+		- SCORE 
+			- ID INTEGER (PRIMARY KEY)
+			- SEASON_ID INTEGER (FOREIGN KEY ON SEASON.ID)
+			- GAME_DATE DATE
+			- TEAM_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- SCORE INTEGER
+			- OPPONENT_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- SCHEDULED_IND INTEGER
+			- HOME_IND INTEGER
+		- RANK 
+			- ID INTEGER (PRIMARY KEY)
+			- TEAM_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- WEEK_NUMBER INTEGER
+			- RANK INTEGER
+			- SOURCE VARCHAR(255)
+		- PREDICTION
+			- ID INTEGER (PRIMARY KEY)
+			- SCORE_ID INTEGER (FOREIGN KEY ON SCORE.ID)
+			- WEEK_NUMBER INTEGER
+			- PREDICTION INTEGER
+	- Update to new season automatically if possible
+		- Read/store links to masseyratings in CTRL_SEASON_INFO table
+- Data Processing: 
+	- Run algorithm as before--clean up javascript methods
+		- Find (& prove) a more robust end condition--can the algorithm run for less time?
+		- Figure out why algorithm crashes when running early in the season & fix the issue
+			- Determine minimum amount of information needed for rankings to be meaningful--most likely when the graph is connected. Definitely shouldn't be calculated before then.
+		- Run weekly to store in rankings tables, but run daily to show to users temporarily--don't need to store.
+	- Update Win/Loss records in _TEAMS tables
+	- Predict scores of future games
+		- Find (& prove) an efficient method for doing this based on model
+	- Store rankings in database table: 
+		- _TEAMS tables
+	- Only calculate rankings when necessary:
+		- CTL_SEASON_INFO
+			- store information to decide when to calculate rankings:
+				- week divisions - when does the week start for this league? When should rankings be calculated/released?
+				- week dates - what is "week 1"? - Jan 1, 2018
+				- season start/end times
+				- post season info?
+			- can be used to generate the _TEAMS tables - used to determine number of columns
+			- columns: 
+				- ID				INTEGER PRIMARY KEY
+				- LEAGUE				VARCHAR(4) [CBB, FBS, FCS, NBA, NFL, NHL, WCBB]
+				- SEASON			INTEGER
+				- TEAMS_URL			VARCHAR(255)
+				- SCORES_URL		VARCHAR(255)
+				- WEEK_START		INTEGER [0-6: day of week to start]
+				- CURRENT_WEEK		INTEGER [current week number]
+				- SEASON_START		DATE [pulled from scheduled games on masseyratings?]
+				- SEASON_END		DATE [pulled from scheduled games on masseyratings?]
+				- NUM_OF_WEEKS		INTEGER [maybe not needed--can be deduced from SEASON_START/SEASON_END & WEEK_START]
+	- Store predictions in database table:
+		- in SCORE_PREDICTION_1 column in _SCORES tables
+		- May need to run this strategically throughout the week, depending on how costly the calculation is
+- Data Display: 
+	- Allow user to view rankings by week - also a tab for daily/live rankings (not saved in database)
+		- Pull from rankings table
+		- Show movement in rankings using green/red arrows
+	- Add tabs for AP Poll, Coaches Poll, etc. if applicable
+	- Show logos of team--pull data file name from database
+	- Show team's schedule & ranking history when team name is clicked
+	- Allow user to compare two teams side by side
+	- Use React for new UI
+	- Generate line graph of a team's ranking over time--R scripts
+		- Allow user to select which teams they want to see the line graph of--on compare team screen?
+- Data Sharing:
+	- Tweet rankings weekly--clean up javascript methods
+		- Get twitter names from _TEAMS tables
+		- Generate infographic using team logos 
+	- Social Media share links
+	- "Biggest Movers" -- share links for jumps in rankings
+		- Tweet ranking shifts greater than some threshold? Or biggest mover every week?
+	- Tweet score predictions to important games each week
+		- use twitter API to predict which games are popular--what teams are people talking about?
+	- Create API to query the scores data saved in the database tables for public use?
+- Miscellaneous/Documentation:
+	- Data Analysis of how well the model predicts future outcomes
+		- Compare to AP Poll, Coaches Poll, etc. if applicable
+	- Unit tests to run before every deployment
+	- Add logging to a log file
+	- Add more error handling
+	- Rewrite explanation/tutorial of ranking methods?

@@ -1,6 +1,6 @@
 CREATE TABLE league (
 	id SERIAL,
-	league_name VARCHAR(4),
+	name VARCHAR(4),
 	PRIMARY KEY (id)
 );
 

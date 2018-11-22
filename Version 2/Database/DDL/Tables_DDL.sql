@@ -31,7 +31,7 @@ CREATE TABLE team (
 );
 
 CREATE TABLE score (
-	id INTEGER,
+	id SERIAL,
 	season_id INTEGER,
 	game_date DATE,
 	team_id INTEGER,
@@ -40,19 +40,19 @@ CREATE TABLE score (
 	scheduled_ind INTEGER,
 	home_ind INTEGER,
 	PRIMARY KEY (id),
-	FOREIGN KEY (season_id) REFERENCES season (id),
-	FOREIGN KEY (team_id) REFERENCES team (id),
-	FOREIGN KEY (opponent_id) REFERENCES team (id)
+	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id),
+	FOREIGN KEY (opponent_id, season_id) REFERENCES team (id, season_id)
 );
 
 CREATE TABLE rank (
 	id INTEGER,
 	team_id INTEGER,
+	season_id INTEGER,
 	week_number INTEGER,
 	rank INTEGER,
 	source VARCHAR(255),
 	PRIMARY KEY (id),
-	FOREIGN KEY (team_id) REFERENCES team (id)
+	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id)
 );
 
 CREATE TABLE prediction (

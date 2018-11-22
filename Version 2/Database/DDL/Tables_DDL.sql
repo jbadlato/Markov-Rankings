@@ -1,11 +1,11 @@
 CREATE TABLE league (
-	id INTEGER,
+	id SERIAL,
 	league_name VARCHAR(4),
 	PRIMARY KEY (id)
 );
 
 CREATE TABLE season (
-	id INTEGER,
+	id SERIAL,
 	league_id INTEGER,
 	season INTEGER,	-- Year
 	teams_url VARCHAR(255),
@@ -45,7 +45,7 @@ CREATE TABLE score (
 );
 
 CREATE TABLE rank (
-	id INTEGER,
+	id SERIAL,
 	team_id INTEGER,
 	season_id INTEGER,
 	week_number INTEGER,
@@ -56,7 +56,7 @@ CREATE TABLE rank (
 );
 
 CREATE TABLE prediction (
-	id INTEGER,
+	id SERIAL,
 	score_id INTEGER,
 	week_number INTEGER,
 	prediction INTEGER,

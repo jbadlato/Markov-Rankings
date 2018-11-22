@@ -1,7 +1,8 @@
 CREATE TABLE league (
 	id SERIAL,
 	name VARCHAR(4),
-	PRIMARY KEY (id)
+	PRIMARY KEY (id),
+	UNIQUE (name)
 );
 
 CREATE TABLE season (

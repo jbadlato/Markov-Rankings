@@ -10,18 +10,17 @@ main();
 
 async function main() {
 	await client.connect(()=> console.log("connected to client"));
-	await client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', async (err, res) => {
+	client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', async (err, res) => {
 		if (err) throw err;	// TODO: output to log file
 		console.log("Select query executed for season info.");
 		for (let i = 0; i < res.rows.length; i++) {
 			let seasonId = res.rows[i].id;
 			let teamsUrl = res.rows[i].teams_url;
 			let scoresUrl = res.rows[i].scores_url;
-			await ingestTeams(teamsUrl, seasonId)
-			await ingestScores(scoresUrl, seasonId)
+			await ingestTeams(teamsUrl, seasonId);
+			await ingestScores(scoresUrl, seasonId);
 		}
-
-		await client.end(() => console.log("Ended client"));
+		client.end(() => console.log("Ended client"));
 	});
 }
 
@@ -58,8 +57,8 @@ async function ingestTeams(url, seasonId) {
 					}
 				}
 			}
-			resolve();
 			console.log("End ingestTeams");
+			resolve();
 		});
 	});
 }
@@ -110,8 +109,8 @@ async function ingestScores(url, seasonId) {
 					}
 				}
 			}
-			resolve();
 			console.log("End ingestScores");
+			resolve();
 		});
 	});
 }
@@ -125,27 +124,17 @@ async function persistNewTeam(teamId, teamName, seasonId) {
 			if (err) {
 				console.log("Error persisting team: " + teamId + " | " + teamName + " | " + seasonId);
 				console.log("Query: " + existsQuery);
-				throw err; // TODO: output to log file
+				reject(err); // TODO: output to log file
 			}
 			if (res.rows.length === 0) {
-				let insertQuery = 'INSERT INTO team (id, name, season_id) VALUES ($1, $2, $3);';
-				await client.query(insertQuery, [teamId, teamName, seasonId], async (err, res) => {
-					if (err) throw err; // TODO: output to log file
-					console.log("Inserted team: " + teamId + "-" + teamName);
-					await client.query('COMMIT', () => {console.log("committed")});
-				});
+				await insertTeam(teamId, teamName, seasonId);
 			} else if (res.rows[0].name !== teamName) {	// team already exists, update it if necessary
-				let updateQuery = 'UPDATE team SET name = $1 WHERE team_id = $2 AND season_id = $3;';
-				await client.query(updateQuery, [teamname, teamId, seasonId], async (err, res) => {
-					if (err) throw err; // TODO: output to log file
-					console.log("Updated team: " + teamId + "-" + teamName);
-					await client.query('COMMIT', () => {console.log("committed")});
-				});
+				await updateTeam(teamId, teamName, seasonId);
 			} else {
 				console.log("team already exists");
 			}
-			resolve();	// TODO: doesn't quite wait for last insert/update to finish
 			console.log("Finished persisting team: " + teamId + ", " + teamName);
+			resolve();	// TODO: doesn't quite wait for last insert/update to finish
 		});
 	});
 }
@@ -159,28 +148,78 @@ async function persistNewScore(gameDate, teamId, opponentId, score, homeInd) {
 		scheduledInd = '0';
 	}
 	// TODO: see if these queries work with DATE type instead of TIMESTAMPZ type
-	let existsQuery = 'SELECT TRUE FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
+	let existsQuery = 'SELECT * FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
 	return new Promise(resolve => {
-		client.query(existsQuery, [gameDate, teamId, opponentId], async (err, res) => {
+		client.query(existsQuery, [gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 			console.log("Exists Query run on score: " + gameDate);
-			if (err) throw err; 	// TODO: output to log file
+			if (err) reject(err); 	// TODO: output to log file
 			if (res.rows.length === 0) {
-				let insertQuery = 'INSERT INTO score (game_date, team_id, opponent_id, score, home_ind, scheduled_ind) VALUES ($1, $2, $3, $4, $5, $6);';
-				await client.query(insertQuery, [gameDate.toUTCString(), teamId, opponentId, score, homeInd, scheduledInd], async (err, res) => {
-					if (err) throw err; // TODO: output to log file
-					await client.query('COMMIT', () => {console.log("committed")});
-				});
-			} else if (res.rows[0].score !== score && res.rows[0].scheduled_ind !== scheduledInd) { // score already exists, update if necessary
-				let updateQuery = 'UPDATE score SET score = $1, scheduled_ind = $2 WHERE game_date = $3 AND team_id = $4 AND opponent_id = $5;';
-				await client.query(updateQuery, [score, scheduledInd, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
-					if (err) throw err;	// TODO: output to log file
-					await client.query('COMMIT', () => {console.log("committed")});
-				});
+				await insertScore(gameDate, teamId, opponentId, score, homeInd, scheduledInd);
+			} else if (res.rows[0].score !== score || res.rows[0].scheduled_ind !== scheduledInd) { // score already exists, update if necessary
+				await updateScore(gameDate, teamId, opponentId, score, homeInd, scheduledInd);
 			} else {
-				console.log("team already exists");
+				console.log("score already exists");
 			}
-			resolve();
 			console.log("Finished persisting score: " + gameDate + ", " + teamId + ", " + opponentId + ", " + score + ", " + homeInd);
+			resolve();
+		});
+	});
+}
+
+async function insertTeam(teamId, teamName, seasonId) {
+	let insertQuery = 'INSERT INTO team (id, name, season_id) VALUES ($1, $2, $3);';
+	return new Promise((resolve, reject) => {
+		client.query(insertQuery, [teamId, teamName, seasonId], async (err, res) => {
+			if (err) reject(err); // TODO: output to log file
+			console.log("Inserted team: " + teamId + "-" + teamName);
+			await commit();
+			resolve();
+		});
+	});
+}
+
+async function updateTeam(teamId, teamName, seasonId) {
+	let updateQuery = 'UPDATE team SET name = $1 WHERE team_id = $2 AND season_id = $3;';
+	return new Promise((resolve, reject) => {
+		client.query(updateQuery, [teamname, teamId, seasonId], async (err, res) => {
+			if (err) reject(err); // TODO: output to log file
+			console.log("Updated team: " + teamId + "-" + teamName);
+			await commit();
+			resolve();
+		});
+	});
+}
+
+async function insertScore(gameDate, teamId, opponentId, score, homeInd, scheduledInd) {
+	let insertQuery = 'INSERT INTO score (game_date, team_id, opponent_id, score, home_ind, scheduled_ind) VALUES ($1, $2, $3, $4, $5, $6);';
+	return new Promise((resolve, reject) => {
+		client.query(insertQuery, [gameDate.toUTCString(), teamId, opponentId, score, homeInd, scheduledInd], async (err, res) => {
+			if (err) reject(err); // TODO: output to log file
+			console.log("Inserted score: " + gameDate + ", " + teamId + ", " + opponentId);
+			await commit();
+			resolve();
+		});		
+	});
+}
+
+async function updateScore(gameDate, teamId, opponentId, score, homeInd, scheduledInd) {
+	let updateQuery = 'UPDATE score SET score = $1, scheduled_ind = $2, home_ind = $3 WHERE game_date = $4 AND team_id = $5 AND opponent_id = $6;';
+	return new Promise((resolve, reject) => {
+		client.query(updateQuery, [score, scheduledInd, homeInd, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
+			if (err) reject(err);	// TODO: output to log file
+			console.log("Updated score: " + gameDate + ", " + teamId + ", " + opponentId);
+			await commit();
+			resolve();
+		});
+	});
+}
+
+async function commit() {
+	return new Promise((resolve, reject) => {
+		client.query('COMMIT', (err, res) => {
+			if (err) reject(err);
+			console.log("committed");
+			resolve();
 		});
 	});
 }

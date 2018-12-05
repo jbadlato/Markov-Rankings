@@ -12,8 +12,8 @@ CREATE TABLE season (
 	teams_url VARCHAR(255),
 	scores_url VARCHAR(255),
 	week_start INTEGER,	-- 0-6, Sunday - Saturday
-	season_start TIMESTAMPTZ,
-	season_end TIMESTAMPTZ,
+	season_start DATE,
+	season_end DATE,
 	PRIMARY KEY (id),
 	FOREIGN KEY (league_id) REFERENCES league (id)
 );
@@ -34,7 +34,7 @@ CREATE TABLE team (
 CREATE TABLE score (
 	id SERIAL,
 	season_id INTEGER,
-	game_date TIMESTAMPTZ,
+	game_date DATE,
 	team_id INTEGER,
 	score INTEGER,
 	opponent_id INTEGER,

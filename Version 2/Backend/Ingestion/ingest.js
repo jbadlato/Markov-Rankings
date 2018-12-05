@@ -2,8 +2,7 @@ var request = require('request');
 const { Client } = require('pg');
 
 const client = new Client({
-	//connectionString: process.env.DATABASE_URL,
-	connectionString: "postgres://rlbzfzginmesau:61003f3db851e7aa8c9a55441f1341ab0c34b5026f9b672e890da6296dae1241@ec2-23-21-101-249.compute-1.amazonaws.com:5432/d4n31bj8obkqc5",
+	connectionString: process.env.DATABASE_URL,
 	ssl: true
 });
 
@@ -46,7 +45,7 @@ class Team {
 					console.log("team already exists");
 				}
 				console.log("Finished persisting team: " + teamId + ", " + teamName);
-				resolve();	// TODO: doesn't quite wait for last insert/update to finish
+				resolve();
 			});
 		});
 	}
@@ -104,15 +103,14 @@ class Score {
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
 		console.log("Persisting score: " + gameDate + ", " + teamId + ", " + opponentId + ", " + score + ", " + homeInd);
-		// TODO: see if these queries work with DATE type instead of TIMESTAMPZ type
 		let existsQuery = 'SELECT * FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
 		return new Promise(resolve => {
 			client.query(existsQuery, [gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
-				console.log("Exists Query run on score: " + gameDate);
+				console.log("Exists Query run on score: " + gameDate + "\n\t\t" + JSON.stringify(res));
 				if (err) reject(err); 	// TODO: output to log file
 				if (res.rows.length === 0) {
 					await this.insert();
-				} else if (res.rows[0].score !== score || res.rows[0].scheduled_ind !== scheduledInd) { // score already exists, update if necessary
+				} else if (res.rows[0].score !== parseInt(score) || res.rows[0].scheduled_ind !== parseInt(scheduledInd) || res.rows[0].home_ind !== parseInt(homeInd)) { // score already exists, update if necessary
 					await this.update();
 				} else {
 					console.log("score already exists");
@@ -199,10 +197,7 @@ async function ingestTeams(url, seasonId) {
 							break;
 						case 1: // team name
 							teamName = data[i];
-							// TODO optimize database queries to minimize connections/insert statements
-							//console.log("Team ID: " + teamId);
-							//console.log("Team Name: " + teamName);
-							//console.log("Season ID: " + seasonId);
+							// TODO optimize database queries to minimize connections/inserts/commits
 							if (teamId.length > 0 && teamName.length > 0) {
 								teamObj = new Team(teamId, teamName, seasonId);
 								console.log("Calling persistNewTeam");

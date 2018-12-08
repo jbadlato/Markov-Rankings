@@ -1,4 +1,5 @@
-var request = require('request');
+const request = require('request');
+const logger = require('heroku-logger');
 const { Client } = require('pg');
 
 const client = new Client({
@@ -9,9 +10,14 @@ const client = new Client({
 async function commit() {
 	return new Promise((resolve, reject) => {
 		client.query('COMMIT', (err, res) => {
-			if (err) reject(err);
-			console.log("committed");
-			resolve();
+			if (err) {
+				logger.error('Error occurred during commit.', err);
+				reject(err);
+				return;
+			} else {
+				logger.debug('Committed.');
+				resolve();
+			}
 		});
 	});
 }
@@ -27,24 +33,18 @@ class Team {
 		let teamId = this.teamId;
 		let teamName = this.teamName;
 		let seasonId = this.seasonId;
-		console.log("Persisting team: " + teamId + ", " + teamName + ", " + seasonId);
 		let existsQuery = 'SELECT * FROM team WHERE id = $1 AND season_id = $2;';
 		return new Promise((resolve, reject) => {
 			client.query(existsQuery, [teamId, seasonId], async (err, res) => {
-				console.log("Exists query run on team: " + teamId + "-" + teamName + "\n\t\t" + JSON.stringify(res));
 				if (err) {
-					console.log("Error persisting team: " + teamId + " | " + teamName + " | " + seasonId);
-					console.log("Query: " + existsQuery);
-					reject(err); // TODO: output to log file
-				}
-				if (res.rows.length === 0) {
+					logger.error('Error occurred during select query on team table.', {error: err, teamId: teamId, seasonId: seasonId});
+					reject(err);
+					return;
+				} else if (res.rows.length === 0) {
 					await this.insert();
 				} else if (res.rows[0].name !== teamName) {	// team already exists, update it if necessary
 					await this.update();
-				} else {
-					console.log("team already exists");
 				}
-				console.log("Finished persisting team: " + teamId + ", " + teamName);
 				resolve();
 			});
 		});
@@ -57,9 +57,14 @@ class Team {
 		let insertQuery = 'INSERT INTO team (id, name, season_id) VALUES ($1, $2, $3);';
 		return new Promise((resolve, reject) => {
 			client.query(insertQuery, [teamId, teamName, seasonId], async (err, res) => {
-				if (err) reject(err); // TODO: output to log file
-				console.log("Inserted team: " + teamId + "-" + teamName);
-				await commit();
+				if (err) {
+					logger.error('Error occurred inserting team.', {error: err, teamId: teamId, teamName: teamName, seasonId: seasonId});
+					reject(err);
+					return;
+				} else {
+					logger.debug('Inserted team.', {teamId: teamId, teamName: teamName, seasonId: seasonId});
+					await commit();
+				}
 				resolve();
 			});
 		});
@@ -71,10 +76,15 @@ class Team {
 		let seasonId = this.seasonId;
 		let updateQuery = 'UPDATE team SET name = $1 WHERE team_id = $2 AND season_id = $3;';
 		return new Promise((resolve, reject) => {
-			client.query(updateQuery, [teamname, teamId, seasonId], async (err, res) => {
-				if (err) reject(err); // TODO: output to log file
-				console.log("Updated team: " + teamId + "-" + teamName);
-				await commit();
+			client.query(updateQuery, [teamName, teamId, seasonId], async (err, res) => {
+				if (err) {
+					logger.error('Error occurred updating team.', {error: err, teamName: teamName, teamId: teamId, seasonId: seasonId});
+					reject(err);
+					return;
+				} else {
+					logger.debug('Updated team.', {teamId: teamId, teamName: teamName, seasonId: seasonId});
+					await commit();
+				}
 				resolve();
 			});
 		});
@@ -102,20 +112,18 @@ class Score {
 		let score = this.score;
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
-		console.log("Persisting score: " + gameDate + ", " + teamId + ", " + opponentId + ", " + score + ", " + homeInd);
 		let existsQuery = 'SELECT * FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
 		return new Promise(resolve => {
 			client.query(existsQuery, [gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
-				console.log("Exists Query run on score: " + gameDate + "\n\t\t" + JSON.stringify(res));
-				if (err) reject(err); 	// TODO: output to log file
-				if (res.rows.length === 0) {
+				if (err) {
+					logger.error('Error occurred during select query on score table.', err);
+					reject(err);
+					return;
+				} else if (res.rows.length === 0) {
 					await this.insert();
 				} else if (res.rows[0].score !== parseInt(score) || res.rows[0].scheduled_ind !== parseInt(scheduledInd) || res.rows[0].home_ind !== parseInt(homeInd)) { // score already exists, update if necessary
 					await this.update();
-				} else {
-					console.log("score already exists");
 				}
-				console.log("Finished persisting score: " + gameDate + ", " + teamId + ", " + opponentId + ", " + score + ", " + homeInd);
 				resolve();
 			});
 		});
@@ -131,9 +139,14 @@ class Score {
 		let insertQuery = 'INSERT INTO score (game_date, team_id, opponent_id, score, home_ind, scheduled_ind) VALUES ($1, $2, $3, $4, $5, $6);';
 		return new Promise((resolve, reject) => {
 			client.query(insertQuery, [gameDate.toUTCString(), teamId, opponentId, score, homeInd, scheduledInd], async (err, res) => {
-				if (err) reject(err); // TODO: output to log file
-				console.log("Inserted score: " + gameDate + ", " + teamId + ", " + opponentId);
-				await commit();
+				if (err) {
+					logger.error('Error occurred inserting score.', {error: err, gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
+					reject(err);
+					return;
+				} else {
+					logger.debug('Inserted score.', {gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
+					await commit();
+				}
 				resolve();
 			});		
 		});
@@ -149,44 +162,73 @@ class Score {
 		let updateQuery = 'UPDATE score SET score = $1, scheduled_ind = $2, home_ind = $3 WHERE game_date = $4 AND team_id = $5 AND opponent_id = $6;';
 		return new Promise((resolve, reject) => {
 			client.query(updateQuery, [score, scheduledInd, homeInd, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
-				if (err) reject(err);	// TODO: output to log file
-				console.log("Updated score: " + gameDate + ", " + teamId + ", " + opponentId);
-				await commit();
+				if (err) {
+					logger.error('Error occurred updating score.', {error: err, score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
+					reject(err);
+					return;
+				} else {
+					logger.debug('Updated score.', {score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
+					await commit();
+				}
 				resolve();
 			});
 		});
 	}
 }
 
-main();
-
 async function main() {
-	await client.connect(()=> console.log("connected to client"));
-	client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', async (err, res) => {
-		if (err) throw err;	// TODO: output to log file
-		console.log("Select query executed for season info.");
-		for (let i = 0; i < res.rows.length; i++) {
-			let seasonId = res.rows[i].id;
-			let teamsUrl = res.rows[i].teams_url;
-			let scoresUrl = res.rows[i].scores_url;
-			await ingestTeams(teamsUrl, seasonId);
-			await ingestScores(scoresUrl, seasonId);
+	logger.info('BEGIN: ingest.js');
+	await client.connect((err)=> {
+		if (err) {
+			logger.error('Error connecting to database.', err);
+			throw err;
+		} else {
+			logger.info('Connected to database successfully.');
 		}
-		client.end(() => console.log("Ended client"));
 	});
+	client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', async (err, res) => {
+		if (err) {
+			logger.error('Error occurred during select query on season table.', err);
+			client.end((err) => {
+				if (err) {
+					logger.error('Error disconnecting from database.', err);
+				} else {
+					logger.info('Disconnected from database successfully.');
+				}
+			});
+			throw err;
+		} else {
+			for (let i = 0; i < res.rows.length; i++) {
+				let seasonId = res.rows[i].id;
+				let teamsUrl = res.rows[i].teams_url;
+				let scoresUrl = res.rows[i].scores_url;
+				await ingestTeams(teamsUrl, seasonId);
+				logger.info('Ingested Teams.');
+				await ingestScores(scoresUrl, seasonId);
+				logger.info('Ingested Scores.');
+			}
+			client.end((err) => {
+				if (err) {
+					logger.error('Error disconnecting from database.', err);
+				} else {
+					logger.info('Disconnected from database successfully.');
+				}
+			});
+		}
+	});
+	logger.info('END: ingest.js');
 }
 
 async function ingestTeams(url, seasonId) {
-	console.log("Start: ingestTeams(" + url + ", " + seasonId + ")");
 	return new Promise(resolve => {
 		request(url, async (error, request, body) => {
-			console.log(body);
 			if (error) {
-				// TODO: output to log file
-				console.log(error);
+				logger.error('Error occurred retrieving team data from URL.', {error: err, url: url});
+				reject(error);
+				return;
 			} else {
+				logger.info('Retrieved team data from URL successfully.');
 				let data = body.split(/,[ ]*|[\n]/);
-				console.log(JSON.stringify(data));
 				let teamId;
 				let teamName;
 				let teamObj;
@@ -200,28 +242,27 @@ async function ingestTeams(url, seasonId) {
 							// TODO optimize database queries to minimize connections/inserts/commits
 							if (teamId.length > 0 && teamName.length > 0) {
 								teamObj = new Team(teamId, teamName, seasonId);
-								console.log("Calling persistNewTeam");
 								await teamObj.persist();
-								console.log("Done calling persistNewTeam");
+								logger.debug('Done persisting team.', teamObj);
 							}
 							break;
 					}
 				}
 			}
-			console.log("End ingestTeams");
 			resolve();
 		});
 	});
 }
 
 async function ingestScores(url, seasonId) {
-	console.log("Start: ingestScores(" + url + ", " + seasonId + ")");
 	return new Promise(resolve => {
 		request(url, async (error, request, body) => {
 			if (error) {
-				// TODO: output to log file
-				console.log(error);
+				logger.error('Error occurred retrieving team data from URL.', {error: err, url: url});
+				reject(error);
+				return;
 			} else {
+				logger.info('Retrieved scores data from URL successfully.');
 				let data = body.split(/,[ ]*|[\n]/);
 				let gameDate;
 				let idTeam1;
@@ -257,14 +298,17 @@ async function ingestScores(url, seasonId) {
 							scoreTeam2 = data[i];
 							scoreObj = new Score(gameDate, idTeam1, idTeam2, scoreTeam1, homeIndTeam1);
 							await scoreObj.persist();
+							logger.debug('Done persisting score.', scoreObj);
 							scoreObj = new Score(gameDate, idTeam2, idTeam1, scoreTeam2, homeIndTeam2);
 							await scoreObj.persist();
+							logger.debug('Done persisting score.', scoreObj);
 							break;
 					}
 				}
 			}
-			console.log("End ingestScores");
 			resolve();
 		});
 	});
 }
+
+main();

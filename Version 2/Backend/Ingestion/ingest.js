@@ -7,6 +7,34 @@ const client = new Client({
 	ssl: true
 });
 
+async function connectToDB() {
+	return new Promise((resolve, reject) => {
+		client.connect((err)=> {
+			if (err) {
+				logger.error('Error connecting to database.', {errorStack: err.stack});
+				reject(err);
+			} else {
+				logger.info('Connected to database successfully.');
+				resolve();
+			}
+		});
+	});
+}
+
+async function disconnectFromDB() {
+	return new Promise((resolve, reject) => {
+		client.end((err) => {
+			if (err) {
+				logger.error('Error disconnecting from database.', JSON.stringify(err));
+				reject(err);
+			} else {
+				logger.info('Disconnected from database successfully.');
+				resolve();
+			}
+		});
+	});
+}
+
 async function commit() {
 	return new Promise((resolve, reject) => {
 		client.query('COMMIT', (err, res) => {
@@ -113,7 +141,7 @@ class Score {
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
 		let existsQuery = 'SELECT * FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			client.query(existsQuery, [gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 				if (err) {
 					logger.error('Error occurred during select query on score table.', err);
@@ -164,7 +192,7 @@ class Score {
 			client.query(updateQuery, [score, scheduledInd, homeInd, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 				if (err) {
 					logger.error('Error occurred updating score.', {error: err, score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
-					reject(err);
+					reject();
 					return;
 				} else {
 					logger.debug('Updated score.', {score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
@@ -176,51 +204,64 @@ class Score {
 	}
 }
 
+class Season {
+	constructor(id, teamsUrl, scoresUrl) {
+		this.id = id;
+		this.teamsUrl = teamsUrl;
+		this.scoresUrl = scoresUrl;
+	}
+}
+
 async function main() {
 	logger.info('BEGIN: ingest.js');
-	await client.connect((err)=> {
-		if (err) {
-			logger.error('Error connecting to database.', err);
-			throw err;
-		} else {
-			logger.info('Connected to database successfully.');
-		}
-	});
-	client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', async (err, res) => {
-		if (err) {
-			logger.error('Error occurred during select query on season table.', err);
-			client.end((err) => {
-				if (err) {
-					logger.error('Error disconnecting from database.', err);
-				} else {
-					logger.info('Disconnected from database successfully.');
-				}
-			});
-			throw err;
-		} else {
-			for (let i = 0; i < res.rows.length; i++) {
-				let seasonId = res.rows[i].id;
-				let teamsUrl = res.rows[i].teams_url;
-				let scoresUrl = res.rows[i].scores_url;
-				await ingestTeams(teamsUrl, seasonId);
-				logger.info('Ingested Teams.');
-				await ingestScores(scoresUrl, seasonId);
-				logger.info('Ingested Scores.');
-			}
-			client.end((err) => {
-				if (err) {
-					logger.error('Error disconnecting from database.', err);
-				} else {
-					logger.info('Disconnected from database successfully.');
-				}
-			});
-		}
-	});
+	await connectToDB()
+		.then(getSeasons()
+			.then((seasonArray) => loopSeasons(seasonArray))
+			.then(disconnectFromDB));
 	logger.info('END: ingest.js');
 }
 
+async function loopSeasons(seasonArray) {
+	return new Promise((resolve, reject) => {
+		seasonArray.forEach(async function(season, index, array) {
+			await ingestTeams(season.teamsUrl, season.id);
+			logger.info('Ingested Teams.', {seasonId: season.id, teamsUrl: season.teamsUrl});
+			await ingestScores(season.scoresUrl, season.id);
+			logger.info('Ingested Scores.', {seasonid: season.id, scoresUrl: season.scoresUrl});
+			resolve();
+		});
+	});
+}
+
+async function getSeasons() {
+	return new Promise((resolve, reject) => {
+		let seasonArray = new Array(0);
+		try {
+		client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', (err, res) => {
+			if (err) {
+				logger.error('Error occurred during select query on season table.', err);
+				throw err;
+			} else {
+				let seasonObj;
+				for (let i = 0; i < res.rows.length; i++) {
+					let seasonId = res.rows[i].id;
+					let teamsUrl = res.rows[i].teams_url;
+					let scoresUrl = res.rows[i].scores_url;
+					seasonObj = new Season(seasonId, teamsUrl, scoresUrl);
+					seasonArray.push(seasonObj);
+				}
+				resolve(seasonArray);
+			}
+		});
+	}
+	catch (err) {
+		reject(err)
+	}
+	});
+}
+
 async function ingestTeams(url, seasonId) {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		request(url, async (error, request, body) => {
 			if (error) {
 				logger.error('Error occurred retrieving team data from URL.', {error: err, url: url});
@@ -255,7 +296,7 @@ async function ingestTeams(url, seasonId) {
 }
 
 async function ingestScores(url, seasonId) {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		request(url, async (error, request, body) => {
 			if (error) {
 				logger.error('Error occurred retrieving team data from URL.', {error: err, url: url});

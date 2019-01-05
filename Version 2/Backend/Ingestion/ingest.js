@@ -120,7 +120,8 @@ class Team {
 }
 
 class Score {
-	constructor(gameDate, teamId, opponentId, score, homeInd) {
+	constructor(seasonId, gameDate, teamId, opponentId, score, homeInd) {
+		this.seasonId = seasonId
 		this.gameDate = gameDate;
 		this.teamId = teamId;
 		this.opponentId = opponentId;
@@ -134,15 +135,16 @@ class Score {
 	}
 
 	async persist() {
+		let seasonId = this.seasonId
 		let gameDate = this.gameDate;
 		let teamId = this.teamId;
 		let opponentId = this.opponentId;
 		let score = this.score;
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
-		let existsQuery = 'SELECT * FROM score WHERE game_date = $1 AND team_id = $2 AND opponent_id = $3;';
+		let existsQuery = 'SELECT * FROM score WHERE season_id = $1 AND game_date = $2 AND team_id = $3 AND opponent_id = $4;';
 		return new Promise((resolve, reject) => {
-			client.query(existsQuery, [gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
+			client.query(existsQuery, [seasonId, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 				if (err) {
 					logger.error('Error occurred during select query on score table.', err);
 					reject(err);
@@ -158,21 +160,22 @@ class Score {
 	}
 
 	async insert() {
+		let seasonId = this.seasonId
 		let gameDate = this.gameDate;
 		let teamId = this.teamId;
 		let opponentId = this.opponentId;
 		let score = this.score;
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
-		let insertQuery = 'INSERT INTO score (game_date, team_id, opponent_id, score, home_ind, scheduled_ind) VALUES ($1, $2, $3, $4, $5, $6);';
+		let insertQuery = 'INSERT INTO score (season_id, game_date, team_id, opponent_id, score, home_ind, scheduled_ind) VALUES ($1, $2, $3, $4, $5, $6, $7);';
 		return new Promise((resolve, reject) => {
-			client.query(insertQuery, [gameDate.toUTCString(), teamId, opponentId, score, homeInd, scheduledInd], async (err, res) => {
+			client.query(insertQuery, [seasonId, gameDate.toUTCString(), teamId, opponentId, score, homeInd, scheduledInd], async (err, res) => {
 				if (err) {
-					logger.error('Error occurred inserting score.', {error: err, gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
+					logger.error('Error occurred inserting score.', {error: err, seasonId: seasonId, gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
 					reject(err);
 					return;
 				} else {
-					logger.debug('Inserted score.', {gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
+					logger.debug('Inserted score.', {seasonId: seasonId, gameDate: gameDate, teamId: teamId, opponentId: opponentId, score: score, homeInd: homeInd, scheduledInd: scheduledInd});
 					await commit();
 				}
 				resolve();
@@ -181,21 +184,22 @@ class Score {
 	}
 
 	async update() {
+		let seasonId = this.seasonId;
 		let gameDate = this.gameDate;
 		let teamId = this.teamId;
 		let opponentId = this.opponentId;
 		let score = this.score;
 		let homeInd = this.homeInd;
 		let scheduledInd = this.scheduledInd;
-		let updateQuery = 'UPDATE score SET score = $1, scheduled_ind = $2, home_ind = $3 WHERE game_date = $4 AND team_id = $5 AND opponent_id = $6;';
+		let updateQuery = 'UPDATE score SET score = $1, scheduled_ind = $2, home_ind = $3 WHERE seasonId = $4 AND game_date = $5 AND team_id = $6 AND opponent_id = $7;';
 		return new Promise((resolve, reject) => {
-			client.query(updateQuery, [score, scheduledInd, homeInd, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
+			client.query(updateQuery, [score, scheduledInd, homeInd, seasonId, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 				if (err) {
-					logger.error('Error occurred updating score.', {error: err, score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
+					logger.error('Error occurred updating score.', {error: err, score: score, scheduledInd: scheduledInd, homeInd: homeInd, seasonId: seasonId, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
 					reject();
 					return;
 				} else {
-					logger.debug('Updated score.', {score: score, scheduledInd: scheduledInd, homeInd: homeInd, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
+					logger.debug('Updated score.', {score: score, scheduledInd: scheduledInd, homeInd: homeInd, seasonId: seasonId, gameDate: gameDate, teamId: teamId, opponentId: opponentId});
 					await commit();
 				}
 				resolve();
@@ -346,10 +350,10 @@ async function ingestScores(url, seasonId) {
 							break;
 						case 7: // score2
 							scoreTeam2 = data[i];
-							scoreObj = new Score(gameDate, idTeam1, idTeam2, scoreTeam1, homeIndTeam1);
+							scoreObj = new Score(seasonId, gameDate, idTeam1, idTeam2, scoreTeam1, homeIndTeam1);
 							await scoreObj.persist();
 							logger.debug('Done persisting score.', scoreObj);
-							scoreObj = new Score(gameDate, idTeam2, idTeam1, scoreTeam2, homeIndTeam2);
+							scoreObj = new Score(seasonId, gameDate, idTeam2, idTeam1, scoreTeam2, homeIndTeam2);
 							await scoreObj.persist();
 							logger.debug('Done persisting score.', scoreObj);
 							break;

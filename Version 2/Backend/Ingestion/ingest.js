@@ -214,23 +214,32 @@ class Season {
 
 async function main() {
 	logger.info('BEGIN: ingest.js');
-	await connectToDB()
+	connectToDB()
 		.then(getSeasons()
 			.then((seasonArray) => loopSeasons(seasonArray))
-			.then(disconnectFromDB));
-	logger.info('END: ingest.js');
+			.then(disconnectFromDB)
+			.then(logger.info('END: ingest.js'))
+			);
 }
 
 async function loopSeasons(seasonArray) {
 	return new Promise((resolve, reject) => {
-		seasonArray.forEach(async function(season, index, array) {
-			await ingestTeams(season.teamsUrl, season.id);
-			logger.info('Ingested Teams.', {seasonId: season.id, teamsUrl: season.teamsUrl});
-			await ingestScores(season.scoresUrl, season.id);
-			logger.info('Ingested Scores.', {seasonid: season.id, scoresUrl: season.scoresUrl});
-			resolve();
+		let requests = seasonArray.map((season) => {
+			return new Promise((resolve, reject) => {
+				ingestSeasonData(season, resolve);
+			});
 		});
+		Promise.all(requests)
+			.then(() => resolve());
 	});
+}
+
+async function ingestSeasonData(season, callback) {
+	await ingestTeams(season.teamsUrl, season.id);
+	logger.info('Ingested Teams.', {seasonId: season.id, teamsUrl: season.teamsUrl});
+	await ingestScores(season.scoresUrl, season.id);
+	logger.info('Ingested Scores.', {seasonid: season.id, scoresUrl: season.scoresUrl});
+	callback();
 }
 
 async function getSeasons() {

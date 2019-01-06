@@ -18,17 +18,27 @@ CREATE TABLE season (
 	FOREIGN KEY (league_id) REFERENCES league (id)
 );
 
+CREATE TABLE conference (
+	id SERIAL,
+	season_id INTEGER,
+	name VARCHAR(20),
+	PRIMARY KEY (id),
+	FOREIGN KEY (season_id) REFERENCES season (id)
+);
+
 CREATE TABLE team (
 	id INTEGER,
 	name VARCHAR(20),
 	season_id INTEGER,
+	conference_id INTEGER,
 	twitter_handle VARCHAR(15),
 	logo_file VARCHAR(255),
 	win_count INTEGER,
 	loss_count INTEGER,
 	tie_count INTEGER,
 	PRIMARY KEY (id, season_id),
-	FOREIGN KEY (season_id) REFERENCES season (id)
+	FOREIGN KEY (season_id) REFERENCES season (id),
+	FOREIGN KEY (conference_id) REFERENCES conference (id)
 );
 
 CREATE TABLE score (

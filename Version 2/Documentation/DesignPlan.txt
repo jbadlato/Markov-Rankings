@@ -4,7 +4,7 @@
 	- Pull from masseyratings.com, include scheduled games
 	- Insert into _TEAMS tables only at beginning of season
 	- Update database tables daily--will have to use update statements rather than inserts
-		- Update by matching to { GAME_DATE, TEAM_ID, OPPONENT_ID }.  This will break if any two teams have a double-header against each other--which shouldn't happen in the leagues currently used, the algorithm isn't great for series-formatted leagues like the MLB anyway
+		- Update by matching to { SEASON_ID, GAME_DATE, TEAM_ID, OPPONENT_ID }.  This will break if any two teams have a double-header against each other--which shouldn't happen in the leagues currently used, the algorithm isn't great for series-formatted leagues like the MLB anyway
 	- Update twitter handles 
 	- Store scores in database tables: 
 		- separate tables for each league
@@ -20,10 +20,15 @@
 			- WEEK_START INTEGER
 			- SEASON_START DATE
 			- SEASON_END DATE
+		- CONFERENCE
+			- ID INTEGER (PRIMARY KEY)
+			- SEASON_ID (FOREIGN KEY ON SEASON.ID)
+			- NAME VARCHAR(20)
 		- TEAM
 			- ID INTEGER (PRIMARY KEY)
 			- NAME VARCHAR(20)
 			- SEASON_ID INTEGER (FOREIGN KEY ON SEASON.ID)
+			- CONFERENCE_ID INTEGER (FOREIGN KEY ON CONFERENCE.ID)
 			- TWITTER_HANDLE VARCHAR(15)
 			- LOGO_FILE VARCHAR(255)
 			- WIN_COUNT INTEGER

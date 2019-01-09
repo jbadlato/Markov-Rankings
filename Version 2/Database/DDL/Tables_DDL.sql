@@ -55,6 +55,13 @@ CREATE TABLE score (
 	FOREIGN KEY (opponent_id, season_id) REFERENCES team (id, season_id)
 );
 
+CREATE TABLE ranking_source (
+	id INTEGER,
+	name VARCHAR(255),
+	logo_file VARCHAR(255),
+	PRIMARY KEY (id)
+);
+
 CREATE TABLE rank (
 	id SERIAL,
 	team_id INTEGER,
@@ -62,9 +69,10 @@ CREATE TABLE rank (
 	week_number INTEGER,
 	rank INTEGER,
 	rating DECIMAL,
-	source VARCHAR(255),
+	ranking_source_id INTEGER,
 	PRIMARY KEY (id),
-	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id)
+	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id),
+	FOREIGN KEY (ranking_source_id) REFERENCES ranking_source (id)
 );
 
 CREATE TABLE prediction (

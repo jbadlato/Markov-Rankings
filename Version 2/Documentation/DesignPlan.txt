@@ -38,16 +38,18 @@
 			- ID INTEGER (PRIMARY KEY)
 			- SEASON_ID INTEGER (FOREIGN KEY ON SEASON.ID)
 			- GAME_DATE DATE
-			- TEAM_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- TEAM_ID INTEGER (FOREIGN KEY ON TEAM.ID, SEASON.ID)
 			- SCORE INTEGER
-			- OPPONENT_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- OPPONENT_ID INTEGER (FOREIGN KEY ON TEAM.ID, SEASON.ID)
 			- SCHEDULED_IND INTEGER
 			- HOME_IND INTEGER
 		- RANK 
 			- ID INTEGER (PRIMARY KEY)
-			- TEAM_ID INTEGER (FOREIGN KEY ON TEAM.ID)
+			- TEAM_ID INTEGER (COMPOSITE FOREIGN KEY ON TEAM.ID, SEASON.ID)
+			- SEASON_ID INTEGER (COMPOSITE FOREIGN KEY ON TEAM.ID, SEASON.ID)
 			- WEEK_NUMBER INTEGER
 			- RANK INTEGER
+			- RATING DECIMAL
 			- SOURCE VARCHAR(255)
 		- PREDICTION
 			- ID INTEGER (PRIMARY KEY)
@@ -55,20 +57,20 @@
 			- WEEK_NUMBER INTEGER
 			- PREDICTION INTEGER
 	- Update to new season automatically if possible
-		- Read/store links to masseyratings in CTRL_SEASON_INFO table
+		- Read/store links to masseyratings in SEASON table
 - Data Processing: 
 	- Run algorithm as before--clean up javascript methods
 		- Find (& prove) a more robust end condition--can the algorithm run for less time?
 		- Figure out why algorithm crashes when running early in the season & fix the issue
 			- Determine minimum amount of information needed for rankings to be meaningful--most likely when the graph is connected. Definitely shouldn't be calculated before then.
 		- Run weekly to store in rankings tables, but run daily to show to users temporarily--don't need to store.
-	- Update Win/Loss records in _TEAMS tables
+	- Update Win/Loss records in TEAM table
 	- Predict scores of future games
 		- Find (& prove) an efficient method for doing this based on model
 	- Store rankings in database table: 
-		- _TEAMS tables
+		- RANK table
 	- Only calculate rankings when necessary:
-		- CTL_SEASON_INFO
+		- SEASON
 			- store information to decide when to calculate rankings:
 				- week divisions - when does the week start for this league? When should rankings be calculated/released?
 				- week dates - what is "week 1"? - Jan 1, 2018
@@ -76,18 +78,16 @@
 				- post season info?
 			- can be used to generate the _TEAMS tables - used to determine number of columns
 			- columns: 
-				- ID				INTEGER PRIMARY KEY
-				- LEAGUE				VARCHAR(4) [CBB, FBS, FCS, NBA, NFL, NHL, WCBB]
-				- SEASON			INTEGER
-				- TEAMS_URL			VARCHAR(255)
-				- SCORES_URL		VARCHAR(255)
-				- WEEK_START		INTEGER [0-6: day of week to start]
-				- CURRENT_WEEK		INTEGER [current week number]
-				- SEASON_START		DATE [pulled from scheduled games on masseyratings?]
-				- SEASON_END		DATE [pulled from scheduled games on masseyratings?]
-				- NUM_OF_WEEKS		INTEGER [maybe not needed--can be deduced from SEASON_START/SEASON_END & WEEK_START]
+				- ID INTEGER (PRIMARY KEY)
+				- LEAGUE_ID INTEGER (FOREIGN KEY ON LEAGUE.ID)
+				- SEASON INTEGER
+				- TEAMS_URL VARCHAR(255)
+				- SCORES_URL VARCHAR(255)
+				- WEEK_START INTEGER
+				- SEASON_START DATE
+				- SEASON_END DATE
 	- Store predictions in database table:
-		- in SCORE_PREDICTION_1 column in _SCORES tables
+		- in PREDICTION column in PREDICTION table
 		- May need to run this strategically throughout the week, depending on how costly the calculation is
 - Data Display: 
 	- Allow user to view rankings by week - also a tab for daily/live rankings (not saved in database)
@@ -102,13 +102,14 @@
 		- Allow user to select which teams they want to see the line graph of--on compare team screen?
 - Data Sharing:
 	- Tweet rankings weekly--clean up javascript methods
-		- Get twitter names from _TEAMS tables
+		- Get twitter names from TEAM table
 		- Generate infographic using team logos 
 	- Social Media share links
 	- "Biggest Movers" -- share links for jumps in rankings
 		- Tweet ranking shifts greater than some threshold? Or biggest mover every week?
 	- Tweet score predictions to important games each week
 		- use twitter API to predict which games are popular--what teams are people talking about?
+	- Tweet biggest upset of the week
 	- Create API to query the scores data saved in the database tables for public use?
 - Miscellaneous/Documentation:
 	- Data Analysis of how well the model predicts future outcomes

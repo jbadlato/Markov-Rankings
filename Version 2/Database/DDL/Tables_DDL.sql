@@ -61,6 +61,7 @@ CREATE TABLE rank (
 	season_id INTEGER,
 	week_number INTEGER,
 	rank INTEGER,
+	rating DECIMAL,
 	source VARCHAR(255),
 	PRIMARY KEY (id),
 	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id)

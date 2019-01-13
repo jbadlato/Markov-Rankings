@@ -54,7 +54,7 @@
 			- WEEK_NUMBER INTEGER
 			- RANK INTEGER
 			- RATING DECIMAL
-			- SOURCE INTEGER (FOREIGN KEY ON RANKING_SOURCE.ID)
+			- RANKING_SOURCE_ID INTEGER (FOREIGN KEY ON RANKING_SOURCE.ID)
 		- PREDICTION
 			- ID INTEGER (PRIMARY KEY)
 			- SCORE_ID INTEGER (FOREIGN KEY ON SCORE.ID)
@@ -67,29 +67,13 @@
 		- Find (& prove) a more robust end condition--can the algorithm run for less time?
 		- Figure out why algorithm crashes when running early in the season & fix the issue
 			- Determine minimum amount of information needed for rankings to be meaningful--most likely when the graph is connected. Definitely shouldn't be calculated before then.
-		- Run weekly to store in rankings tables, but run daily to show to users temporarily--don't need to store.
+		- Run weekly to store in rankings tables, but run daily to show to users temporarily--can overwrite in database.
 	- Update Win/Loss records in TEAM table
 	- Predict scores of future games
 		- Find (& prove) an efficient method for doing this based on model
 	- Store rankings in database table: 
 		- RANK table
-	- Only calculate rankings when necessary:
-		- SEASON
-			- store information to decide when to calculate rankings:
-				- week divisions - when does the week start for this league? When should rankings be calculated/released?
-				- week dates - what is "week 1"? - Jan 1, 2018
-				- season start/end times
-				- post season info?
-			- can be used to generate the _TEAMS tables - used to determine number of columns
-			- columns: 
-				- ID INTEGER (PRIMARY KEY)
-				- LEAGUE_ID INTEGER (FOREIGN KEY ON LEAGUE.ID)
-				- SEASON INTEGER
-				- TEAMS_URL VARCHAR(255)
-				- SCORES_URL VARCHAR(255)
-				- WEEK_START INTEGER
-				- SEASON_START DATE
-				- SEASON_END DATE
+	- Only calculate rankings when necessary
 	- Store predictions in database table:
 		- in PREDICTION column in PREDICTION table
 		- May need to run this strategically throughout the week, depending on how costly the calculation is

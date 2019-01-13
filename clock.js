@@ -340,6 +340,7 @@ function fetchData(teamsURL, scoresURL, league) {
 					var rankings = calculateRankings(scores, teamNameToId);
 					// send rankings to database
 					sendToDatabase(rankings, league);
+					/*
 					// send to Twitter
 					var today = new Date();
 					var dayOfTheWeek = today.getDay();
@@ -351,6 +352,7 @@ function fetchData(teamsURL, scoresURL, league) {
 						console.log("Tweeting NFL rankings...");
 						tweetTopTen(rankings, NFL_TWITTER_LU_TBL);
 					}
+					*/
 				}
 				catch(err) {
 					console.log(err + ": " + err.message);

@@ -2,5 +2,13 @@ Drop Tables:
 	heroku pg:psql < Version\ 2/Utility/Drop_Tables.sql
 Truncate score & team tables:
 	heroku pg:psql < Version\ 2/Utility/Truncate_Tables.sql
+Create Tables: 
+	heroku pg:psql < Version\ 2/Database/DDL/Tables_DDL.sql
+Initial DML: 
+	heroku pg:psql < Version\ 2/Database/DML/league_DML.sql
+	heroku pg:psql < Version\ 2/Database/DML/ranking_source_DML.sql
+	heroku pg:psql < Version\ 2/Database/DML/season_DML.sql
 Run ingestion script (with database credentials from config file)
 	node -r dotenv/config Version\ 2/Backend/Ingestion/ingest.js
+Run rankings calculation script (with database credentials from config file)
+	node -r dotenv/config Version\ 2/Backend/Processing/calculateRankings.js

@@ -250,7 +250,7 @@ async function getSeasons() {
 	return new Promise((resolve, reject) => {
 		let seasonArray = new Array(0);
 		try {
-		client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', (err, res) => {
+			client.query('SELECT id, teams_url, scores_url FROM season WHERE season_start <= CURRENT_DATE AND CURRENT_DATE <= season_end;', (err, res) => {
 			if (err) {
 				logger.error('Error occurred during select query on season table.', err);
 				throw err;

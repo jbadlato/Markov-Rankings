@@ -9,7 +9,7 @@ Pages:
 			- display team name
 			- display team logo
 			- display team record
-			- display team conference
+			- display team conference logo
 			- shows rank calculated at beginning of current week
 			- shows rank calculated at beginning of day
 				- communicated as how the team is doing this week, compare to current week rank

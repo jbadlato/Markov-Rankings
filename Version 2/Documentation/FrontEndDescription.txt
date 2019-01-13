@@ -1,0 +1,23 @@
+Pages:
+	- Landing Page
+		- List of leagues in database--link to league page
+		- Link to Twitter
+		- Link to GitHub
+	- League Page
+		- Shows current week number in heading
+		- For each team: 
+			- display team name
+			- display team logo
+			- display team record
+			- display team conference
+			- shows rank calculated at beginning of current week
+			- shows rank calculated at beginning of day
+				- communicated as how the team is doing this week, compare to current week rank
+			- shows rank movement from the previous week
+			- shows rating along with rank?
+		- When clicking on a team, overlay/pop-up of team data:
+			- Shows full schedule
+				- partition/highlight the games from the current week
+				- shows home/away/neutral site
+	- Tutorial/Methods Explanation Page
+			

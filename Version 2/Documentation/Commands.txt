@@ -1,6 +1,6 @@
 Drop Tables: 
 	heroku pg:psql < Version\ 2/Utility/Drop_Tables.sql
-Truncate score & team tables:
+Truncate score, team, & rank tables:
 	heroku pg:psql < Version\ 2/Utility/Truncate_Tables.sql
 Create Tables: 
 	heroku pg:psql < Version\ 2/Database/DDL/Tables_DDL.sql
@@ -12,3 +12,5 @@ Run ingestion script (with database credentials from config file)
 	node -r dotenv/config Version\ 2/Backend/Ingestion/ingest.js
 Run rankings calculation script (with database credentials from config file)
 	node -r dotenv/config Version\ 2/Backend/Processing/calculateRankings.js
+Update win-loss records in team table:
+	heroku:pg:psql < Version\ 2/Database/Scripts/UPDATE_WIN_LOSS_RECORDS.sql

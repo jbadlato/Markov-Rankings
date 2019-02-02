@@ -19,5 +19,7 @@ Pages:
 			- Shows full schedule
 				- partition/highlight the games from the current week
 				- shows home/away/neutral site
+			- Compare to another team drop-down list
+		
 	- Tutorial/Methods Explanation Page
 			

@@ -14,3 +14,5 @@ Run rankings calculation script (with database credentials from config file)
 	node -r dotenv/config Version\ 2/Backend/Processing/calculateRankings.js
 Update win-loss records in team table:
 	heroku:pg:psql < Version\ 2/Database/Scripts/UPDATE_WIN_LOSS_RECORDS.sql
+Run server locally:
+	node -r dotenv/config Version\ 2/server.js

@@ -25,19 +25,19 @@ app.listen(app.get('port'), function () {
 });
 
 app.get('/', function(request, response) {
-	response.sendFile(__dirname + '/Frontend/views/home.html');
-});
-
-app.get('/league/:id', function(request, response) {
-
-});
 	
-app.get('/season/:id', function(request, response) {
-
 });
 
-app.get('/team/:id', function(request, response) {
+app.get('/api/league/:id/ranks', async function(request, response) {
+	let leagueId = request.params.id;
+	// build query to database
+	// TODO: pass leagueId as parameter to client.query to prevent SQL injection
+	let SQL = "SELECT   rank.id AS rank_id,  rank.team_id AS team_id,  team.name AS team_name,  rank.rank AS rank,  rank.rating AS rating FROM league LEFT OUTER JOIN season ON season.league_id = league.id LEFT OUTER JOIN rank ON rank.season_id = season.id LEFT OUTER JOIN team ON team.id = rank.team_id WHERE league.id = " + leagueId + "  AND season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = " + leagueId + ")  AND rank.week_number = (SELECT MAX(week_number) FROM rank WHERE season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = " + leagueId + "))  AND rank.ranking_source_id = 1 ORDER BY rank ASC;";
 
+	await selectQuery(SQL)
+		.then((res) => {
+			response.send(res);
+		})
 });
 
 app.get('/api/leagues', async function(request, response) {
@@ -48,33 +48,6 @@ app.get('/api/leagues', async function(request, response) {
 	// send list of leagues to client
 			response.send(res);
 		});
-});
-
-app.get('/api/ranks', function(request, response) {
-	// get league from URL
-	let league = request.query.league;
-	// build query to database
-
-	// send rankings to client
-
-});
-
-app.get('/api/schedule', function(request, response) {
-	// get league and team from URL
-	let league = request.query.league;
-	let team = request.query.team;
-	// build query to database
-
-	// send schedule to client
-
-});
-
-app.get('/api/teams', function(request, response) {
-	// get league from URL
-	let league = request.query.league;
-	// build query to database
-
-	// send list of teams to client
 });
 
 function selectQuery(QUERY) {

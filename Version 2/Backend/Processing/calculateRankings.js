@@ -203,6 +203,10 @@ function getScoresMatrix(season) {
 					throw err;
 				} else {
 					logger.debug('getScoresMatrix: retrieved scores.', {rows: JSON.stringify(res)});
+					if (res.rows.length === 0) {
+						logger.error('Retrieved zero scores from scores table.');
+						return;
+					}
 					let teamId;
 					let opponentId;
 					let score;
@@ -264,13 +268,14 @@ function calculateRankings(scoresMatrix, season) {
 
 		// Take the ratings and sort them into a map of rankings
 		let ratings = scoresMatrix[0];
+		logger.debug('calculateRankings', JSON.stringify(ratings));
 		let ranksMap = new Map();	// map to contain key:value::teamId:rank
 		let nextTopRating;
 		let teamId;
 		for (let i = 0; i < ratings.length; i++) {
 			nextTopRating = Math.max.apply(Math, ratings);
 			teamId = ratings.indexOf(nextTopRating)+1;
-			ranksMap.set(teamId-1, {rank: i, rating: nextTopRating});
+			ranksMap.set(teamId-1, {rank: i+1, rating: nextTopRating});
 			ratings[teamId-1] = -1;
 		}
 

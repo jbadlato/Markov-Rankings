@@ -22,7 +22,7 @@ UPDATE team
 UPDATE team
 	SET conference_id = 4
 	WHERE season_id = 1 AND
-		name IN ('Lipscomb', 'Liberty', 'NJIT', 'North_Alabama', 'Jacksonville', 'Fl_Gulf_Coast', 'North_Florida', 'Kennesaw', 'Stetson');
+		name IN ('Lipscomb', 'Liberty', 'NJIT', 'North_Alabama', 'Jacksonville', 'FL_Gulf_Coast', 'North_Florida', 'Kennesaw', 'Stetson');
 -- Big_12
 UPDATE team
 	SET conference_id = 5
@@ -62,7 +62,7 @@ UPDATE team
 UPDATE team
 	SET conference_id = 12
 	WHERE season_id = 1 AND
-		name IN ('Old_Dominion', 'UT_San_Antonio', 'North_Texas', 'UAB', 'Marshall', 'WKU', 'Southern_Miss', 'Louisiana_Tech', 'Fl_Atlantic', 'Rice', 'Florida_Intl', 'MTSU', 'UTEP', 'Charlotte');
+		name IN ('Old_Dominion', 'UT_San_Antonio', 'North_Texas', 'UAB', 'Marshall', 'WKU', 'Southern_Miss', 'Louisiana_Tech', 'FL_Atlantic', 'Rice', 'Florida_Intl', 'MTSU', 'UTEP', 'Charlotte');
 --Horizon_League
 UPDATE team
 	SET conference_id = 14
@@ -77,7 +77,7 @@ UPDATE team
 UPDATE team
 	SET conference_id = 17
 	WHERE season_id = 1 AND
-		name IN ('Rider', 'Canisius', 'Monmouth', 'Quinnipiac', 'Siena', 'Iona', 'Niagara', 'St_Peter''s', 'Marist', 'Manhattan', 'Fairfield');
+		name IN ('Rider', 'Canisius', 'Monmouth_NJ', 'Quinnipiac', 'Siena', 'Iona', 'Niagara', 'St_Peter''s', 'Marist', 'Manhattan', 'Fairfield');
 -- Mid_American
 UPDATE team
 	SET conference_id = 18
@@ -132,7 +132,7 @@ UPDATE team
 UPDATE team
 	SET conference_id = 29
 	WHERE season_id = 1 AND
-		name IN ('Sam_Houston', 'Abilene_Chr', 'New_Orleans', 'TAM_C._Christi', 'SF_Austin', 'Cent_Arkansas', 'SE_Louisiana', 'McNeese_St', 'Nicholls_St', 'Lamar', 'Northwestern_LA', 'Houston_Baptist', 'Incarnate_Word');
+		name IN ('Sam_Houston_St', 'Abilene_Chr', 'New_Orleans', 'TAM_C._Christi', 'SF_Austin', 'Cent_Arkansas', 'SE_Louisiana', 'McNeese_St', 'Nicholls_St', 'Lamar', 'Northwestern_LA', 'Houston_Bap', 'Incarnate_Word');
 -- Southwestern_Athletic
 UPDATE team
 	SET conference_id = 30

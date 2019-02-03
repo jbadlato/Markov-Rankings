@@ -12,6 +12,9 @@ Initial DML:
 	heroku pg:psql < Version\ 2/Database/DML/season_DML.sql
 Run ingestion script (with database credentials from config file)
 	node -r dotenv/config Backend/Ingestion/ingest.js
+Update team data:
+	heroku pg:psql < Version\ 2/Database/DML/UPDATE_TEAM_CONFERENCES.sql
+	heroku pg:psql < Version\ 2/Database/DML/UPDATE_TEAM_LOGO_FILES.sql
 Update scheduled indicator in the scores table:
 	heroku pg:psql < Version\ 2/Database/Scripts/UPDATE_SCHEDULED_IND.sql
 Update win-loss records in team table:

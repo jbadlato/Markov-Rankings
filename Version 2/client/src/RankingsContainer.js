@@ -9,28 +9,18 @@ class RankingsContainer extends Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.league === null) return;
-    fetch('./api/league/' + this.props.league.id + '/ranks')
+  componentDidMount() {
+    fetch('/api/league/' + this.props.match.params.id + '/ranks')
       .then(response => response.json())
       .then(data => this.setState({ rankings: data.rows}));
   }
 
   render() {
-  	if (this.props.league === null) {
-  		return (
-  			<div>
-  				Please select a league from the menu above.
-  			</div>
-  			);
-  	} else {
-	    return (
-	      <div>
-	        Current league: {this.props.league.name}
-          <RankList rankings={this.state.rankings} />
-	      </div>
-	    	);
-	}
+    return (
+      <div id="rankings-container">
+        <RankList rankings={this.state.rankings} />
+      </div>
+    	);
   }
 }
 

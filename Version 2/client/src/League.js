@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 class League extends Component {
-  handleClick = () => {
-    this.props.onClickFunction(this.props.league);
-  }
-
   render() {
     return (
-      <button onClick={this.handleClick}>{this.props.league.name}</button>
+      <Link to={'/league/'+this.props.league.id+'/ranks'}>{this.props.league.name}</Link>
     );
   }
 }

@@ -4,7 +4,7 @@ import Rank from './Rank.js';
 class RankList extends Component {
   render() {
   	return (
-  		<div>
+  		<div id="rank-list">
   			{this.props.rankings.map(rank => <Rank key={rank.rank_id} rank={rank} />)}
   		</div>
   		);

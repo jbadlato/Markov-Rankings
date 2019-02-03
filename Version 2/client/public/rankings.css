@@ -1,8 +1,31 @@
+body {
+	width: 100%;
+}
+
 .rank-container {
 	border-style: solid;
-	border-width: 2px;
+	border-width: 1px;
+	border-radius: 2px;
+	max-width: 750px;
+	height: 100px;
+	overflow: hidden;
+}
+
+.rank-row {
+	height: 100%;
+}
+
+.rank-conference-logo-container {
+	height: 100%;
 }
 
 .conference-logo {
-	width: 100%;
+	margin-top: 10%;
+	max-width: 100%;
+	max-height: 30%;
+}
+
+.team-logo {
+	max-height: 100%;
+	max-width: 100%;
 }

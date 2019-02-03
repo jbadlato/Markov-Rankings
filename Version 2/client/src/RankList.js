@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
+import Rank from './Rank.js';
 
 class RankList extends Component {
   render() {
-  	if (this.props.league === null) {
-  		return (
-  			<div>
-  				Please select a league from the menu above.
-  			</div>
-  			);
-  	} else {
-	    return (
-	      <div>
-	        Current league: {this.props.league.name}
-	      </div>
-	    	);
-	}
+  	return (
+  		<div>
+  			{this.props.rankings.map(rank => <Rank key={rank.rank_id} rank={rank} />)}
+  		</div>
+  		);
   }
 }
 

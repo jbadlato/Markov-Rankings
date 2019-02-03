@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class League extends Component {
   handleClick = () => {
-    this.props.onClickFunction(this.props.league)
+    this.props.onClickFunction(this.props.league);
   }
 
   render() {

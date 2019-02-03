@@ -1,6 +1,7 @@
 CREATE TABLE league (
 	id SERIAL,
 	name VARCHAR(4),
+	logo_file VARCHAR(255),
 	PRIMARY KEY (id),
 	UNIQUE (name)
 );

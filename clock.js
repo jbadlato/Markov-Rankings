@@ -8,6 +8,17 @@ var Twitter = new twit(config);
 var FBS_TWITTER_LU_TBL = 'lu_twitter_fbs';
 var NFL_TWITTER_LU_TBL = 'lu_twitter_nfl';
 
+var scoresDataIndex = {
+	GAME_ID: 0,
+	DATE: 1,
+	TEAM_ID: 2,
+	TEAM_VENUE: 3,
+	TEAM_SCORE: 4,
+	OPPONENT_ID: 5,
+	OPPONENT_VENUE: 6,
+	OPPONENT_SCORE: 7
+};
+
 scrape();
 // cronJob = new CronJob({
 // 	cronTime: "00 00 00 * * *", // runs everyday at midnight.
@@ -252,68 +263,63 @@ function sendToDatabase(rankings, league) {
 	});
 }
 
+/* Given the response from scoreURL, parses the scores data
+and returns an array populated with the structured data.
+
+scores format:
+[
+	{
+		"Team": int >= 0,
+		"Team Venue": 'Home' or 'Away' (string),
+		"Team Score": int >= 0,
+		"Opponent"; int >= 0,
+		"Opponent Venue": 'Home' or 'Away' (string),
+		"Opponent Score": int >= 0
+	},
+	...(for each game)
+]
+*/
+function parseScoresData(scoresDataString) {
+	let data = scoresDataString.split(/,[ ]*|[\n]/);
+	let gameChunkSize = 8; // Size of one game entry.
+	let scores = [];
+
+	// Construct the map for each game.
+	for (var i = 0; i < data.length; i += gameChunkSize) {
+		let dataMap = {};
+
+		// Team ID.
+		dataMap['Team'] = parseInt(data[i + scoresDataIndex.TEAM_ID]) - 1;
+
+		// Team venue (i.e. Home, Away, Neutral)
+		dataMap['Team Venue'] = keyToVenue(data[i + scoresDataIndex.TEAM_VENUE]);
+
+		// Team score
+		dataMap['Team Score'] = parseInt(data[i + scoresDataIndex.TEAM_SCORE]);
+
+		// Opponent ID.
+		dataMap['Opponent'] = parseInt(data[i + scoresDataIndex.OPPONENT_ID]) - 1;
+
+		// Opponent venue
+		dataMap['Opponent Venue'] = keyToVenue(data[i + scoresDataIndex.OPPONENT_VENUE]);
+
+		// Opponent score
+		dataMap['Opponent Score'] = parseInt(data[i + scoresDataIndex.OPPONENT_SCORE]);
+
+		scores.push(dataMap);
+	}
+
+	return scores;
+}
+
 function fetchData(teamsURL, scoresURL, league) {
 	console.log("Start " + league);
 	request(scoresURL, function (error, response, body) {
 		if (error) {
 			console.log(error);
 		} else {
-			data = body;
-			data = data.split(/,[ ]*|[\n]/);
-			var scores = []; 
-			/* scores format:
-				[
-					{
-						"Team": int >= 0, 
-						"Team Venue": 'Home' or 'Away' (string), 
-						"Team Score": int >= 0, 
-						"Opponent"; int >= 0,
-						"Opponent Venue": 'Home' or 'Away' (string), 
-						"Opponent Score": int >= 0
-					}, 
-					...(for each game)
-				]
-			*/
-			for (var i = 0; i < data.length; i++) {
-				if (i % 8 === 0) { // not sure what this number from the data represents? Game ID maybe?
-					continue;
-				} else if (i % 8 === 1) { // Date of game
-					continue;
-				} else if (i % 8 === 2) { // Team id
-					scores.push({});
-					scores[scores.length - 1]["Team"] = parseInt(data[i]) - 1;
-				} else if (i % 8 === 3) { // Team venue (i.e. Home, Away, Neutral)
-					var venue;
-					if (data[i] === '1') {
-						venue = "Home";
-					} else if (data[i] === '-1') {
-						venue = "Away";
-					} else if (data[i] === '0') {
-						venue = "Neutral";
-					} else {
-						venue = "N/A";
-					}
-					scores[scores.length - 1]["Team Venue"] = venue;
-				} else if (i % 8 === 4) { // Team score
-					scores[scores.length - 1]["Team Score"] = parseInt(data[i]);
-				} else if (i % 8 === 5) { // Opponent id
-					scores[scores.length - 1]["Opponent"] = parseInt(data[i]) - 1;
-				} else if (i % 8 === 6) {
-					var venue;
-					if (data[i] === '1') {
-						venue = "Home";
-					} else if (data[i] === '-1') {
-						venue = "Away";
-					} else if (data[i] === '0') {
-						venue = "Neutral";
-					} else {
-						venue = "N/A";
-					}
-					scores[scores.length - 1]["Opponent Venue"] = venue;
-				} else if (i % 8 === 7) {
-					scores[scores.length - 1]["Opponent Score"] = parseInt(data[i]);
-				}
-			}
+			var scores = parseScoresData(body);
+
 			request(teamsURL, function (error2, response2, body2) {
 				body2 = body2.split(/,[ ]*|[\n]/);
 				var teamNameToId = {};
@@ -483,4 +489,18 @@ function matrixMultiply(A, B) {
 		}
 	}
 	return C;
+}
+
+/* Converts the venueKey string to human-readable venue name. */
+function keyToVenue(venueKey) {
+	switch(venueKey) {
+		case '1':
+			return 'Home';
+		case '-1':
+			return 'Away';
+		case '0':
+			return 'Neutral';
+		default:
+			return 'N/A';
+	}
 }

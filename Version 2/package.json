@@ -1,0 +1,15 @@
+{
+  "name": "markov-rankings",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "node -r dotenv/config server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1"
+  },
+  "dependencies": {
+    "react-router-dom": "^4.3.1"
+  }
+}

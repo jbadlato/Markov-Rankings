@@ -99,6 +99,7 @@
 		- use twitter API to predict which games are popular--what teams are people talking about?
 	- Tweet biggest upset of the week
 	- Create API to query the scores data saved in the database tables for public use?
+	- Send weekly emails out to a subscription list
 - Miscellaneous/Documentation:
 	- Data Analysis of how well the model predicts future outcomes
 		- Compare to AP Poll, Coaches Poll, etc. if applicable

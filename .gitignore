@@ -1,3 +1,9 @@
-samplerankings.json
-Data Analysis
+# File types
 .env
+
+# Files
+samplerankings.json
+
+# Folders
+Data Analysis
+node_modules

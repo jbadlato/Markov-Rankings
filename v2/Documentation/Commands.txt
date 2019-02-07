@@ -10,6 +10,7 @@ Initial DML:
 	heroku pg:psql < Version\ 2/Database/DML/league_DML.sql
 	heroku pg:psql < Version\ 2/Database/DML/ranking_source_DML.sql
 	heroku pg:psql < Version\ 2/Database/DML/season_DML.sql
+	heroku pg:psql < Version\ 2/Database/DML/conference_DML.sql
 Run ingestion script (with database credentials from config file)
 	node -r dotenv/config Backend/Ingestion/ingest.js
 Update team data:

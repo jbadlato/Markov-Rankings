@@ -7,9 +7,15 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.3.1"
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "dotenv": "^6.2.0"
   },
   "dependencies": {
-    "react-router-dom": "^4.3.1"
+    "express": "^4.16.4",
+    "heroku-logger": "^0.3.3",
+    "pg": "^7.8.0",
+    "react": "^16.8.1",
+    "react-router-dom": "^4.3.1",
+    "request": "^2.88.0"
   }
 }

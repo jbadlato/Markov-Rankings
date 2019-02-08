@@ -29,3 +29,27 @@ body {
 	max-height: 100%;
 	max-width: 100%;
 }
+
+.league-container {
+	display: inline-block;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 2px;
+	width: 100px;
+	height: 100px;
+	overflow: hidden;
+	margin: 5px;
+	padding: 0;
+}
+
+.league-link {
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+.league-logo {
+	margin: auto auto;
+	max-height: 100%;
+	max-width: 100%;
+}

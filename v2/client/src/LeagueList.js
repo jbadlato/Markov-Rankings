@@ -4,7 +4,7 @@ import League from './League';
 class LeagueList extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         {this.props.leagues.map(league => <League key={league.id} league={league} />)}
       </div>
     );

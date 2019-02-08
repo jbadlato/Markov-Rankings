@@ -42,7 +42,7 @@ app.get('/team/:id', function(request, response) {
 
 app.get('/api/leagues', async function(request, response) {
 	// build query to database
-	let SQL = "SELECT id, name FROM league;";
+	let SQL = "SELECT id, name, logo_file FROM league;";
 	await selectQuery(SQL)
 		.then((res) => {
 	// send list of leagues to client

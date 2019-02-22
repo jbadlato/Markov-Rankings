@@ -23,4 +23,4 @@ Update win-loss records in team table:
 Run rankings calculation script (with database credentials from config file)
 	node -r dotenv/config Backend/Processing/calculateRankings.js
 Run server locally:
-	node -r dotenv/config server.js
+	npm run dev

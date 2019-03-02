@@ -183,7 +183,7 @@ class Score {
 		let opponentId = this.opponentId;
 		let score = this.score;
 		let homeInd = this.homeInd;
-		let updateQuery = 'UPDATE score SET score = $1, home_ind = $2 WHERE seasonId = $3 AND game_date = $4 AND team_id = $5 AND opponent_id = $6;';
+		let updateQuery = 'UPDATE score SET score = $1, home_ind = $2 WHERE season_id = $3 AND game_date = $4 AND team_id = $5 AND opponent_id = $6;';
 		return new Promise((resolve, reject) => {
 			client.query(updateQuery, [score, homeInd, seasonId, gameDate.toUTCString(), teamId, opponentId], async (err, res) => {
 				if (err) {

@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 5000;
 let { Client } = require('pg');
@@ -18,14 +19,14 @@ client.connect((err)=> {
 
 app.set('port', (process.env.PORT || 5000));
 
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname,'client/build')));
 
 app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
 
 app.get('/', function(request, response) {
-	
+	response.sendFile(path.join(__dirname,'/client/build/index.html'));
 });
 
 app.get('/api/league/:id/ranks', async function(request, response) {

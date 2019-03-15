@@ -1,3 +1,132 @@
+--===================================================
+-- DDL
+--===================================================
+CREATE TABLE league (
+	id SERIAL,
+	name VARCHAR(4),
+	logo_file VARCHAR(255),
+	PRIMARY KEY (id),
+	UNIQUE (name)
+);
+
+CREATE TABLE season (
+	id SERIAL,
+	league_id INTEGER,
+	season INTEGER,	-- Year
+	teams_url VARCHAR(255),
+	scores_url VARCHAR(255),
+	week_start INTEGER,	-- 0-6, Sunday - Saturday
+	season_start DATE,
+	season_end DATE,
+	PRIMARY KEY (id),
+	FOREIGN KEY (league_id) REFERENCES league (id)
+);
+
+CREATE TABLE conference (
+	id SERIAL,
+	season_id INTEGER,
+	name VARCHAR(255),
+	logo_file VARCHAR(255),
+	PRIMARY KEY (id),
+	FOREIGN KEY (season_id) REFERENCES season (id)
+);
+
+CREATE TABLE team (
+	id INTEGER,
+	name VARCHAR(20),
+	season_id INTEGER,
+	conference_id INTEGER,
+	twitter_handle VARCHAR(15),
+	logo_file VARCHAR(255),
+	win_count INTEGER,
+	loss_count INTEGER,
+	tie_count INTEGER,
+	PRIMARY KEY (id, season_id),
+	FOREIGN KEY (season_id) REFERENCES season (id),
+	FOREIGN KEY (conference_id) REFERENCES conference (id)
+);
+
+CREATE TABLE score (
+	id SERIAL,
+	season_id INTEGER,
+	game_date DATE,
+	team_id INTEGER,
+	score INTEGER,
+	opponent_id INTEGER,
+	scheduled_ind INTEGER,
+	home_ind INTEGER,
+	PRIMARY KEY (id),
+	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id),
+	FOREIGN KEY (opponent_id, season_id) REFERENCES team (id, season_id)
+);
+
+CREATE TABLE ranking_source (
+	id INTEGER,
+	name VARCHAR(255),
+	logo_file VARCHAR(255),
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE rank (
+	id SERIAL,
+	team_id INTEGER,
+	season_id INTEGER,
+	week_number INTEGER,
+	rank INTEGER,
+	rating DECIMAL,
+	ranking_source_id INTEGER,
+	PRIMARY KEY (id),
+	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id),
+	FOREIGN KEY (ranking_source_id) REFERENCES ranking_source (id)
+);
+
+CREATE TABLE prediction (
+	id SERIAL,
+	score_id INTEGER,
+	week_number INTEGER,
+	prediction INTEGER,
+	PRIMARY KEY (id),
+	FOREIGN KEY (score_id) REFERENCES score (id)
+);
+--===================================================
+-- DML
+--===================================================
+-- Ranking Source DML:
+INSERT INTO ranking_source (
+		id,
+		name
+	) VALUES (
+		1,
+		'MARKOV'
+	);
+-- League DML:
+INSERT INTO league (name, logo_file) VALUES ('CBB', 'ncaa_basketball.png');
+INSERT INTO league (name, logo_file) VALUES ('CFB', 'ncaa_football.png');
+INSERT INTO league (name, logo_file) VALUES ('NFL', 'nfl.png');
+INSERT INTO league (name, logo_file) VALUES ('NHL', 'nhl.png');
+INSERT INTO league (name, logo_file) VALUES ('WCBB', 'ncaa_basketball.png');
+INSERT INTO league (name, logo_file) VALUES ('NBA', 'nba.png');
+COMMIT;
+-- Season DML:
+INSERT INTO season (
+		league_id,
+		season,
+		teams_url,
+		scores_url,
+		week_start,
+		season_start,
+		season_end
+	)
+	VALUES (
+			1,
+			2019,
+			'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&sch=on&format=2',
+			'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&sch=on&format=1',
+			1,
+			DATE '2018-11-06',
+			DATE '2019-04-08'
+		);
+-- Conference DML:
 TRUNCATE TABLE conference CASCADE;
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (1, 1, 'America_East', 'america-east.png');

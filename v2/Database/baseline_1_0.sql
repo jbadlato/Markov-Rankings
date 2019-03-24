@@ -88,6 +88,7 @@ CREATE TABLE rank (
 	rank INTEGER,
 	rating DECIMAL,
 	ranking_source_id INTEGER,
+	calculated_date DATE,
 	PRIMARY KEY (id),
 	FOREIGN KEY (team_id, season_id) REFERENCES team (id, season_id),
 	FOREIGN KEY (ranking_source_id) REFERENCES ranking_source (id)

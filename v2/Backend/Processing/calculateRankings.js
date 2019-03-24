@@ -111,14 +111,14 @@ class Rank {
 		let rating = this.rating;
 		let rankingSourceId = this.rankingSourceId;
 		logger.debug('Persisting Rank...', {teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId});
-		let insertQuery = 'INSERT INTO rank (team_id, season_id, week_number, rank, rating, ranking_source_id) VALUES ($1, $2, $3, $4, $5, $6);';
+		let insertQuery = 'INSERT INTO rank (team_id, season_id, week_number, rank, rating, ranking_source_id, calculated_date) VALUES ($1, $2, $3, $4, $5, $6, $7);';
 		return new Promise((resolve, reject) => {
-			client.query(insertQuery, [teamId, seasonId, weekNumber, rank, rating, rankingSourceId], async (err, res) => {
+			client.query(insertQuery, [teamId, seasonId, weekNumber, rank, rating, rankingSourceId, CALCULATED_DATE.toUTCString()], async (err, res) => {
 				if (err) {
-					logger.error('Error occurred inserting rank.', {error: err, teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId});
+					logger.error('Error occurred inserting rank.', {error: err, teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId, calculatedDate: CALCULATED_DATE});
 					reject(err);
 				} else {
-					logger.debug('Inserted rank.', {teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId});
+					logger.debug('Inserted rank.', {teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId, calculatedDate: CALCULATED_DATE});
 					await commit();
 					resolve();
 				}
@@ -127,7 +127,9 @@ class Rank {
 	}
 }
 
+var CALCULATED_DATE;
 function main() {
+	CALCULATED_DATE = new Date();
 	logger.info('BEGIN: calculateRankings.js');
 	connectToDB()
 		.then(getSeasons()

@@ -120,7 +120,6 @@ INSERT INTO league (name, logo_file) VALUES ('NFL', 'nfl.png');
 INSERT INTO league (name, logo_file) VALUES ('NHL', 'nhl.png');
 INSERT INTO league (name, logo_file) VALUES ('WCBB', 'ncaa_basketball.png');
 INSERT INTO league (name, logo_file) VALUES ('NBA', 'nba.png');
-COMMIT;
 -- Season DML:
 INSERT INTO season (
 		league_id,
@@ -212,3 +211,7 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (34, 1, 'Western_Athletic', 'western-athletic.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (35, 1, 'Atlantic_Coast', 'atlantic-coast.png');
+--===================================================
+-- GRANTS
+--===================================================
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO markov;

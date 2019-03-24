@@ -214,4 +214,7 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 --===================================================
 -- GRANTS
 --===================================================
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO markov;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO markov;
+GRANT INSERT ON ALL TABLES IN SCHEMA public TO markov;
+GRANT UPDATE ON ALL TABLES IN SCHEMA public TO markov;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO markov;

@@ -139,6 +139,17 @@ INSERT INTO season (
 			DATE '2018-11-06',
 			DATE '2019-04-08'
 		);
+INSERT INTO season (
+		2,
+		2019,
+		'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&sch=on&format=1',
+		DATE '2018-11-06',
+		DATE '2019-04-08'
+	)
+	VALUES (
+	
+		);
 -- Conference DML:
 TRUNCATE TABLE conference CASCADE;
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)

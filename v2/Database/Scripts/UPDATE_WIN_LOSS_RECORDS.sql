@@ -37,6 +37,6 @@ FROM
           t1.opponent_id = t2.team_id AND
           t1.scheduled_ind = 0
       ) win_loss
-    GROUP BY team_id
+    GROUP BY team_id, season_id
   ) subquery
 WHERE team.id = subquery.team_id and team.season_id = subquery.season_id; 

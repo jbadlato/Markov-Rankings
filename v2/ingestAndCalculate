@@ -1,5 +1,7 @@
 #!/bin/sh
 node -r dotenv/config Backend/Ingestion/ingest.js
+psql -d markov < Database/Scripts/UPDATE_TEAM_CONFERENCES.sql
+psql -d markov < Database/Scripts/UPDATE_TEAM_LOGO_FILES.sql
 psql -d markov < Database/Scripts/UPDATE_SCHEDULED_IND.sql
 psql -d markov < Database/Scripts/UPDATE_WIN_LOSS_RECORDS.sql
 node -r dotenv/config Backend/Processing/calculateRankings.js

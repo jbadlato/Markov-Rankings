@@ -7,6 +7,7 @@ FROM
   (
     SELECT
       team_id,
+	  season_id,
       SUM(win) AS wins,
       SUM(loss) AS losses,
       SUM(tie) AS ties
@@ -14,6 +15,7 @@ FROM
       (
       SELECT 
         t1.team_id AS team_id,
+		t1.season_id AS season_id,
         CASE 
           WHEN t1.score > t2.score THEN 1 
           ELSE 0 
@@ -37,4 +39,4 @@ FROM
       ) win_loss
     GROUP BY team_id
   ) subquery
-WHERE team.id = subquery.team_id; 
+WHERE team.id = subquery.team_id and team.season_id = subquery.season_id; 

@@ -114,14 +114,15 @@ INSERT INTO ranking_source (
 		'MARKOV'
 	);
 -- League DML:
-INSERT INTO league (name, logo_file) VALUES ('CBB', 'ncaa_basketball.png');
-INSERT INTO league (name, logo_file) VALUES ('CFB', 'ncaa_football.png');
-INSERT INTO league (name, logo_file) VALUES ('NFL', 'nfl.png');
-INSERT INTO league (name, logo_file) VALUES ('NHL', 'nhl.png');
-INSERT INTO league (name, logo_file) VALUES ('WCBB', 'ncaa_basketball.png');
-INSERT INTO league (name, logo_file) VALUES ('NBA', 'nba.png');
+INSERT INTO league (id, name, logo_file) VALUES (1,'CBB', 'ncaa_basketball.png');
+INSERT INTO league (id, name, logo_file) VALUES (2,'CFB', 'ncaa_football.png');
+INSERT INTO league (id, name, logo_file) VALUES (3,'NFL', 'nfl.png');
+INSERT INTO league (id, name, logo_file) VALUES (4,'NHL', 'nhl.png');
+INSERT INTO league (id, name, logo_file) VALUES (5,'WCBB', 'ncaa_basketball.png');
+INSERT INTO league (id, name, logo_file) VALUES (6,'NBA', 'nba.png');
 -- Season DML:
 INSERT INTO season (
+		id,
 		league_id,
 		season,
 		teams_url,
@@ -132,7 +133,8 @@ INSERT INTO season (
 	)
 	VALUES (
 			1,
-			2019,
+			1,
+			2018,
 			'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&sch=on&format=2',
 			'https://www.masseyratings.com/scores.php?s=305972&sub=11590&all=1&mode=2&sch=on&format=1',
 			1,
@@ -140,6 +142,7 @@ INSERT INTO season (
 			DATE '2019-04-08'
 		);
 INSERT INTO season (
+		id,
 		league_id,
 		season,
 		teams_url,
@@ -150,12 +153,93 @@ INSERT INTO season (
 	)
 	VALUES (
 		2,
-		2019,
+		2,
+		2018,
 		'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&sch=on&format=2',
 		'https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1&mode=2&sch=on&format=1',
 		1,
+		DATE '2018-08-25',
+		DATE '2019-01-07'	
+		);
+INSERT INTO season (
+		id,
+		league_id,
+		season,
+		teams_url,
+		scores_url,
+		week_start,
+		season_start,
+		season_end
+	)
+	VALUES (
+		3,
+		3,
+		2018,
+		'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=300936&sub=300936&all=1&mode=2&sch=on&format=1',
+		1,
+		DATE '2018-09-06',
+		DATE '2019-02-03'	
+		);
+INSERT INTO season (
+		id,
+		league_id,
+		season,
+		teams_url,
+		scores_url,
+		week_start,
+		season_start,
+		season_end
+	)
+	VALUES (
+		4,
+		4,
+		2018,
+		'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&sch=on&format=1',
+		1,
+		DATE '2018-10-03',
+		DATE '2019-06-20'	
+		);
+INSERT INTO season (
+		id,
+		league_id,
+		season,
+		teams_url,
+		scores_url,
+		week_start,
+		season_start,
+		season_end
+	)
+	VALUES (
+		5,
+		5,
+		2018,
+		'https://www.masseyratings.com/scores.php?s=298893&sub=11590&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=298893&sub=11590&all=1&mode=2&sch=on&format=1',
+		1,
 		DATE '2018-11-06',
-		DATE '2019-04-08'	
+		DATE '2019-04-07'	
+		);
+INSERT INTO season (
+		id,
+		league_id,
+		season,
+		teams_url,
+		scores_url,
+		week_start,
+		season_start,
+		season_end
+	)
+	VALUES (
+		6,
+		6,
+		2018,
+		'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=305191&sub=305191&all=1&mode=2&sch=on&format=1',
+		1,
+		DATE '2018-10-16',
+		DATE '2019-06-16'	
 		);
 -- Conference DML:
 TRUNCATE TABLE conference CASCADE;

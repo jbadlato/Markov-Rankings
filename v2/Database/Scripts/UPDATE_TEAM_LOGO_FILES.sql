@@ -244,3 +244,7 @@ UPDATE team
 	SET logo_file = 'tampa_bay_lightning.png'
 	WHERE name = 'Tampa_Bay'
 		AND season_id = 4;
+UPDATE team
+	SET logo_file = 'st_louis_blues.png'
+	WHERE name = 'St_Louis'
+		AND season_id = 4;

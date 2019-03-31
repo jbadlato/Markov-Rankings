@@ -248,3 +248,131 @@ UPDATE team
 	SET logo_file = 'st_louis_blues.png'
 	WHERE name = 'St_Louis'
 		AND season_id = 4;
+UPDATE team
+	SET logo_file = 'carolina_panthers.png'
+	WHERE name = 'Carolina'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'green_bay_packers.png'
+	WHERE name = 'Green_Bay'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'atlanta_falcons.png'
+	WHERE name = 'Atlanta'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'seattle_seahawks.png'
+	WHERE name = 'Seattle'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'minnesota_vikings.png'
+	WHERE name = 'Minnesota'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'chicago_bears.png'
+	WHERE name = 'Chicago'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'los_angeles_rams.png'
+	WHERE name = 'LA_Rams'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'dallas_cowboys.png'
+	WHERE name = 'Dallas'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'tampa_bay_buccaneers.png'
+	WHERE name = 'Tampa_Bay'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'new_york_giants.png'
+	WHERE name = 'NY_Giants'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'washington_redskins.png'
+	WHERE name = 'Washington'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'houston_texans.png'
+	WHERE name = 'Houston'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'cincinnati_bengals.png'
+	WHERE name = 'Cincinnati'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'new_orleans_saints.png'
+	WHERE name = 'New_Orleans'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'jacksonville_jaguars.png'
+	WHERE name = 'Jacksonville'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'pittsburgh_steelers.png'
+	WHERE name = 'Pittsburgh'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'baltimore_ravens.png'
+	WHERE name = 'Baltimore'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'oakland_raiders.png'
+	WHERE name = 'Oakland'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'san_francisco_49ers.png'
+	WHERE name = 'San_Francisco'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'denver_broncos.png'
+	WHERE name = 'Denver'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'los_angeles_chargers.png'
+	WHERE name = 'LA_Chargers'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'arizona_cardinals.png'
+	WHERE name = 'Arizona'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'cleveland_browns.png'
+	WHERE name = 'Cleveland'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'kansas_city_chiefs.png'
+	WHERE name = 'Kansas_City'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'tennessee_titans.png'
+	WHERE name = 'Tennessee'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'new_york_jets.png'
+	WHERE name = 'NY_Jets'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'indianapolis_colts.png'
+	WHERE name = 'Indianapolis'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'buffalo_bills.png'
+	WHERE name = 'Buffalo'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'miami_dolphins.png'
+	WHERE name = 'Miami'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'detroit_lions.png'
+	WHERE name = 'Detroit'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'new_england.png'
+	WHERE name = 'New_England'
+		AND season_id = 3;
+UPDATE team
+	SET logo_file = 'philadelphia_eagles.png'
+	WHERE name = 'Philadelphia'
+		AND season_id = 3;

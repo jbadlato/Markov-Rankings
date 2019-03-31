@@ -1,7 +1,7 @@
 -- NCAA Men's and Women's Basketball
 UPDATE team
 	SET logo_file = lower(replace(replace(name, '''', ''), '.', ''))||'.png'
-	WHERE season_id = 1 OR season_id = 5;
+	WHERE season_id IN (1,2,5);
 -- NBA
 UPDATE team
 	SET logo_file = 'phoenix_suns.png'

@@ -324,6 +324,11 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (38, 4, 'Eastern_Conference', 'nhl-eastern-conference.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (39, 4, 'Western_Conference', 'nhl-western-conference.png');
+-- NBA Conferences
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (40, 6, 'Eastern_Conference', 'nba-eastern-conference.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (41, 6, 'Western_Conference', 'nba-western-conference.png');
 --===================================================
 -- GRANTS
 --===================================================

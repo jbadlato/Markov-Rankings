@@ -183,3 +183,14 @@ UPDATE team
 	SET conference_id = 39
 	WHERE season_id = 4 AND
 		name IN ('Anaheim','Arizona','Calgary','Edmonton','Los_Angeles','San_Jose','Vancouver','Vegas','Chicago','Colorado','Dallas','Minnesota','Nashville','St_Louis','Winnipeg');
+--===================================================
+-- NBA Conferences
+--===================================================
+UPDATE team
+	SET conference_id = 40
+	WHERE season_id = 6 AND
+		name IN ('Atlanta','Boston','Brooklyn','Charlotte','Chicago','Cleveland','Detroit','Indiana','Miami','Milwaukee','New_York','Orlando','Philadelphia','Toronto','Washington');
+UPDATE team
+	SET conference_id = 41
+	WHERE season_id = 6 AND
+		name IN ('Dallas','Denver','Golden_State','Houston','LA_Clippers','LA_Lakers','Memphis','Minnesota','New_Orleans','Oklahoma_City','Phoenix','Portland','Sacramento','San_Antonio','Utah');

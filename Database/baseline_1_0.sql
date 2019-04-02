@@ -315,11 +315,15 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (35, 1, 'Atlantic_Coast', 'atlantic-coast.png');
 -- NFL Conferences
-
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (36, 3, 'National_Football_Conference', 'national-football-conference.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (37, 3, 'American_Football_Conference', 'american-football-conference.png');
+-- NHL Conferences
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (38, 3, 'Eastern_Conference', 'nhl-eastern-conference.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (39, 3, 'Western_Conference', 'nhl-western-conference.png');
 --===================================================
 -- GRANTS
 --===================================================

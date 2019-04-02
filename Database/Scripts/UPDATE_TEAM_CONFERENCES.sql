@@ -172,3 +172,14 @@ UPDATE team
 	SET conference_id = 37
 	WHERE season_id = 3 AND
 		name IN ('Buffalo','Miami','New_England','NY_Jets','Baltimore','Cincinnati','Cleveland','Pittsburgh','Houston','Indianapolis','Jacksonville','Tennessee','Denver','Kansas_City','LA_Chargers','Oakland');
+--===================================================
+-- NHL Conferences
+--===================================================
+UPDATE team
+	SET conference_id = 38
+	WHERE season_id = 4 AND
+		name IN ('Boston','Buffalo','Carolina','Columbus','Detroit','New_Jersey','NY_Islanders','NY_Rangers','Florida','Montreal','Ottawa','Tampa_Bay','Toronto','Philadelphia','Pittsburgh','Washington');
+UPDATE team
+	SET conference_id = 39
+	WHERE season_id = 4 AND
+		name IN ('Anaheim','Arizona','Calgary','Edmonton','Los_Angeles','San_Jose','Vancouver','Vegas','Chicago','Colorado','Dallas','Minnesota','Nashville','St_Louis','Winnipeg');

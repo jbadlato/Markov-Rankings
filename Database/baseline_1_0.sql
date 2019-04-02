@@ -243,6 +243,7 @@ INSERT INTO season (
 		);
 -- Conference DML:
 TRUNCATE TABLE conference CASCADE;
+-- NCAA Basketball Conferences
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (1, 1, 'America_East', 'america-east.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
@@ -313,6 +314,12 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (34, 1, 'Western_Athletic', 'western-athletic.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (35, 1, 'Atlantic_Coast', 'atlantic-coast.png');
+-- NFL Conferences
+
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (36, 3, 'National_Football_Conference', 'national-football-conference.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (37, 3, 'American_Football_Conference', 'american-football-conference.png');
 --===================================================
 -- GRANTS
 --===================================================

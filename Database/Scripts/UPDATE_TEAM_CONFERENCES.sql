@@ -1,3 +1,6 @@
+--===================================================
+-- NCAA Basketball Conferences
+--===================================================
 -- Atlantic_Coast
 UPDATE team
 	SET conference_id = 35
@@ -158,3 +161,14 @@ UPDATE team
 	SET conference_id = 34
 	WHERE season_id IN (1,5) AND
 		name IN ('CS_Bakersfield', 'New_Mexico_St', 'Grand_Canyon', 'Utah_Valley', 'Missouri_KC', 'UTRGV', 'Cal_Baptist', 'Seattle', 'Chicago_St');
+--===================================================
+-- NFL Conferences
+--===================================================
+UPDATE team
+	SET conference_id = 36
+	WHERE season_id = 3 AND
+		name IN ('Dallas','NY_Giants','Philadelphia','Washington','Chicago','Detroit','Green_Bay','Minnesota','Atlanta','Carolina','New_Orleans','Tampa_Bay','Arizona','LA_Rams','San_Francisco','Seattle');
+UPDATE team
+	SET conference_id = 37
+	WHERE season_id = 3 AND
+		name IN ('Buffalo','Miami','New_England','NY_Jets','Baltimore','Cincinnati','Cleveland','Pittsburgh','Houston','Indianapolis','Jacksonville','Tennessee','Denver','Kansas_City','LA_Chargers','Oakland');

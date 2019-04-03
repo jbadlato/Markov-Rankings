@@ -25,10 +25,6 @@ app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
 
-app.get('/', function(request, response) {
-	response.sendFile(path.join(__dirname,'/client/build/index.html'));
-});
-
 app.get('/api/league/:id/ranks', async function(request, response) {
 	let leagueId = request.params.id;
 	// build query to database
@@ -49,6 +45,10 @@ app.get('/api/leagues', async function(request, response) {
 	// send list of leagues to client
 			response.send(res);
 		});
+});
+
+app.get('/*', function(request, response) {
+	response.sendFile(path.join(__dirname,'/client/build/index.html'));
 });
 
 function selectQuery(QUERY) {

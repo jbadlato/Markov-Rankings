@@ -194,3 +194,50 @@ UPDATE team
 	SET conference_id = 41
 	WHERE season_id = 6 AND
 		name IN ('Dallas','Denver','Golden_State','Houston','LA_Clippers','LA_Lakers','Memphis','Minnesota','New_Orleans','Oklahoma_City','Phoenix','Portland','Sacramento','San_Antonio','Utah');
+--===================================================
+-- College Football Conferences
+--===================================================
+UPDATE team
+	SET conference_id = 42	-- ACC
+	WHERE season_id = 2 AND
+		name IN ('Clemson','Syracuse','NC_State','Boston_College','Wake_Forest','Florida_St','Louisville','Pittsburgh','Georgia_Tech','Virginia','Miami','Virginia_Tech','Duke','North_Carolina');
+UPDATE team 
+	SET conference_id = 43	-- Independents
+	WHERE season_id = 2 AND
+		name IN ('Notre_Dame','Army','BYU','Liberty','Massachusetts','New_Mexico_St');
+UPDATE team 
+	SET conference_id = 44	-- Mid-American
+	WHERE season_id = 2 AND
+		name IN ('Buffalo','Ohio','Miami_OH','Akron','Bowling_Green','Kent','N_Illinois','E_Michigan','Toledo','W_Michigan','Ball_St','C_Michigan');
+UPDATE team
+	SET conference_id = 45	-- Mountain West
+	WHERE season_id = 2 AND
+		name IN ('Fresno_St','Nevada','Hawaii','San_Diego_St','UNLV','San_Jose_St','Utah_St','Boise_St','Wyoming','Air_Force','Colorado_St','New_Mexico');
+UPDATE team
+	SET conference_id = 46	-- Pac-12
+	WHERE season_id = 2 AND
+		name IN ('Washington_St','Washington','Stanford','Oregon','California','Oregon_St','Utah','Arizona_St','Arizona','USC','UCLA','Colorado');
+UPDATE team
+	SET conference_id = 47 -- Southeastern 
+	WHERE season_id = 2 AND
+		name IN ('Alabama','LSU','Texas_A&M','Mississippi_St','Auburn','Mississippi','Arkansas','Georgia','Florida','Kentucky','Missouri','South_Carolina','Vanderbilt','Tennessee');
+UPDATE team
+	SET conference_id = 48	--Sun Belt 
+	WHERE season_id = 2 AND
+		name IN ('Appalachian_St','Troy','Ga_Southern','Coastal_Car','Georgia_St','Arkansas_St','Louisiana','ULM','South_Alabama','Texas_St');
+UPDATE team
+	SET conference_id = 49	-- American Athletic 
+	WHERE season_id = 2 AND
+		name IN ('UCF','Temple','Cincinnati','South_Florida','East_Carolina','Connecticut','Houston','Memphis','Tulane','SMU','Tulsa','Navy');
+UPDATE team
+	SET conference_id = 50	-- Big 12 
+	WHERE season_id = 2 AND
+		name IN ('Oklahoma','Texas','West_Virginia','Iowa_St','Baylor','TCU','Oklahoma_St','Kansas_St','Texas_Tech','Kansas');
+UPDATE team
+	SET conference_id = 51	-- Big Ten
+	WHERE season_id = 2 AND
+		name IN ('Ohio_St','Michigan','Penn_St','Michigan_St','Maryland','Indiana','Rutgers','Northwestern','Iowa','Wisconsin','Purdue','Minnesota','Nebraska','Illinois');
+UPDATE team
+	SET conference_id = 52	-- Conference USA 
+	WHERE season_id = 2 AND
+		name IN ('UAB','North_Texas','Louisiana_Tech','Southern_Miss','UT_San_Antonio','Rice','UTEP','MTSU','Florida_Intl','Marshall','Charlotte','FL_Atlantic','Old_Dominion','WKU');

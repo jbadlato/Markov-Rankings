@@ -314,6 +314,29 @@ INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (34, 1, 'Western_Athletic', 'western-athletic.png');
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (35, 1, 'Atlantic_Coast', 'atlantic-coast.png');
+-- College Football Conferences
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (42, 1, 'Atlantic_Coast', 'atlantic-coast.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (43, 1, 'Independent', 'independents.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (44, 1, 'Mid_American', 'mid-american.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (45, 1, 'Mountain_West', 'mountain-west.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (46, 1, 'Pac_12', 'pac-12.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (47, 1, 'Southeastern', 'southeastern.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (48, 1, 'Sun_Belt', 'sun-belt.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (49, 1, 'American_Athletic', 'american-athletic.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (50, 1, 'Big_12', 'big-12.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (51, 1, 'Big_Ten', 'big-ten.png');
+INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
+	VALUES (52, 1, 'Conference_USA', 'conference-usa.png');
 -- NFL Conferences
 INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
 	VALUES (36, 3, 'National_Football_Conference', 'national-football-conference.png');

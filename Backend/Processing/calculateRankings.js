@@ -2,7 +2,7 @@ const logger = require('heroku-logger');
 const { Client } = require('pg');
 
 const client = new Client({
-	connectionString: process.env.DATABASE_URL,
+	connectionString: process.env.BACKEND_DATABASE_URL,
 //	ssl: true
 });
 

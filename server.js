@@ -5,7 +5,7 @@ const port = 8080;
 let { Client } = require('pg');
 
 const client = new Client({
-	connectionString: process.env.DATABASE_URL,
+	connectionString: process.env.CLIENT_DATABASE_URL
 //	ssl: true
 });
 

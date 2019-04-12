@@ -195,8 +195,8 @@ INSERT INTO season (
 		4,
 		4,
 		2018,
-		'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&sch=on&format=2',
-		'https://www.masseyratings.com/scores.php?s=298136&sub=298136&all=1&mode=2&sch=on&format=1',
+		'https://www.masseyratings.com/scores.php?s=305192&sub=305192&all=1&mode=2&sch=on&format=2',
+		'https://www.masseyratings.com/scores.php?s=305192&sub=305192&all=1&mode=2&sch=on&format=1',
 		1,
 		DATE '2018-10-03',
 		DATE '2019-06-20'	

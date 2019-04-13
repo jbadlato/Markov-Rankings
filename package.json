@@ -5,7 +5,10 @@
     "client": "cd client && npm start",
     "server": "node -r dotenv/config server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "test": "jest"
+    "start": "pm2 start process.json",
+    "restart": "pm2 restart all",
+    "test": "jest",
+	"stop": "pm2 stop process.json"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
@@ -15,6 +18,7 @@
     "express": "^4.16.4",
     "heroku-logger": "^0.3.3",
     "pg": "^7.8.0",
+    "pm2": "^3.5.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",

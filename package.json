@@ -8,7 +8,7 @@
     "start": "pm2 start process.json",
     "restart": "pm2 restart all",
     "test": "jest",
-	"stop": "pm2 stop process.json"
+    "stop": "pm2 stop process.json"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
@@ -17,6 +17,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "heroku-logger": "^0.3.3",
+    "jest": "^24.7.1",
     "pg": "^7.8.0",
     "pm2": "^3.5.0",
     "react": "^16.8.1",

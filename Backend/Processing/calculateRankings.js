@@ -143,7 +143,7 @@ function getSeasons() {
 	// Gets array of season IDs, as well as their associated team counts.
 	return new Promise((resolve, reject) => {
 		let seasonArray = new Array(0);
-		let query = "SELECT season.id AS id, COUNT(team.id) AS team_count, CEIL((CURRENT_DATE::DATE - season_start::DATE)/7.0) AS week_number FROM season INNER JOIN team ON (team.season_id = season.id) WHERE season.week_start = EXTRACT(dow FROM '01-14-2019'::DATE) AND season.season_start <= CURRENT_DATE AND CURRENT_DATE <= season.season_end GROUP BY season.id;";
+		let query = "SELECT season.id AS id, COUNT(team.id) AS team_count, CEIL((CURRENT_DATE::DATE - season_start::DATE)/7.0) AS week_number FROM season INNER JOIN team ON (team.season_id = season.id) WHERE season.week_start = EXTRACT(dow FROM '01-14-2019'::DATE) AND season.season_start <= CURRENT_DATE AND CURRENT_DATE <= season.season_end OR (season.season_start <= CURRENT_DATE AND (SELECT COUNT(*) FROM rank WHERE rank.season_id = season.id) = 0) GROUP BY season.id;";
 		try {
 			client.query(query, (err, res) => {
 				if (err) {

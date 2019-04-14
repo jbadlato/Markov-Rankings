@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import history from './history.js';
 import HomePage from './HomePage.js';
-import RankingsContainer from './RankingsContainer.js';
+import RankingsPage from './RankingsPage.js';
 
 class App extends Component {
   render() {
@@ -14,7 +14,7 @@ class App extends Component {
       <Router history={history}>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/:league_name/:season/ranks/:date" component={RankingsContainer} />
+          <Route path="/:league_name/:season/ranks/:date" component={RankingsPage} />
         </Switch>
       </Router>
     );

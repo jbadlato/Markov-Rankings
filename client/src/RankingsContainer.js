@@ -16,7 +16,7 @@ class RankingsContainer extends Component {
 		.then(data => {
 			let latestRankdate = data.rows[0].latest_rank_date;
 			if (latestRankdate < this.props.date) {
-				history.push('/'+this.props.league_name+'/'+this.props.season+'/ranks/'+latestRankdate);
+				history.replace('/'+this.props.league_name+'/'+this.props.season+'/ranks/'+latestRankdate);
 			}
 		})
 		.then(() => {

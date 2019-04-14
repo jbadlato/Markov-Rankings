@@ -44,15 +44,15 @@ app.get('/api/league/:id/ranks', async function(request, response) {
 			rank.rank AS rank,  
 			rank.rating AS rating 
 		FROM league 
-		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = ` + leagueId + `)
+		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = $1)
 		LEFT OUTER JOIN rank ON rank.season_id = season.id AND rank.calculated_date = (SELECT MAX(calculated_date) FROM rank WHERE rank.season_id = season.id)
 		LEFT OUTER JOIN team ON team.id = rank.team_id AND team.season_id = rank.season_id 
 		LEFT OUTER JOIN conference ON team.conference_id = conference.id 
-		WHERE league.id = ` + leagueId + `
+		WHERE league.id = $1
 			AND rank.ranking_source_id = 1 
 		ORDER BY rank ASC;`;
-
-	await selectQuery(SQL)
+	let PARAMS = [leagueId];
+	await selectQuery(SQL, PARAMS)
 		.then((res) => {
 			response.send(res);
 		})
@@ -76,6 +76,19 @@ function selectQuery(QUERY) {
 	return new Promise((resolve, reject) => {
 		try{
 			client.query(QUERY, (err, res) => {
+				if (err) throw err;
+				resolve(res);
+			});
+		} catch (err) {
+			reject(err);
+		}
+	});
+}
+
+function selectQuery(QUERY, PARAMS) {
+	return new Promise((resolve, reject) => {
+		try {
+			client.query(QUERY, PARAMS, (err, res) => {
 				if (err) throw err;
 				resolve(res);
 			});

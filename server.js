@@ -25,8 +25,8 @@ app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
 
-app.get('/api/league/:id/ranks', async function(request, response) {
-	let leagueId = request.params.id;
+app.get('/api/league/:league_name/ranks', async function(request, response) {
+	let leagueId = request.params.league_name;
 	// build query to database
 	// TODO: pass leagueId as parameter to client.query to prevent SQL injection
 	let SQL = 
@@ -44,11 +44,11 @@ app.get('/api/league/:id/ranks', async function(request, response) {
 			rank.rank AS rank,  
 			rank.rating AS rating 
 		FROM league 
-		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = $1)
+		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season_start = (SELECT MAX(season_start) FROM season WHERE season.league_id = league.id)
 		LEFT OUTER JOIN rank ON rank.season_id = season.id AND rank.calculated_date = (SELECT MAX(calculated_date) FROM rank WHERE rank.season_id = season.id)
 		LEFT OUTER JOIN team ON team.id = rank.team_id AND team.season_id = rank.season_id 
 		LEFT OUTER JOIN conference ON team.conference_id = conference.id 
-		WHERE league.id = $1
+		WHERE league.name = $1
 			AND rank.ranking_source_id = 1 
 		ORDER BY rank ASC;`;
 	let PARAMS = [leagueId];

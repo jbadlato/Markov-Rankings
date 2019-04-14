@@ -14,7 +14,7 @@ class Rank extends Component {
   					<h1>{this.props.rank.rank}</h1>
   				</div>
   				<div className="col-xs-3">
-  					<img className="team-logo" src={'/img/teams/' + this.props.rank.team_logo_file} alt={this.props.rank.team_name.split('_').join(' ')} />
+					<img className="team-logo" src={'/img/teams/' + this.props.rank.team_logo_file} title={this.props.rank.team_name.split('_').join(' ')} alt={this.props.rank.team_name.split('_').join(' ')} />
   				</div>
   				<div className="col-xs-4">
   					<h1>{this.props.rank.team_name.split('_').join(' ')}</h1>
@@ -23,7 +23,7 @@ class Rank extends Component {
   					<h3>{record}</h3>
   				</div>
   				<div className="col-xs-2 rank-conference-logo-container">
-  					<img className="conference-logo pull-right" src={'/img/conferences/' + this.props.rank.conference_logo_file} alt={this.props.rank.conference_name} />
+  					<img className="conference-logo pull-right" src={'/img/conferences/' + this.props.rank.conference_logo_file} title={this.props.rank.conference_name.split('_').join(' ')} alt={this.props.rank.conference_name} />
   				</div>
 				</div>
   		</div>

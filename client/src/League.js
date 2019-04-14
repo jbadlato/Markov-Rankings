@@ -6,7 +6,7 @@ class League extends Component {
     return (
     	<div className="league-container container">
 	      <Link className="league-link" to={'/league/'+this.props.league.id+'/ranks'}>
-	      	<img className="league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name} alt={this.props.league.name} />
+	      	<img className="league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name.split('_').join(' ')} alt={this.props.league.name} />
 	      </Link>
       </div>
     );

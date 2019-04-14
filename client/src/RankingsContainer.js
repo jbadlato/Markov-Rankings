@@ -10,7 +10,7 @@ class RankingsContainer extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/league/' + this.props.match.params.league_name + '/ranks')
+    fetch('/api/' + this.props.match.params.league_name + '/' + this.props.match.params.season + '/ranks/' + this.props.match.params.date)
       .then(response => response.json())
       .then(data => this.setState({ rankings: data.rows}));
   }

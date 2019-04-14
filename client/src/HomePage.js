@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import LeaguesContainer from './LeaguesContainer.js';
 
-class Home extends Component {
+class HomePage extends Component {
   render() {
     return (
       <div>
@@ -16,4 +16,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default HomePage;

@@ -5,7 +5,7 @@ import {
   Switch
 } from 'react-router-dom';
 import history from './history.js';
-import Home from './Home.js';
+import HomePage from './HomePage.js';
 import RankingsContainer from './RankingsContainer.js';
 
 class App extends Component {
@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <Router history={history}>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={HomePage} />
           <Route path="/:league_name/:season/ranks/:date" component={RankingsContainer} />
         </Switch>
       </Router>

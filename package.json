@@ -4,7 +4,7 @@
   "scripts": {
     "client": "cd client && npm start",
     "server": "node server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "dev": "cd client && npm run build && cd .. && node server.js",
     "start": "pm2 start process.json",
     "restart": "pm2 restart all",
     "test": "jest",

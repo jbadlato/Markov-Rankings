@@ -200,7 +200,7 @@ UPDATE team
 UPDATE team
 	SET conference_id = 42	-- ACC
 	WHERE season_id = 2 AND
-		name IN ('Clemson','Syracuse','NC_State','Boston_College','Wake_Forest','Florida_St','Louisville','Pittsburgh','Georgia_Tech','Virginia','Miami','Virginia_Tech','Duke','North_Carolina');
+		name IN ('Clemson','Syracuse','NC_State','Boston_College','Wake_Forest','Florida_St','Louisville','Pittsburgh','Georgia_Tech','Virginia','Miami_FL','Virginia_Tech','Duke','North_Carolina');
 UPDATE team 
 	SET conference_id = 43	-- Independents
 	WHERE season_id = 2 AND

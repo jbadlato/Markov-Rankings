@@ -90,6 +90,24 @@ app.get('/api/:league_name/:season/latest_rank_date', async function(request, re
 		});
 });
 
+app.get('/api/:league_name/:season/all_rank_dates', async function(request, response) {
+	let inLeagueName = request.params.league_name;
+	let inSeason = request.params.season;
+	let SQL = `
+		SELECT DISTINCT(TO_CHAR(rank.calculated_date::date,'YYYYMMDD')) AS date
+		FROM league
+		LEFT OUTER JOIN season ON season.league_id = league.id AND season = $2
+		LEFT OUTER JOIN rank ON rank.season_id = season.id
+		WHERE league.name = $1
+		ORDER BY date DESC
+	;`;
+	let PARAMS = [inLeagueName, inSeason];
+	await selectQuery(SQL, PARAMS)
+		.then((res) => {
+			response.send(res);
+		});
+});
+
 app.get('/*', function(request, response) {
 	response.sendFile(path.join(__dirname,'/client/build/index.html'));
 });

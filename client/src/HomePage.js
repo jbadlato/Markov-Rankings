@@ -4,12 +4,12 @@ import LeaguesContainer from './LeaguesContainer.js';
 class HomePage extends Component {
   render() {
     return (
-      <div>
-        <header>
-          <p>
+      <div className="container">
+        <div className="page-header">
+          <h1>
             Welcome to Markov Rankings.
-          </p>
-        </header>
+          </h1>
+        </div>
         <LeaguesContainer />
       </div>
     );

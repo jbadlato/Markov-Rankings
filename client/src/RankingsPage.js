@@ -6,13 +6,18 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-        <header>
-          <h1>
-		  {this.props.match.params.league_name} {this.props.match.params.season}
-          </h1>
-		  <p>Showing rankings calculated on: {this.props.match.params.date}</p>
-        </header>
-		<RankingsDateMenu league_name={this.props.match.params.league_name} season={this.props.match.params.season} />
+		<div className="container">
+			<div className="page-header">
+			  <h1>
+			  {this.props.match.params.league_name} {this.props.match.params.season}
+			  </h1>
+			</div>
+			<div className="row">
+				<p className="col-xs-3">Showing rankings calculated on: {this.props.match.params.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')}</p>
+				<RankingsDateMenu league_name={this.props.match.params.league_name} season={this.props.match.params.season} className="col-xs-2" />
+				<div className="col-xs-7" />
+			</div>
+		</div>
         <RankingsContainer league_name={this.props.match.params.league_name} season={this.props.match.params.season} date={this.props.match.params.date} />
       </div>
     );

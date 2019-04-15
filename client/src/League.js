@@ -11,7 +11,7 @@ class League extends Component {
 	if (dd.length < 2) dd = '0' + dd;
 	today = [yyyy,mm,dd].join('');
     return (
-    	<div className="league-container container">
+    	<div className="col-xs-6 league-container container">
 	      <Link className="league-link" to={'/'+this.props.league.name+'/'+this.props.league.latest_season+'/ranks/'+today}>
 	      	<img className="league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name.split('_').join(' ')} alt={this.props.league.name} />
 	      </Link>

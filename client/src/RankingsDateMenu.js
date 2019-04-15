@@ -23,8 +23,8 @@ class RankingsDateMenu extends Component {
   
   render() {
 	return (
-	<DropdownButton id="rankings-date-dropdown" title="Date">
-	    {this.state.dates.map(date => <Dropdown.Item key={date.date} href={'/'+this.props.league_name+'/'+this.props.season+'/ranks/'+date.date} >{date.date}</Dropdown.Item>)}
+	<DropdownButton id="rankings-date-dropdown" title="Select Another Date">
+	    {this.state.dates.map(date => <Dropdown.Item key={date.date} href={'/'+this.props.league_name+'/'+this.props.season+'/ranks/'+date.date} >{date.date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3')}</Dropdown.Item>)}
 	</DropdownButton>
 	);
   }

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import LeaguesContainer from './LeaguesContainer.js';
 
-class Home extends Component {
+class HomePage extends Component {
   render() {
     return (
-      <div>
-        <header>
-          <p>
+      <div className="container">
+        <div className="page-header">
+          <h1>
             Welcome to Markov Rankings.
-          </p>
-        </header>
+          </h1>
+        </div>
         <LeaguesContainer />
       </div>
     );
   }
 }
 
-export default Home;
+export default HomePage;

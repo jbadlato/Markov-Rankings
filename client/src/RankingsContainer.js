@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RankList from './RankList.js';
+import history from './history.js';
 
 class RankingsContainer extends Component {
   constructor(props) {
@@ -10,9 +11,19 @@ class RankingsContainer extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/league/' + this.props.match.params.league_name + '/ranks')
-      .then(response => response.json())
-      .then(data => this.setState({ rankings: data.rows}));
+ 	fetch('/api/' + this.props.league_name + '/' + this.props.season + '/latest_rank_date')
+		.then(response => response.json())
+		.then(data => {
+			let latestRankdate = data.rows[0].latest_rank_date;
+			if (latestRankdate < this.props.date) {
+				history.replace('/'+this.props.league_name+'/'+this.props.season+'/ranks/'+latestRankdate);
+			}
+		})
+		.then(() => {
+			fetch('/api/' + this.props.league_name + '/' + this.props.season + '/ranks/' + this.props.date)
+			  .then(response => response.json())
+			  .then(data => this.setState({ rankings: data.rows}));
+		});
   }
 
   render() {

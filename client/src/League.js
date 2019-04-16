@@ -11,11 +11,14 @@ class League extends Component {
 	if (dd.length < 2) dd = '0' + dd;
 	today = [yyyy,mm,dd].join('');
     return (
-    	<div className="col-xs-6 league-container container">
-	      <Link className="league-link" to={'/'+this.props.league.name+'/'+this.props.league.latest_season+'/ranks/'+today}>
-	      	<img className="league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name.split('_').join(' ')} alt={this.props.league.name} />
+	      <Link className="list-group-item w-50 list-group-item-action league-link" to={'/'+this.props.league.name+'/'+this.props.league.latest_season+'/ranks/'+today}>
+			<div className="container">
+				<div className="row league-container">
+					<img className="col-4 league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name.split('_').join(' ')} alt={this.props.league.name} />
+					<h3 className="col-8 league-name" >{this.props.league.name}</h3>
+				</div>
+			</div>
 	      </Link>
-      </div>
     );
   }
 }

@@ -15,9 +15,9 @@ END $$;
 -- DDL
 --===================================================
 CREATE TABLE db_version (
-	version VARCHAR(255);
-	date_applied TIMESTAMP(6);
-	notes VARCHAR(255);
+	version VARCHAR(255),
+	date_applied TIMESTAMP(6),
+	notes VARCHAR(255)
 );
 
 CREATE TABLE league (

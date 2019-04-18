@@ -14,6 +14,12 @@ END $$;
 --===================================================
 -- DDL
 --===================================================
+CREATE TABLE db_version (
+	version VARCHAR(255),
+	date_applied TIMESTAMP(6),
+	notes VARCHAR(255)
+);
+
 CREATE TABLE league (
 	id SERIAL,
 	name VARCHAR(4),
@@ -360,3 +366,9 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO backend;
 GRANT INSERT ON ALL TABLES IN SCHEMA public TO backend;
 GRANT UPDATE ON ALL TABLES IN SCHEMA public TO backend;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO backend;
+
+--===================================================
+-- UPDATE VERSION
+--===================================================
+INSERT INTO db_version (version, date_applied, notes)
+	VALUES ('1.0',NOW(),'initial baseline');

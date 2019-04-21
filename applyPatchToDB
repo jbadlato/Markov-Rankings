@@ -1,0 +1,12 @@
+#!/bin/sh
+for patch in Database/patch_*.sql
+do
+	version=${patch:15:-4}
+	version=${version//_/.}
+	isApplied=`psql --command="SELECT COUNT(version) FROM db_version WHERE version = '$version';" -AtX $DEPLOY_DATABASE_URL` 
+	if [ $isApplied -eq 0 ]
+	then
+		echo "Applying patch $patch for version $version"
+		psql $DEPLOY_DATABASE_URL < $patch
+	fi
+done

@@ -114,7 +114,7 @@ app.get('/api/:league_name/:season/:team_name/schedule', async function(request,
 	let inTeamName = request.params.team_name;
 	let SQL = `
 		SELECT 
-			team_score.game_date AS game_date,
+			TO_CHAR(team_score.game_date,'MM/DD/YYYY') AS game_date,
 			team.name AS team_name,
 			team.logo_file AS team_logo_file,
 			team_conference.name AS team_conference_name,

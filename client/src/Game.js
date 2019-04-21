@@ -50,7 +50,7 @@ class Game extends Component {
 						<h1>{awayTeam.name.split('_').join(' ')}</h1>
 					</div>
 					<div className="col-xs-2">
-						<h1>{awayTeam.record}</h1>
+						<h6>{awayTeam.record}</h6>
 					</div>
 					<div className="col-xs-1">
 						<h1>{awayTeam.score}</h1>
@@ -64,7 +64,7 @@ class Game extends Component {
 						<h1>{homeTeam.name.split('_').join(' ')}</h1>
 					</div>
 					<div className="col-xs-2">
-						<h1>{homeTeam.record}</h1>
+						<h6>{homeTeam.record}</h6>
 					</div>
 					<div className="col-xs-1">
 						<h1>{homeTeam.score}</h1>

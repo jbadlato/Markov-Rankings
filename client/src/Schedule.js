@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Rank from './Rank.js';
+import Game from './Game.js';
 
 class RankList extends Component {
   render() {
@@ -8,7 +8,7 @@ class RankList extends Component {
 		<div className="row">
 			<div className="col-12">
 				<div className="list-group d-flex flex-row flex-wrap">
-  			{this.props.rankings.map(rank => <Rank key={rank.rank_id} rank={rank} />)}
+					{this.props.schedule.map(game => <Game key={game.game_date + game.opponent_name} game={game} />)}
 				</div>
 			</div>
 		</div>

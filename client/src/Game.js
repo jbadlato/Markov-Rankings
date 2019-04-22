@@ -22,13 +22,15 @@ function concatenateRecord(winCount, lossCount, tieCount) {
 
 class Game extends Component {
   render() {
+	let homeInd = this.props.game.home_ind;
+	let scheduledInd = this.props.game.scheduled_ind;
   	let teamRecord = concatenateRecord(this.props.game.team_win_count, this.props.game.team_loss_count, this.props.game.team_tie_count);
 	let opponentRecord = concatenateRecord(this.props.game.opponent_win_count, this.props.game.opponent_loss_count, this.props.game.opponent_tie_count);
 	let homeTeam, awayTeam;
-	if (this.props.game.home_ind === 1) {
+	if (homeInd === 1) {
 		homeTeam = new Team(this.props.game.team_name, teamRecord, this.props.game.team_logo_file, this.props.game.team_score, this.props.game.team_conference_name, this.props.game.team_conference_logo_file);
 		awayTeam = new Team(this.props.game.opponent_name, opponentRecord, this.props.game.opponent_logo_file, this.props.game.opponent_score, this.props.game.opponent_conference_name, this.props.game.opponent_conference_logo);
-	} else if (this.props.game.home_ind === -1) {
+	} else if (homeInd === -1) {
 		homeTeam = new Team(this.props.game.opponent_name, opponentRecord, this.props.game.opponent_logo_file, this.props.game.opponent_score, this.props.game.opponent_conference_name, this.props.game.opponent_conference_logo);
 		awayTeam = new Team(this.props.game.team_name, teamRecord, this.props.game.team_logo_file, this.props.game.team_score, this.props.game.team_conference_name, this.props.game.team_conference_logo_file);
 	} else {	// TODO: further decision making for which team to display as "home"?
@@ -52,9 +54,11 @@ class Game extends Component {
 					<div className="col-xs-2">
 						<h6>{awayTeam.record}</h6>
 					</div>
+					{ scheduledInd === 0 &&
 					<div className="col-xs-1">
 						<h1>{awayTeam.score}</h1>
 					</div>
+					}
 				</div>
 				<div className="row home-row">
 					<div className="col-xs-3">
@@ -66,9 +70,11 @@ class Game extends Component {
 					<div className="col-xs-2">
 						<h6>{homeTeam.record}</h6>
 					</div>
+					{ scheduledInd === 0 &&
 					<div className="col-xs-1">
 						<h1>{homeTeam.score}</h1>
 					</div>
+					}
 				</div>
 			</div>
 		</div>

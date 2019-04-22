@@ -8,6 +8,7 @@ class Team {
 		this.score = score;
 		this.conferenceName = conferenceName;
 		this.conferenceLogoFile = conferenceLogoFile;
+		this.win = false;
 	}
 }
 
@@ -27,6 +28,7 @@ class Game extends Component {
   	let teamRecord = concatenateRecord(this.props.game.team_win_count, this.props.game.team_loss_count, this.props.game.team_tie_count);
 	let opponentRecord = concatenateRecord(this.props.game.opponent_win_count, this.props.game.opponent_loss_count, this.props.game.opponent_tie_count);
 	let homeTeam, awayTeam;
+	// Create home team and away team objects:
 	if (homeInd === 1) {
 		homeTeam = new Team(this.props.game.team_name, teamRecord, this.props.game.team_logo_file, this.props.game.team_score, this.props.game.team_conference_name, this.props.game.team_conference_logo_file);
 		awayTeam = new Team(this.props.game.opponent_name, opponentRecord, this.props.game.opponent_logo_file, this.props.game.opponent_score, this.props.game.opponent_conference_name, this.props.game.opponent_conference_logo);
@@ -37,6 +39,12 @@ class Game extends Component {
 		// (for now, team in URL is homeTeam)
 		homeTeam = new Team(this.props.game.team_name, teamRecord, this.props.game.team_logo_file, this.props.game.team_score, this.props.game.team_conference_name, this.props.game.team_conference_logo_file);
 		awayTeam = new Team(this.props.game.opponent_name, opponentRecord, this.props.game.opponent_logo_file, this.props.game.opponent_score, this.props.game.opponent_conference_name, this.props.game.opponent_conference_logo);
+	}
+	// See who won the game:
+	if (homeTeam.score > awayTeam.score) {
+		homeTeam.win = true;
+	} else if (awayTeam.score > homeTeam.score) {
+		awayTeam.win = true;
 	}
   	return (
 		<div className="list-group-item w-50 list-group-item-action">
@@ -59,6 +67,11 @@ class Game extends Component {
 						<h1>{awayTeam.score}</h1>
 					</div>
 					}
+					{ awayTeam.win &&
+					<div className="col-xs-1">
+						<h1>&#9664;</h1>
+					</div>
+					}
 				</div>
 				<div className="row home-row">
 					<div className="col-xs-3">
@@ -73,6 +86,11 @@ class Game extends Component {
 					{ scheduledInd === 0 &&
 					<div className="col-xs-1">
 						<h1>{homeTeam.score}</h1>
+					</div>
+					}
+					{ homeTeam.win &&
+					<div className="col-xs-1">
+						<h1>&#9664;</h1>
 					</div>
 					}
 				</div>

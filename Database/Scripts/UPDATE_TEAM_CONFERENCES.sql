@@ -246,57 +246,57 @@ UPDATE team
 --===================================================
 --Atlantic_Coast
 UPDATE team
-	SET conference_id = 42
+	SET conference_id = 53
 	WHERE season_id = 7 AND
 		name IN ('North_Carolina', 'Notre_Dame', 'Syracuse','Duke','Virginia');
 --America_East
 UPDATE team
-	SET conference_id = 43
+	SET conference_id = 54
 	WHERE season_id = 7 AND
 		name IN ('Albany_NY', 'Binghamton', 'Hartford','UMBC','MA_Lowell','Stony_Brook','Vermont');
 --Big_East
 UPDATE team
-	SET conference_id = 44
+	SET conference_id = 55
 	WHERE season_id = 7 AND
 		name IN ('Denver', 'Georgetown', 'Marquette','Providence','St_John''s','Villanova');
 --Big_Ten
 UPDATE team
-	SET conference_id = 45
+	SET conference_id = 56
 	WHERE season_id = 7 AND
 		name IN ('Johns_Hopkins', 'Maryland', 'Michigan','Ohio_St','Penn_St','Rutgers');
 --Colonial_Athletic
 UPDATE team
-	SET conference_id = 46
+	SET conference_id = 57
 	WHERE season_id = 7 AND
 		name IN ('Delaware', 'Drexel', 'Fairfield','Hofstra','Massachusetts','Towson'); 
 --Independents
 UPDATE team
-	SET conference_id = 47
+	SET conference_id = 58
 	WHERE season_id = 7 AND
 		name IN ('Cleveland_St', 'Hampton', 'Utah','NJIT'); 
 --Ivy_League
 UPDATE team
-	SET conference_id = 48
+	SET conference_id = 59
 	WHERE season_id = 7 AND
 		name IN ('Brown', 'Cornell', 'Dartmouth','Harvard','Penn','Princeton','Yale'); 
 --Metro_Atlantic
 UPDATE team
-	SET conference_id = 49
+	SET conference_id = 60
 	WHERE season_id = 7 AND
 		name IN ('Canisius', 'Detroit', 'Manhattan', 'Marist','Monmouth_NJ','Quinnipiac','St_Bonaventure','Siena');
 --Northeast_Conference
 UPDATE team
-	SET conference_id = 50
+	SET conference_id = 61
 	WHERE season_id = 7 AND
-		name IN ('Bryant', 'Hobart_&_Smith', 'Mt_St_Mary''s', 'Marist','Robert_Morris','Sacred_Heart','St_Joseph''s','Wagner');
+		name IN ('Bryant', 'Hobart_&_Smith', 'Mt_St_Mary''s', 'Marist','Robert_Morris','Sacred_Heart','St_Joseph''s_PA','Wagner');
 --Patriot_League
 UPDATE team
-	SET conference_id = 51
+	SET conference_id = 62
 	WHERE season_id = 7 AND
-		name IN ('Army', 'Boston', 'Bucknell', 'Colgate','Holy_Cross','Lafayette','Lehigh','Loyola_MD', 'Navy');
+		name IN ('Army', 'Boston_Univ', 'Bucknell', 'Colgate','Holy_Cross','Lafayette','Lehigh','Loyola_MD', 'Navy');
 --Southern
 UPDATE team
-	SET conference_id = 51
+	SET conference_id = 63
 	WHERE season_id = 7 AND
 		name IN ('Air_Force', 'Bellarmine', 'Furman', 'High_Point','Jacksonville','Mercer','Richmond','VMI');
 		

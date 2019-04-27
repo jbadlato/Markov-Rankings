@@ -16,60 +16,60 @@ BEGIN
 	IF cnt = 0 THEN
 		INSERT INTO season (id, league_id, season, teams_url, scores_url, week_start, season_start, season_end) VALUES (7,7,2019,'https://www.masseyratings.com/scores.php?s=307658&sub=11590&all=1&mode=2&sch=on&format=2','https://www.masseyratings.com/scores.php?s=307658&sub=11590&all=1&mode=2&sch=on&format=1',1,DATE '2019-02-01',DATE '2019-05-27');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 42;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 53;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (42, 7, 'Atlantic_Coast', 'atlantic-coast.png');
+			VALUES (53, 7, 'Atlantic_Coast', 'atlantic-coast.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 43;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 54;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (43, 7, 'America_East', 'america-east.png');
+			VALUES (54, 7, 'America_East', 'america-east.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 44;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 55;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (44, 7, 'Big_East', 'big-east.png');
+			VALUES (55, 7, 'Big_East', 'big-east.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 45;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 56;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (45, 7, 'Big_Ten', 'big-ten.png');
+			VALUES (56, 7, 'Big_Ten', 'big-ten.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 46;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 57;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (46, 7, 'Colonial_Athletic', 'colonial-athletic.png');
+			VALUES (57, 7, 'Colonial_Athletic', 'colonial-athletic.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 47;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 58;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (47, 7, 'Independents', 'independents.png');
+			VALUES (58, 7, 'Independents', 'independents.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 48;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 59;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (48, 7, 'Ivy_League', 'ivy-league.png');
+			VALUES (59, 7, 'Ivy_League', 'ivy-league.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 49;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 60;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (49, 7, 'Metro_Atlantic', 'metro-atlantic.png');
+			VALUES (60, 7, 'Metro_Atlantic', 'metro-atlantic.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 50;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 61;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (50, 7, 'Northeast_Conference', 'northeast-conference.png');
+			VALUES (61, 7, 'Northeast_Conference', 'northeast-conference.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 51;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 62;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (51, 7, 'Patriot_League', 'patriot-league.png');
+			VALUES (62, 7, 'Patriot_League', 'patriot-league.png');
 	END IF;
-	SELECT COUNT(*) INTO cnt FROM season WHERE id = 52;
+	SELECT COUNT(*) INTO cnt FROM conference WHERE id = 63;
 	IF cnt = 0 THEN
 		INSERT INTO conference (ID, SEASON_ID, NAME, LOGO_FILE)
-			VALUES (52, 7, 'Southern', 'southern.png');
+			VALUES (63, 7, 'Southern', 'southern.png');
 	END IF;
 END $$;
 

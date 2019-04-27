@@ -33,6 +33,8 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 	let SQL = 
 		`SELECT 
 			rank.id AS rank_id,  
+			league.name AS league,
+			season.season AS season,
 			rank.team_id AS team_id,  
 			team.name AS team_name, 
 			team.logo_file AS team_logo_file, 
@@ -102,6 +104,49 @@ app.get('/api/:league_name/:season/all_rank_dates', async function(request, resp
 		ORDER BY date DESC
 	;`;
 	let PARAMS = [inLeagueName, inSeason];
+	await selectQuery(SQL, PARAMS)
+		.then((res) => {
+			response.send(res);
+		});
+});
+
+app.get('/api/:league_name/:season/:team_name/schedule', async function(request, response) {
+	let inLeagueName = request.params.league_name;
+	let inSeason = request.params.season;
+	let inTeamName = request.params.team_name;
+	let SQL = `
+		SELECT 
+			TO_CHAR(team_score.game_date,'MM/DD/YYYY') AS game_date,
+			team.name AS team_name,
+			team.logo_file AS team_logo_file,
+			team_conference.name AS team_conference_name,
+			team_conference.logo_file AS team_conference_logo_file,
+			team.win_count AS team_win_count,
+			team.loss_count AS team_loss_count,
+			team.tie_count AS team_tie_count,
+			team_score.score AS team_score,
+			opponent_team.name AS opponent_name,
+			opponent_team.logo_file AS opponent_logo_file,
+			opponent_conference.name AS opponent_conference_name,
+			opponent_conference.logo_file AS opponent_conference_logo_file,
+			opponent_team.win_count AS opponent_win_count,
+			opponent_team.loss_count AS opponent_loss_count,
+			opponent_team.tie_count AS opponent_tie_count,
+			opponent_score.score AS opponent_score,
+			team_score.scheduled_ind AS scheduled_ind,
+			team_score.home_ind AS home_ind
+		FROM league
+		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season = $2
+		LEFT OUTER JOIN team ON team.season_id = season.id AND team.name = $3
+		LEFT OUTER JOIN score team_score ON team_score.team_id = team.id AND team_score.season_id = season.id
+		LEFT OUTER JOIN score opponent_score ON opponent_score.team_id = team_score.opponent_id AND opponent_score.game_date = team_score.game_date AND opponent_score.season_id = season.id
+		LEFT OUTER JOIN team opponent_team ON opponent_team.id = team_score.opponent_id AND opponent_team.season_id = season.id
+		LEFT OUTER JOIN conference team_conference ON team_conference.id = team.conference_id
+		LEFT OUTER JOIN conference opponent_conference ON opponent_conference.id = opponent_team.conference_id
+		WHERE league.name = $1
+		ORDER BY team_score.game_date;
+	;`;
+	let PARAMS = [inLeagueName, inSeason, inTeamName];
 	await selectQuery(SQL, PARAMS)
 		.then((res) => {
 			response.send(res);

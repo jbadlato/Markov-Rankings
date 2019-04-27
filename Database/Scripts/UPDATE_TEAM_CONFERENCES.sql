@@ -241,3 +241,63 @@ UPDATE team
 	SET conference_id = 52	-- Conference USA 
 	WHERE season_id = 2 AND
 		name IN ('UAB','North_Texas','Louisiana_Tech','Southern_Miss','UT_San_Antonio','Rice','UTEP','MTSU','Florida_Intl','Marshall','Charlotte','FL_Atlantic','Old_Dominion','WKU');
+--===================================================
+-- NCAA Men's Lacrosse Conferences
+--===================================================
+--Atlantic_Coast
+UPDATE team
+	SET conference_id = 42
+	WHERE season_id = 7 AND
+		name IN ('North_Carolina', 'Notre_Dame', 'Syracuse','Duke','Virginia');
+--America_East
+UPDATE team
+	SET conference_id = 43
+	WHERE season_id = 7 AND
+		name IN ('Albany_NY', 'Binghamton', 'Hartford','UMBC','MA_Lowell','Stony_Brook','Vermont');
+--Big_East
+UPDATE team
+	SET conference_id = 44
+	WHERE season_id = 7 AND
+		name IN ('Denver', 'Georgetown', 'Marquette','Providence','St_John''s','Villanova');
+--Big_Ten
+UPDATE team
+	SET conference_id = 45
+	WHERE season_id = 7 AND
+		name IN ('Johns_Hopkins', 'Maryland', 'Michigan','Ohio_St','Penn_St','Rutgers');
+--Colonial_Athletic
+UPDATE team
+	SET conference_id = 46
+	WHERE season_id = 7 AND
+		name IN ('Delaware', 'Drexel', 'Fairfield','Hofstra','Massachusetts','Towson'); 
+--Independents
+UPDATE team
+	SET conference_id = 47
+	WHERE season_id = 7 AND
+		name IN ('Cleveland_St', 'Hampton', 'Utah','NJIT'); 
+--Ivy_League
+UPDATE team
+	SET conference_id = 48
+	WHERE season_id = 7 AND
+		name IN ('Brown', 'Cornell', 'Dartmouth','Harvard','Penn','Princeton','Yale'); 
+--Metro_Atlantic
+UPDATE team
+	SET conference_id = 49
+	WHERE season_id = 7 AND
+		name IN ('Canisius', 'Detroit', 'Manhattan', 'Marist','Monmouth_NJ','Quinnipiac','St_Bonaventure','Siena');
+--Northeast_Conference
+UPDATE team
+	SET conference_id = 50
+	WHERE season_id = 7 AND
+		name IN ('Bryant', 'Hobart_&_Smith', 'Mt_St_Mary''s', 'Marist','Robert_Morris','Sacred_Heart','St_Joseph''s','Wagner');
+--Patriot_League
+UPDATE team
+	SET conference_id = 51
+	WHERE season_id = 7 AND
+		name IN ('Army', 'Boston', 'Bucknell', 'Colgate','Holy_Cross','Lafayette','Lehigh','Loyola_MD', 'Navy');
+--Southern
+UPDATE team
+	SET conference_id = 51
+	WHERE season_id = 7 AND
+		name IN ('Air_Force', 'Bellarmine', 'Furman', 'High_Point','Jacksonville','Mercer','Richmond','VMI');
+		
+		

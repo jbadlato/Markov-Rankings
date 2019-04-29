@@ -299,5 +299,93 @@ UPDATE team
 	SET conference_id = 63
 	WHERE season_id = 7 AND
 		name IN ('Air_Force', 'Bellarmine', 'Furman', 'High_Point','Jacksonville','Mercer','Richmond','VMI');
+--===================================================
+-- NCAA Women's Lacrosse Conferences
+--===================================================
+--Atlantic_Coast
+UPDATE team
+	SET conference_id = 64
+	WHERE season_id = 8 AND
+		name IN ('Boston_College','Duke','Louisville','North_Carolina','Notre_Dame','Syracuse','Virginia','Virginia_Tech');
+--America_East
+UPDATE team
+	SET conference_id = 65
+	WHERE season_id = 8 AND
+		name IN ('Albany_NY','Binghamton','Hartford','MA_Lowell','UMBC','New_Hampshire','Stony_Brook','Vermont');
+--American_Athletic
+UPDATE team
+	SET conference_id = 66
+	WHERE season_id = 8 AND
+		name IN ('Cincinnati','Connecticut','East_Carolina','Temple','Florida','Vanderbilt');
+--Atlantic_Sun
+UPDATE team
+	SET conference_id = 67
+	WHERE season_id = 8 AND
+		name IN ('Jacksonville','Kennesaw','Liberty','Stetson','Coastal_Car','Howard','Kent');
+--Atlantic_10
+UPDATE team
+	SET conference_id = 68
+	WHERE season_id = 8 AND
+		name IN ('Davidson','Duquesne','George_Mason','G_Washington','La_Salle','Massachusetts','Richmond','St_Bonaventure','St_Joseph''s_PA','VA_Commonwealth');
+--Big_East
+UPDATE team
+	SET conference_id = 69
+	WHERE season_id = 8 AND
+		name IN ('Butler','Georgetown','Marquette','Villanova','Denver','Old_Dominion');
+--Big_South
+UPDATE team
+	SET conference_id = 70
+	WHERE season_id = 8 AND
+		name IN ('Campbell','Gardner_Webb','High_Point','Longwood','Presbyterian','Radford','Winthrop');
+--Big_Ten
+UPDATE team
+	SET conference_id = 71
+	WHERE season_id = 8 AND
+		name IN ('Maryland','Michigan','Northwestern','Ohio_St','Penn_St','Rutgers','Johns_Hopkins');
+--Colonial_Athletic
+UPDATE team
+	SET conference_id = 72
+	WHERE season_id = 8 AND
+		name IN ('Delaware','Drexel','Elon','Hofstra','James_Madison','Towson','William_&_Mary');
+--Ivy_League
+UPDATE team
+	SET conference_id = 73
+	WHERE season_id = 8 AND
+		name IN ('Brown','Columbia','Cornell','Dartmouth','Harvard','Penn','Princeton','Yale');
+--Metro_Atlantic
+UPDATE team
+	SET conference_id = 74
+	WHERE season_id = 8 AND
+		name IN ('Canisius','Fairfield','Iona','Manhattan','Marist','Monmouth_NJ','Niagara','Quinnipiac','Siena');
+--Mountain_Pacific
+UPDATE team
+	SET conference_id = 75
+	WHERE season_id = 8 AND
+		name IN ('UC_Davis','Fresno_St','San_Diego_St','St_Mary''s_CA');
+--Northeast_Conference
+UPDATE team
+	SET conference_id = 76
+	WHERE season_id = 8 AND
+		name IN ('Bryant','Central_Conn','LIU_Brooklyn','Mt_St_Mary''s','Robert_Morris','Sacred_Heart','St_Francis_PA','Wagner');
+--Pac_12
+UPDATE team
+	SET conference_id = 77
+	WHERE season_id = 8 AND
+		name IN ('Arizona_St','California','Colorado','Oregon','USC','Stanford');
+--Patriot_League
+UPDATE team
+	SET conference_id = 78
+	WHERE season_id = 8 AND
+		name IN ('American_Univ','Army','Boston_Univ','Bucknell','Colgate','Holy_Cross','Lafayette','Lehigh','Loyola_MD','Navy');
+--Southern
+UPDATE team
+	SET conference_id = 79
+	WHERE season_id = 8 AND
+		name IN ('Furman','Mercer','Wofford','Detroit','C_Michigan','Delaware_St');
+
+
+
+
+
 		
 		

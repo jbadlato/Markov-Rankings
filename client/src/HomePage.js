@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LeaguesContainer from './LeaguesContainer.js';
+import SocialFooter from './SocialFooter.js';
 
 class HomePage extends Component {
   render() {
@@ -11,6 +12,7 @@ class HomePage extends Component {
           </h1>
         </div>
         <LeaguesContainer />
+		<SocialFooter />
       </div>
     );
   }

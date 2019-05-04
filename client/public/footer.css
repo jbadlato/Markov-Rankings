@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,600,700');
+
+body{
+    background: #f2f2f2;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+h3{
+     font-family: 'Josefin Sans', sans-serif;
+}
+
+.box{
+    padding:60px 0px;
+}
+
+.box-part{
+    background:#FFF;
+    border-radius:10px;
+    padding:20px 10px;
+    margin:30px 0px;
+}
+
+.box-twitter.box-part:hover{
+    background:#38A1F3;
+} 
+
+.box-github.box-part:hover{
+    background:#211f1f;
+} 
+
+.box-part:hover .fa , 
+.box-part:hover a{
+    color:#FFF;
+    -webkit-transition: all 1s ease-out;
+    -moz-transition: all 1s ease-out;
+    -o-transition: all 1s ease-out;
+    transition: all 1s ease-out;
+}
+
+.fa-twitter {
+    color:#38A1F3;
+}
+
+.fa-github {
+	color:#211f1f;
+}

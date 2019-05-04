@@ -64,7 +64,7 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 app.get('/api/leagues', async function(request, response) {
 	// build query to database
 	let SQL = 
-		`SELECT league.id AS id, name AS name, logo_file, season.season AS latest_season
+		`SELECT league.id AS id, league.name AS name, league.logo_file AS logo_file, league.display_name AS display_name, season.season AS latest_season
 			FROM league
 			LEFT OUTER JOIN season ON season.league_id = league.id AND season_start = (SELECT MAX(season_start) FROM season WHERE league_id = league.id)
 		;`;

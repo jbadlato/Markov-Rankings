@@ -9,8 +9,8 @@ class RankingsContainer extends Component {
       rankings: []
     };
   }
-
-  componentDidMount() {
+  
+  fetchRankings() {
  	fetch('/api/' + this.props.league_name + '/' + this.props.season + '/latest_rank_date')
 		.then(response => response.json())
 		.then(data => {
@@ -24,6 +24,14 @@ class RankingsContainer extends Component {
 			  .then(response => response.json())
 			  .then(data => this.setState({ rankings: data.rows}));
 		});
+  }
+
+  componentDidMount() {
+	this.fetchRankings();
+  }
+  
+  componentDidUpdate() {
+	this.fetchRankings();
   }
 
   render() {

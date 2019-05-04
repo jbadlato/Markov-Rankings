@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Schedule from './Schedule.js';
-import history from './history.js';
 
 class ScheduleContainer extends Component {
   constructor(props) {

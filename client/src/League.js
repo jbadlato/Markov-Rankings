@@ -15,7 +15,7 @@ class League extends Component {
 			<div className="container">
 				<div className="row league-container">
 					<img className="col-4 league-logo" src={'/img/leagues/' + this.props.league.logo_file} title={this.props.league.name.split('_').join(' ')} alt={this.props.league.name} />
-					<h3 className="col-8 league-name" >{this.props.league.name}</h3>
+					<h3 className="col-8 league-name" >{this.props.league.display_name}</h3>
 				</div>
 			</div>
 	      </Link>

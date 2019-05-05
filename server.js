@@ -32,10 +32,10 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 	// build query to database
 	let SQL = 
 		`SELECT 
-			rank.id AS rank_id,  
+			rank_curr.id AS rank_id,  
 			league.name AS league,
 			season.season AS season,
-			rank.team_id AS team_id,  
+			rank_curr.team_id AS team_id,  
 			team.name AS team_name, 
 			team.logo_file AS team_logo_file, 
 			team.win_count AS win_count, 
@@ -44,16 +44,18 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 			conference.id AS conference_id, 
 			conference.logo_file AS conference_logo_file, 
 			conference.name AS conference_name,  
-			rank.rank AS rank,  
-			rank.rating AS rating 
+			rank_curr.rank AS rank,  
+			rank_curr.rating AS rating,
+			rank_curr.rank - rank_prev.rank AS rank_change
 		FROM league 
 		LEFT OUTER JOIN season ON season.league_id = league.id AND season.season = $2
-		LEFT OUTER JOIN rank ON rank.season_id = season.id AND rank.calculated_date = (SELECT MAX(calculated_date) FROM rank WHERE rank.season_id = season.id AND rank.calculated_date::date = to_date($3,'YYYYMMDD'))
-		LEFT OUTER JOIN team ON team.id = rank.team_id AND team.season_id = rank.season_id 
+		LEFT OUTER JOIN rank rank_curr ON rank_curr.season_id = season.id AND rank_curr.calculated_date = (SELECT MAX(calculated_date) FROM rank WHERE rank.season_id = season.id AND rank.calculated_date::date = to_date($3,'YYYYMMDD'))
+		LEFT OUTER JOIN team ON team.id = rank_curr.team_id AND team.season_id = rank_curr.season_id 
 		LEFT OUTER JOIN conference ON team.conference_id = conference.id 
+		LEFT OUTER JOIN rank rank_prev ON rank_prev.season_id = season.id AND rank_prev.team_id = team.id AND rank_prev.ranking_source_id = rank_curr.ranking_source_id AND rank_prev.calculated_date = (SELECT MAX(calculated_date) FROM rank WHERE rank.season_id = season.id AND rank.calculated_date::date = (rank_curr.calculated_date::date - INTERVAL '1 DAY'))
 		WHERE league.name = $1
-			AND rank.ranking_source_id = 1 
-		ORDER BY rank ASC;`;
+			AND rank_curr.ranking_source_id = 1 
+		ORDER BY rank_curr.rank ASC;`;
 	let PARAMS = [inLeagueName, inSeason, inDate];
 	await selectQuery(SQL, PARAMS)
 		.then((res) => {

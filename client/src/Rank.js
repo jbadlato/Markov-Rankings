@@ -12,7 +12,7 @@ class Rank extends Component {
 		<Link className="list-group-item w-100 list-group-item-action" to={'/'+this.props.rank.league+'/'+this.props.rank.season+'/'+this.props.rank.team_name+'/schedule'} >
 			<div className="container rank-container">
 				<div className="row rank-row">
-					<div className="col-xs-1">
+					<div className="col-xs-1 my-auto">
 						{(this.props.rank.rank_change > 0) && 
 						<h1 className="down-ranking">
 							{this.props.rank.rank_change}&#9660;
@@ -24,19 +24,19 @@ class Rank extends Component {
 						</h1>
 						}
 					</div>
-					<div className="col-xs-1">
+					<div className="col-xs-1 my-auto">
 						<h1>{this.props.rank.rank}</h1>
 					</div>
-					<div className="col-xs-2">
+					<div className="col-xs-2 my-auto">
 						<img className="team-logo" src={'/img/teams/' + this.props.rank.team_logo_file} title={this.props.rank.team_name.split('_').join(' ')} alt={this.props.rank.team_name.split('_').join(' ')} />
 					</div>
-					<div className="col-xs-4">
+					<div className="col-xs-4 my-auto">
 						<h1>{this.props.rank.team_name.split('_').join(' ')}</h1>
 					</div>
-					<div className="col-xs-2">
+					<div className="col-xs-2 my-auto">
 						<h3>{record}</h3>
 					</div>
-					<div className="col-xs-2 rank-conference-logo-container">
+					<div className="col-xs-2 my-auto rank-conference-logo-container">
 						<img className="conference-logo pull-right" src={'/img/conferences/' + this.props.rank.conference_logo_file} title={this.props.rank.conference_name.split('_').join(' ')} alt={this.props.rank.conference_name} />
 					</div>
 					</div>

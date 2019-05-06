@@ -14,12 +14,12 @@ class Rank extends Component {
 				<div className="row rank-row">
 					<div className="col-xs-1">
 						{(this.props.rank.rank_change > 0) && 
-						<h1>
+						<h1 className="down-ranking">
 							&#9660;
 						</h1>
 						}
 						{(this.props.rank.rank_change < 0) &&
-						<h1>
+						<h1 className="up-ranking">
 							&#9650;
 						</h1>
 						}

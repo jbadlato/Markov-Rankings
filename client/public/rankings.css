@@ -38,3 +38,11 @@ body {
 .league-name {
 	margin: auto auto;
 }
+
+.up-ranking {
+	color: green;
+}
+
+.down-ranking {
+	color: red;
+}

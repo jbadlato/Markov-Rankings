@@ -13,9 +13,21 @@ class Rank extends Component {
 			<div className="container rank-container">
 				<div className="row rank-row">
 					<div className="col-xs-1">
+						{(this.props.rank.rank_change > 0) && 
+						<h1>
+							&#9660;
+						</h1>
+						}
+						{(this.props.rank.rank_change < 0) &&
+						<h1>
+							&#9650;
+						</h1>
+						}
+					</div>
+					<div className="col-xs-1">
 						<h1>{this.props.rank.rank}</h1>
 					</div>
-					<div className="col-xs-3">
+					<div className="col-xs-2">
 						<img className="team-logo" src={'/img/teams/' + this.props.rank.team_logo_file} title={this.props.rank.team_name.split('_').join(' ')} alt={this.props.rank.team_name.split('_').join(' ')} />
 					</div>
 					<div className="col-xs-4">

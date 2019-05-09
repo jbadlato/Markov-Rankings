@@ -1,0 +1,13 @@
+DELETE FROM score
+WHERE id IN (
+	SELECT team1.id 
+	FROM score team1
+	INNER JOIN score team2 
+		ON team1.season_id = team2.season_id 
+		AND team1.team_id = team2.opponent_id 
+		AND team1.opponent_id = team2.team_id 
+		AND team1.game_date = team2.game_date
+	WHERE team1.score = 0
+		AND team2.score = 0
+		AND team1.scheduled_ind = 0
+);

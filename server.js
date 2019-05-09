@@ -25,6 +25,16 @@ app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
 
+app.get('/api/:league_name/display_name', async function(request, response) {
+	let inLeagueName = request.params.league_name;
+	let SQL = 'SELECT display_name FROM league WHERE name = $1';
+	let PARAMS = [inLeagueName];
+	await selectQuery(SQL, PARAMS)
+		.then((res) => {
+			response.send(res);
+		});
+});
+
 app.get('/api/:league_name/:season/ranks/:date', async function(request, response) {
 	let inLeagueName = request.params.league_name;
 	let inSeason = request.params.season;
@@ -33,7 +43,7 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 	let SQL = 
 		`SELECT 
 			rank_curr.id AS rank_id,  
-			league.name AS league,
+			league.display_name AS league,
 			season.season AS season,
 			rank_curr.team_id AS team_id,  
 			team.name AS team_name, 
@@ -60,7 +70,7 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 	await selectQuery(SQL, PARAMS)
 		.then((res) => {
 			response.send(res);
-		})
+		});
 });
 
 app.get('/api/leagues', async function(request, response) {

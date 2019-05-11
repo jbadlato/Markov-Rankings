@@ -43,7 +43,8 @@ app.get('/api/:league_name/:season/ranks/:date', async function(request, respons
 	let SQL = 
 		`SELECT 
 			rank_curr.id AS rank_id,  
-			league.display_name AS league,
+			league.name AS league,
+			league.display_name AS league_display_name,
 			season.season AS season,
 			rank_curr.team_id AS team_id,  
 			team.name AS team_name, 

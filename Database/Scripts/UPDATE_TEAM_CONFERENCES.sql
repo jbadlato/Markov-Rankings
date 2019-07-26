@@ -1,3 +1,5 @@
+DO $$
+BEGIN
 --===================================================
 -- NCAA Basketball Conferences
 --===================================================
@@ -382,10 +384,5 @@ UPDATE team
 	SET conference_id = 79
 	WHERE season_id = 8 AND
 		name IN ('Furman','Mercer','Wofford','Detroit','C_Michigan','Delaware_St');
-
-
-
-
-
-		
-		
+RAISE INFO 'Updated team conferences.';
+END $$;

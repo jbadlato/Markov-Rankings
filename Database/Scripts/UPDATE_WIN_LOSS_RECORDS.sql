@@ -1,3 +1,5 @@
+DO $$ 
+BEGIN
 UPDATE team
   SET 
     win_count = subquery.wins,
@@ -40,3 +42,5 @@ FROM
     GROUP BY team_id, season_id
   ) subquery
 WHERE team.id = subquery.team_id and team.season_id = subquery.season_id; 
+RAISE INFO 'Updated win-loss records.';
+END $$;

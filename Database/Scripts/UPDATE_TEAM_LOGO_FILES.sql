@@ -1,3 +1,5 @@
+DO $$
+BEGIN
 -- NCAA Sports
 UPDATE team
 	SET logo_file = lower(replace(replace(name, '''', ''), '.', ''))||'.png'
@@ -376,3 +378,5 @@ UPDATE team
 	SET logo_file = 'philadelphia_eagles.png'
 	WHERE name = 'Philadelphia'
 		AND season_id = 3;
+RAISE INFO 'Updated team logos.';
+END $$;

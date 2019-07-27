@@ -214,7 +214,7 @@ async function main() {
 		.then(getSeasons()
 			.then((seasonArray) => loopSeasons(seasonArray))
 			.then(disconnectFromDB)
-			.then(logger.info('END: ingest.js'))
+			.then(() => logger.info('END: ingest.js'))
 			);
 }
 

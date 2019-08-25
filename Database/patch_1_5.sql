@@ -18,11 +18,9 @@ BEGIN
 	UPDATE league SET display_name = 'NBA Basketball' WHERE name = 'NBA';
 	UPDATE league SET display_name = 'NCAA Division I Men''s Lacrosse' WHERE name = 'MLAX';
 	UPDATE league SET display_name = 'NCAA Division I Women''s Lacrosse' WHERE name = 'WLAX';
+	--===================================================
+	-- UPDATE VERSION
+	--===================================================
+	INSERT INTO db_version (version, date_applied, notes)
+		VALUES ('1.5',NOW(),'Adding verbose league names');
 END $$;
-
-
---===================================================
--- UPDATE VERSION
---===================================================
-INSERT INTO db_version (version, date_applied, notes)
-	VALUES ('1.4',NOW(),'Adding verbose league names');

@@ -36,6 +36,13 @@ export class Matrix {
 		return this.matrix[0].length;
 	}
 	
+	public getRow(i: number): Array<number> {
+		if (i < 0 || i >= this.getHeight()) {
+			throw new Error('Matrix index out of range');
+		}
+		return this.matrix[i];
+	}
+	
 	public transpose(): Matrix {
 		let result = new Matrix(this.getWidth(), this.getHeight(), 0);
 		for (let i: number = 0; i < result.getHeight(); i++) {

@@ -31,6 +31,21 @@ describe('Construct, Get, Set', () => {
 		expect(m.getWidth()).toEqual(6);
 	});
 	
+	it('get row', () => {
+		const m: Matrix = new Matrix(3,5,0);
+		let count: number = 0;
+		for (let i: number = 0; i < m.getHeight(); i++) {
+			for (let j: number = 0; j < m.getWidth(); j++) {
+				m.set(i,j,count);
+				count++;
+			}
+		}
+		const expected: Array<number> = [0,1,2,3,4];
+		expect(m.getRow(0)).toEqual(expected);
+		expect(() => m.getRow(-1)).toThrow();
+		expect(() => m.getRow(4)).toThrow();
+	});
+	
 	it('out of bounds', () => {
 		const m: Matrix = new Matrix(3,6,1);
 		expect(m.get(0,2)).toEqual(1);

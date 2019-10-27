@@ -272,6 +272,10 @@ function calculateRankings(scoresMatrix, season) {
 		let ratings = scoresMatrix[0];
 		logger.debug('calculateRankings', JSON.stringify(ratings));
 		let ranksMap = new Map();	// map to contain key:value::teamId:rank
+		if (!validate(ratings)) {
+			resolve(ranksMap);
+			return;
+		}
 		let nextTopRating;
 		let teamId;
 		for (let i = 0; i < ratings.length; i++) {
@@ -283,6 +287,16 @@ function calculateRankings(scoresMatrix, season) {
 
 		resolve(ranksMap);
 	});
+}
+
+// validate that ranking calculation didn't fail
+function validate(ratings) {
+	for (let i = 0; i < ratings.length; i++) {
+		if (Number.isNaN(ratings[i])) {
+			return false;
+		}
+	}
+	return true;
 }
 
 // Update rankings in rank table

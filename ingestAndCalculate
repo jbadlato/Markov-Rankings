@@ -1,8 +1,8 @@
 #!/bin/sh
-node Backend/Ingestion/ingest.js
-psql $BACKEND_DATABASE_URL < Database/Scripts/UPDATE_TEAM_CONFERENCES.sql
-psql $BACKEND_DATABASE_URL < Database/Scripts/UPDATE_TEAM_LOGO_FILES.sql
-psql $BACKEND_DATABASE_URL < Database/Scripts/UPDATE_SCHEDULED_IND.sql
-psql $BACKEND_DATABASE_URL < Database/Scripts/DELETE_CANCELLED_GAMES.sql
-psql $BACKEND_DATABASE_URL < Database/Scripts/UPDATE_WIN_LOSS_RECORDS.sql
-node Backend/Processing/calculateRankings.js
+node scripts/ingest.js
+psql $BACKEND_DATABASE_URL < db/scripts/UPDATE_TEAM_CONFERENCES.sql
+psql $BACKEND_DATABASE_URL < db/scripts/UPDATE_TEAM_LOGO_FILES.sql
+psql $BACKEND_DATABASE_URL < db/scripts/UPDATE_SCHEDULED_IND.sql
+psql $BACKEND_DATABASE_URL < db/scripts/DELETE_CANCELLED_GAMES.sql
+psql $BACKEND_DATABASE_URL < db/scripts/UPDATE_WIN_LOSS_RECORDS.sql
+node scripts/calculateRankings.js

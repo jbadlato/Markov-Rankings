@@ -8,4 +8,5 @@ npm install
 npm run build
 cd ..
 npm install
+npm run build
 npm restart

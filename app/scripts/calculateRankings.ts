@@ -1,46 +1,11 @@
 const logger = require('heroku-logger');
 const { Client } = require('pg');
+import { Matrix } from '../src/Matrix';
 
 const client = new Client({
 	connectionString: process.env.BACKEND_DATABASE_URL,
 //	ssl: true
 });
-
-function newMatrix(m, n, val) {
-	// Creates an mxn matrix, intialized with val as each element
-	let matrix = [];
-	for (let i = 0; i < m; i++) {
-		matrix[i] = [];
-		for (let j = 0; j < n; j++) {
-			matrix[i][j] = val;
-		}
-	}
-	return matrix;
-}
-
-function transpose(matrix) {
-	// transposes input matrix
-	let temp;
-	for (let i = 0; i < matrix.length; i++) {
-		for (let j = 0; j < i; j++) {
-			temp = matrix[i][j];
-			matrix[i][j] = matrix[j][i];
-			matrix[j][i] = temp;
-		}
-	}
-}
-
-function matrixMultiply(A, B) {
-	let C = newMatrix(A.length, B[0].length, 0);
-	for (let i = 0; i < C.length; i++) {
-		for (let j = 0; j < C[i].length; j++) {
-			for (let k = 0; k < C.length; k++) {
-				C[i][j] += A[i][k] * B[k][j];
-			}
-		}
-	}
-	return C;
-}
 
 async function connectToDB() {
 	return new Promise((resolve, reject) => {
@@ -197,7 +162,7 @@ function getScoresMatrix(season) {
 	return new Promise((resolve, reject) => {
 		logger.debug('getScoresMatrix', {seasonId: season.id, teamCount: season.teamCount, weekNumber: season.weekNumber});
 		let query = 'SELECT team_id, score, opponent_id FROM score WHERE season_id = $1 AND scheduled_ind = 0;';
-		let scoresMatrix = newMatrix(season.teamCount, season.teamCount, 0);
+		let scoresMatrix: Matrix = new Matrix(season.teamCount, season.teamCount, 0);
 		try {
 			client.query(query, [season.id], (err, res) => {
 				if (err) {
@@ -217,7 +182,7 @@ function getScoresMatrix(season) {
 						teamId = row.team_id;
 						opponentId = row.opponent_id;
 						score = row.score;
-						scoresMatrix[teamId-1][opponentId-1] += score;
+						scoresMatrix.set(teamId-1, opponentId-1, scoresMatrix.get(teamId-1, opponentId-1) + score);
 					}
 					logger.debug('Created scores matrix', JSON.stringify(scoresMatrix));
 					resolve(scoresMatrix);
@@ -230,46 +195,46 @@ function getScoresMatrix(season) {
 }
 
 // Run algorithm on scores matrix to generate "ratings" values
-function calculateRankings(scoresMatrix, season) {
+function calculateRankings(scoresMatrix: Matrix, season) {
 	return new Promise((resolve, reject) => {
 		logger.debug('calculateRankings');
 		// TODO: toggle this transpose
-		transpose(scoresMatrix);
+		scoresMatrix = scoresMatrix.transpose();
 
 		// calculate sum of all scores
 		let sumOfScores = 0;
-		for (let i = 0; i < scoresMatrix.length; i++) {
-			for (let j = 0; j < scoresMatrix[i].length; j++) {
-				sumOfScores += scoresMatrix[i][j];
+		for (let i = 0; i < scoresMatrix.getHeight(); i++) {
+			for (let j = 0; j < scoresMatrix.getWidth(); j++) {
+				sumOfScores += scoresMatrix.get(i,j);
 			}
 		}
 
 		// divide all elements by sumOfScores
-		for (let i = 0; i < scoresMatrix.length; i++) {
-			for (let j = 0; j < scoresMatrix[i].length; j++) {
-				scoresMatrix[i][j] /= sumOfScores;
+		for (let i = 0; i < scoresMatrix.getHeight(); i++) {
+			for (let j = 0; j < scoresMatrix.getWidth(); j++) {
+				scoresMatrix.set(i,j, scoresMatrix.get(i,j)/sumOfScores);
 			}
 		}
 
 		// make sure each row adds up to 1
 		let rowSum;
-		for (let i = 0; i < scoresMatrix.length; i++) {
+		for (let i = 0; i < scoresMatrix.getHeight(); i++) {
 			rowSum = 0;
-			for (let j = 0; j < scoresMatrix[i].length; j++) {
-				rowSum += scoresMatrix[i][j];
+			for (let j = 0; j < scoresMatrix.getWidth(); j++) {
+				rowSum += scoresMatrix.get(i,j);
 			}
-			scoresMatrix[i][i] = 1 - rowSum;
+			scoresMatrix.set(i,i, 1 - rowSum);
 		}
 
 		// Square matrix until each row is the same
 		// TODO: come up with more robust end condition
 		let tol = 0.0000000001;
-		while (Math.abs(scoresMatrix[0][0] - scoresMatrix[1][0]) > tol) {
-			scoresMatrix = matrixMultiply(scoresMatrix, scoresMatrix);
+		while (Math.abs(scoresMatrix.get(0,0) - scoresMatrix.get(1,0)) > tol) {
+			scoresMatrix = scoresMatrix.multiply(scoresMatrix);
 		}
 
 		// Take the ratings and sort them into a map of rankings
-		let ratings = scoresMatrix[0];
+		let ratings: Array<number> = scoresMatrix.getRow(0);
 		logger.debug('calculateRankings', JSON.stringify(ratings));
 		let ranksMap = new Map();	// map to contain key:value::teamId:rank
 		if (!validate(ratings)) {

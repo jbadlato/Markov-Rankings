@@ -19,7 +19,7 @@ client.connect((err)=> {
 
 app.set('port', (process.env.PORT || 8080));
 
-app.use(express.static(path.join(__dirname,'./../client/build')));
+app.use(express.static(path.join(__dirname,'client')));
 
 app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
@@ -167,7 +167,7 @@ app.get('/api/:league_name/:season/:team_name/schedule', async function(request,
 });
 
 app.get('/*', function(request, response) {
-	response.sendFile(path.join(__dirname,'/client/build/index.html'));
+	response.sendFile(path.join(__dirname,'/client/index.html'));
 });
 
 function selectQuery(QUERY) {

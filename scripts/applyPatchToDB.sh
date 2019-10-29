@@ -1,6 +1,6 @@
 #!/bin/sh
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-cd $parent_path/..
+cd "$parent_path"/..
 for patch in ./db/patch_*.sql
 do
 	version=${patch:15:-4}

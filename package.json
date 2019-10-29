@@ -10,7 +10,8 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "stop": "pm2 stop process.json",
-    "build": "bash ./scripts/build.sh"
+    "build": "bash ./scripts/build.sh",
+	"tsc": "tsc"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",

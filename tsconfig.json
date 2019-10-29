@@ -9,9 +9,9 @@
 		"allowJs": true
 	}
 	"include": [
-		"./server/**/*"
+		"./app/**/*"
 	],
 	"exclude": [
-		"./server/tests"
+		"./app/tests"
 	]
 }

@@ -1,9 +1,13 @@
-const { Client } = require('pg');
+import { Client } from 'pg';
+import { LogManager } from './LogManager';
+import { Logger } from 'log4js';
 
 export class DatabaseManager {
 	private const client: Client;
+	private const logger: Logger;
 	
 	public constructor(connectionString: string) {
+		this.logger = new LogManager().getLogger();
 		this.client = new Client({
 			connectionString: connectionString
 		});
@@ -13,10 +17,10 @@ export class DatabaseManager {
 		return new Promise((resolve, reject) => {
 			this.client.connect((err) => {
 				if (err) {
-					console.log('Error connecting to database.');
+					this.logger.error('Error connecting to database.');
 					reject(err);
 				} else {
-					console.log('Connected to database successfully.');
+					this.logger.debug('Connected to database successfully.');
 					resolve();
 				}
 			});
@@ -27,10 +31,10 @@ export class DatabaseManager {
 		return new Promise((resolve, reject) => {
 			this.client.end((err) => {
 				if (err) {
-					console.log('Error disconnecting from database.');
+					this.logger.error('Error disconnecting from database.');
 					reject(err);
 				} else {
-					console.log('Disconnected from database successfully.');
+					this.logger.debug('Disconnected from database successfully.');
 					resolve();
 				}
 			});
@@ -41,10 +45,10 @@ export class DatabaseManager {
 		return new Promise((resolve, reject) => {
 			this.client.query(queryString, params, (err, res) => {
 				if (err) {
-					console.log('Error running query.');
+					this.logger.error('Error running query.');
 					reject(err);
 				} else {
-					console.log('Query successful: ' + queryString + params);
+					this.logger.debug('Query successful: ' + queryString + params);
 					resolve(res);
 				}
 			});

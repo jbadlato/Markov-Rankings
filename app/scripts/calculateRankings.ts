@@ -1,8 +1,10 @@
-const logger = require('heroku-logger');
 import { Matrix } from '../src/Matrix';
 import { DatabaseManager } from '../src/DatabaseManager';
+import { LogManager } from '../src/LogManager';
+import { Logger } from 'log4js';
 
-let dbManager: DatabaseManager = new DatabaseManager(process.env.BACKEND_DATABASE_URL);
+const logger: Logger = new LogManager().getLogger();
+const dbManager: DatabaseManager = new DatabaseManager(process.env.BACKEND_DATABASE_URL);
 
 class Season {
 	constructor(id, teamCount, weekNumber) {
@@ -44,7 +46,6 @@ async function main() {
 	await dbManager.connect();
 	let seasonArray = await getSeasons()
 	await loopSeasons(seasonArray);
-	console.log('*************************************************************await over');
 	dbManager.disconnect()
 		.then(() => logger.info('END: calculateRankings.js'));
 }
@@ -83,7 +84,6 @@ async function loopSeasons(seasonArray) {
 		});
 		Promise.all(requests)
 			.then(() => {
-				console.log('about to resolve loopSeasons');
 				resolve();
 			});
 	});

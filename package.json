@@ -11,7 +11,8 @@
     "coverage": "jest --coverage",
     "stop": "pm2 stop process.json",
     "build": "bash ./scripts/build.sh",
-	"tsc": "tsc"
+    "tsc": "tsc",
+	"ts-node": "ts-node"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "@types/jest": "^24.0.20",
+    "@types/pg": "^7.11.2",
     "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "heroku-logger": "^0.3.3",

@@ -1,54 +1,8 @@
 const logger = require('heroku-logger');
-const { Client } = require('pg');
 import { Matrix } from '../src/Matrix';
+import { DatabaseManager } from '../src/DatabaseManager';
 
-const client = new Client({
-	connectionString: process.env.BACKEND_DATABASE_URL,
-//	ssl: true
-});
-
-async function connectToDB() {
-	return new Promise((resolve, reject) => {
-		client.connect((err)=> {
-			if (err) {
-				logger.error('Error connecting to database.', {errorStack: err.stack});
-				reject(err);
-			} else {
-				logger.info('Connected to database successfully.');
-				resolve();
-			}
-		});
-	});
-}
-
-async function disconnectFromDB() {
-	return new Promise((resolve, reject) => {
-		client.end((err) => {
-			if (err) {
-				logger.error('Error disconnecting from database.', JSON.stringify(err));
-				reject(err);
-			} else {
-				logger.info('Disconnected from database successfully.');
-				resolve();
-			}
-		});
-	});
-}
-
-async function commit() {
-	return new Promise((resolve, reject) => {
-		client.query('COMMIT', (err, res) => {
-			if (err) {
-				logger.error('Error occurred during commit.', err);
-				reject(err);
-				return;
-			} else {
-				logger.debug('Committed.');
-				resolve();
-			}
-		});
-	});
-}
+let dbManager: DatabaseManager = new DatabaseManager(process.env.BACKEND_DATABASE_URL);
 
 class Season {
 	constructor(id, teamCount, weekNumber) {
@@ -75,33 +29,24 @@ class Rank {
 		let rank = this.rank;
 		let rating = this.rating;
 		let rankingSourceId = this.rankingSourceId;
-		logger.debug('Persisting Rank...', {teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId});
 		let insertQuery = 'INSERT INTO rank (team_id, season_id, week_number, rank, rating, ranking_source_id, calculated_date) VALUES ($1, $2, $3, $4, $5, $6, $7);';
-		return new Promise((resolve, reject) => {
-			client.query(insertQuery, [teamId, seasonId, weekNumber, rank, rating, rankingSourceId, CALCULATED_DATE.toUTCString()], async (err, res) => {
-				if (err) {
-					logger.error('Error occurred inserting rank.', {error: err, teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId, calculatedDate: CALCULATED_DATE});
-					reject(err);
-				} else {
-					logger.debug('Inserted rank.', {teamId: teamId, seasonId: seasonId, weekNumber: weekNumber, rank: rank, rating: rating, rankingSourceId: rankingSourceId, calculatedDate: CALCULATED_DATE});
-					await commit();
-					resolve();
-				}
-			});
+		return new Promise(async (resolve, reject) => {
+			await dbManager.query(insertQuery, [teamId, seasonId, weekNumber, rank, rating, rankingSourceId, CALCULATED_DATE.toUTCString()]);
+			resolve();
 		})
 	}
 }
 
 var CALCULATED_DATE;
-function main() {
+async function main() {
 	CALCULATED_DATE = new Date();
 	logger.info('BEGIN: calculateRankings.js');
-	connectToDB()
-		.then(getSeasons()
-			.then((seasonArray) => loopSeasons(seasonArray))
-			.then(disconnectFromDB)
-			.then(() => logger.info('END: calculateRankings.js'))
-			);
+	await dbManager.connect();
+	let seasonArray = await getSeasons()
+	await loopSeasons(seasonArray);
+	console.log('*************************************************************await over');
+	dbManager.disconnect()
+		.then(() => logger.info('END: calculateRankings.js'));
 }
 
 function getSeasons() {
@@ -109,30 +54,21 @@ function getSeasons() {
 	return new Promise((resolve, reject) => {
 		let seasonArray = new Array(0);
 		let query = "SELECT season.id AS id, COUNT(team.id) AS team_count, CEIL((CURRENT_DATE::DATE - season_start::DATE)/7.0) AS week_number FROM season INNER JOIN team ON (team.season_id = season.id) WHERE season.week_start = EXTRACT(dow FROM '01-14-2019'::DATE) AND season.season_start <= CURRENT_DATE AND CURRENT_DATE <= season.season_end OR (season.season_start <= CURRENT_DATE AND (SELECT COUNT(*) FROM rank WHERE rank.season_id = season.id) = 0) GROUP BY season.id;";
-		try {
-			client.query(query, (err, res) => {
-				if (err) {
-					logger.error('Error occurred during select query on season table.', err);
-					throw err;
-				} else {
-					let seasonObj;
-					let seasonId;
-					let teamCount;
-					let weekNumber;
-					for (let i = 0; i < res.rows.length; i++) {
-						seasonId = res.rows[i].id;
-						teamCount = res.rows[i].team_count;
-						weekNumber = res.rows[i].week_number;
-						seasonObj = new Season(seasonId, teamCount, weekNumber);
-						seasonArray.push(seasonObj);
-					}
-					logger.debug('Retrieved season data.', {seasonArray: JSON.stringify(seasonArray)});
-					resolve(seasonArray);
-				}
-			})
-		} catch (err) {
-			reject(err);
-		}
+		dbManager.query(query).then((res) => {
+			let seasonObj;
+			let seasonId;
+			let teamCount;
+			let weekNumber;
+			for (let i = 0; i < res.rows.length; i++) {
+				seasonId = res.rows[i].id;
+				teamCount = res.rows[i].team_count;
+				weekNumber = res.rows[i].week_number;
+				seasonObj = new Season(seasonId, teamCount, weekNumber);
+				seasonArray.push(seasonObj);
+			}
+			logger.debug('Retrieved season data.', {seasonArray: JSON.stringify(seasonArray)});
+			resolve(seasonArray);
+		});
 	});
 }
 
@@ -140,21 +76,27 @@ async function loopSeasons(seasonArray) {
 	return new Promise((resolve, reject) => {
 		logger.debug('Looping through seasons...');
 		let requests = seasonArray.map((season) => {
-			return new Promise((resolve, reject) => {
-				runRankings(season, resolve);
+			return new Promise(async (resolve, reject) => {
+				await runRankings(season);
+				resolve();
 			});
 		});
 		Promise.all(requests)
-			.then(() => resolve());
+			.then(() => {
+				console.log('about to resolve loopSeasons');
+				resolve();
+			});
 	});
 }
 
-async function runRankings(season, callback) {
+async function runRankings(season) {
 	logger.debug('runRankings: ', JSON.stringify(season));
-	getScoresMatrix(season)
-		.then((scoresMatrix) => calculateRankings(scoresMatrix, season))
-		.then((ranksMap) => updateRankTable(ranksMap, season))
-		.then(callback);
+	return new Promise(async (resolve, reject) => {
+		let scoresMatrix = await getScoresMatrix(season);
+		let ranksMap = await calculateRankings(scoresMatrix, season);
+		await updateRankTable(ranksMap, season);
+		resolve();
+	});
 }
 
 // Retrieve scores data from database & translate into a scores matrix
@@ -163,34 +105,24 @@ function getScoresMatrix(season) {
 		logger.debug('getScoresMatrix', {seasonId: season.id, teamCount: season.teamCount, weekNumber: season.weekNumber});
 		let query = 'SELECT team_id, score, opponent_id FROM score WHERE season_id = $1 AND scheduled_ind = 0;';
 		let scoresMatrix: Matrix = new Matrix(season.teamCount, season.teamCount, 0);
-		try {
-			client.query(query, [season.id], (err, res) => {
-				if (err) {
-					logger.error('Error occurred during select query on score table.', {error: err.stack});
-					throw err;
-				} else {
-					logger.debug('getScoresMatrix: retrieved scores.', {rows: JSON.stringify(res)});
-					if (res.rows.length === 0) {
-						logger.error('Retrieved zero scores from scores table.');
-						return;
-					}
-					let teamId;
-					let opponentId;
-					let score;
-					for (let row of res.rows) {
-						logger.debug('getScoresMatrix: working on row: ', {row: JSON.stringify(row)});
-						teamId = row.team_id;
-						opponentId = row.opponent_id;
-						score = row.score;
-						scoresMatrix.set(teamId-1, opponentId-1, scoresMatrix.get(teamId-1, opponentId-1) + score);
-					}
-					logger.debug('Created scores matrix', JSON.stringify(scoresMatrix));
-					resolve(scoresMatrix);
-				}
-			});
-		} catch (err) {
-			reject(err);
-		}
+		dbManager.query(query, [season.id]).then((res) => {
+			logger.debug('getScoresMatrix: retrieved scores.');
+			if (res.rows.length === 0) {
+				logger.error('Retrieved zero scores from scores table.');
+				return;
+			}
+			let teamId;
+			let opponentId;
+			let score;
+			for (let row of res.rows) {
+				teamId = row.team_id;
+				opponentId = row.opponent_id;
+				score = row.score;
+				scoresMatrix.set(teamId-1, opponentId-1, scoresMatrix.get(teamId-1, opponentId-1) + score);
+			}
+			logger.debug('Created scores matrix', JSON.stringify(scoresMatrix));
+			resolve(scoresMatrix);
+		});
 	});
 }
 
@@ -286,7 +218,6 @@ function updateRankTable(ranksMap, season) {
 }
 
 async function insertRank(rankObj, callback) {
-	logger.debug('insertRank', JSON.stringify(rankObj));
 	await rankObj.persist();
 	callback();
 }

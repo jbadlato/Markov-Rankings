@@ -3,3 +3,5 @@
 
 # Folders
 node_modules
+coverage
+build

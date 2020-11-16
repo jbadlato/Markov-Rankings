@@ -5,7 +5,7 @@ Sports team rankings generated using Markov chains.  The algorithm used takes in
 
 Data is pulled from https://www.masseyratings.com
 
-Hosted on Digital Ocean at http://markovrankings.com
+Hosted on Digital Ocean at https://markovrankings.com
 
 Built with: 
 * Node.js

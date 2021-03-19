@@ -102,7 +102,7 @@ class Team {
 		let teamId = this.teamId;
 		let teamName = this.teamName;
 		let seasonId = this.seasonId;
-		let updateQuery = 'UPDATE team SET name = $1 WHERE team_id = $2 AND season_id = $3;';
+		let updateQuery = 'UPDATE team SET name = $1 WHERE id = $2 AND season_id = $3;';
 		return new Promise((resolve, reject) => {
 			client.query(updateQuery, [teamName, teamId, seasonId], async (err, res) => {
 				if (err) {
